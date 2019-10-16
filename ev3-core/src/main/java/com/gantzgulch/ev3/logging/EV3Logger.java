@@ -33,21 +33,21 @@ public class EV3Logger {
 		log = Logger.getLogger(logClass.getName());
 	}
 
-	public void log(final Level level, final String msg) {
+	protected void log(final Level level, final String msg) {
 		log.logp(level, log.getName(), null, msg);
 	}
 
-	public void log(final Level level, final Throwable throwable, final String msg) {
+	protected void log(final Level level, final Throwable throwable, final String msg) {
 		log.logp(level, log.getName(), null, msg, throwable);
 	}
 
-	public void log(final Level level, final String msg, final Object...args) {
+	protected void log(final Level level, final String msg, final Object...args) {
 		if( log.isLoggable(level) ) {
 			log.logp(level, log.getName(), null, format(msg,args));
 		}
 	}
 
-	public void log(final Level level, final Throwable throwable, final String msg, final Object...args) {
+	protected void log(final Level level, final Throwable throwable, final String msg, final Object...args) {
 		if( log.isLoggable(level) ) {
 			log.logp(level, log.getName(), null, format(msg, args), throwable);
 		}
