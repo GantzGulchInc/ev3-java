@@ -53,6 +53,10 @@ public class EV3Logger {
 		}
 	}
 
+	//
+	// SEVERE
+	//
+	
 	public void severe(final String msg) {
 		log(Level.SEVERE, msg);
 	}
@@ -61,10 +65,18 @@ public class EV3Logger {
 		log(Level.SEVERE, msg, args);
 	}
 
+    public void severe(final Throwable throwable, final String msg) {
+        log(Level.SEVERE, throwable, msg);
+    }
+
 	public void severe(final Throwable throwable, final String msg, final Object... args) {
 		log(Level.SEVERE, throwable, msg, args);
 	}
 
+	//
+	// WARNING
+	//
+	
 	public void warning(final String msg) {
 		log(Level.WARNING, msg);
 	}
@@ -73,9 +85,17 @@ public class EV3Logger {
 			log(Level.WARNING, msg, args);
 	}
 
+    public void warning(final Throwable throwable, final String msg) {
+        log(Level.WARNING, throwable, msg);
+    }
+
 	public void warning(final Throwable throwable, final String msg, final Object... args) {
 		log(Level.WARNING, throwable, msg, args);
 	}
+
+    //
+    // INFO
+    //
 
 	public void info(final String msg) {
 		log(Level.INFO, msg);
@@ -85,10 +105,18 @@ public class EV3Logger {
 			log(Level.INFO, msg, args);
 	}
 
+    public void info(final Throwable throwable, final String msg) {
+        log(Level.INFO, throwable, msg);
+    }
+
 	public void info(final Throwable throwable, final String msg, final Object... args) {
 		log(Level.INFO, throwable, msg, args);
 	}
 
+
+    //
+    // CONFIG
+    //
 
 	public void config(final String msg) {
 		log(Level.CONFIG, msg);
@@ -98,9 +126,17 @@ public class EV3Logger {
 			log(Level.CONFIG, msg, args);
 	}
 
+    public void config(final Throwable throwable, final String msg) {
+        log(Level.CONFIG, throwable, msg);
+    }
+
 	public void config(final Throwable throwable, final String msg, final Object... args) {
 		log(Level.CONFIG, throwable, msg, args);
 	}
+
+    //
+    // FINE
+    //
 
 	public void fine(final String msg) {
 		log(Level.FINE, msg);
@@ -110,9 +146,57 @@ public class EV3Logger {
 			log(Level.FINE, msg, args);
 	}
 
+    public void fine(final Throwable throwable, final String msg) {
+        log(Level.FINE, throwable, msg);
+    }
+
 	public void fine(final Throwable throwable, final String msg, final Object... args) {
 		log(Level.FINE, throwable, msg, args);
 	}
+
+    //
+    // FINER
+    //
+
+    public void finer(final String msg) {
+        log(Level.FINER, msg);
+    }
+
+    public void finer(final String msg, final Object... args) {
+            log(Level.FINER, msg, args);
+    }
+
+    public void finer(final Throwable throwable, final String msg) {
+        log(Level.FINER, throwable, msg);
+    }
+
+    public void finer(final Throwable throwable, final String msg, final Object... args) {
+        log(Level.FINER, throwable, msg, args);
+    }
+
+    //
+    // FINEST
+    //
+
+    public void finest(final String msg) {
+        log(Level.FINEST, msg);
+    }
+
+    public void finest(final String msg, final Object... args) {
+            log(Level.FINEST, msg, args);
+    }
+
+    public void finest(final Throwable throwable, final String msg) {
+        log(Level.FINEST, throwable, msg);
+    }
+
+    public void finest(final Throwable throwable, final String msg, final Object... args) {
+        log(Level.FINEST, throwable, msg, args);
+    }
+
+    //
+    // Methods
+    //
 
 	public void entering(final String sourceMethod) {
 		log.entering(log.getName(), sourceMethod);
@@ -121,6 +205,10 @@ public class EV3Logger {
 	public void exiting(final String sourceMethod) {
 		log.exiting(log.getName(), sourceMethod);
 	}
+
+    //
+    // Private
+    //
 
 	private static String format(final String msg, final Object... args) {
 

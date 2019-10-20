@@ -1,0 +1,9 @@
+package com.gantzgulch.ev3.device;
+
+public enum EV3MotorStopAction {
+
+    COAST,
+    BRAKE,
+    HOLD;
+    
+}
