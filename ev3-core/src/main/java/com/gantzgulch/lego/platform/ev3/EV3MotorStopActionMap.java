@@ -8,6 +8,9 @@ public class EV3MotorStopActionMap extends BidirectionalEnumMap<EV3MotorStopActi
     public static final EV3MotorStopActionMap INSTANCE = new EV3MotorStopActionMap();
     
     public EV3MotorStopActionMap() {
+        
+        super(EV3MotorStopAction.values());
+        
         add(EV3MotorStopAction.BRAKE, "brake");
         add(EV3MotorStopAction.COAST, "coast");
         add(EV3MotorStopAction.HOLD, "hold");

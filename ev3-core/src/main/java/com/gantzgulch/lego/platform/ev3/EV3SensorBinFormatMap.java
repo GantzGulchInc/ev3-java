@@ -8,6 +8,9 @@ public class EV3SensorBinFormatMap extends BidirectionalEnumMap<EV3SensorBinForm
     public static final EV3SensorBinFormatMap INSTANCE = new EV3SensorBinFormatMap();
 
     public EV3SensorBinFormatMap() {
+        
+        super(EV3SensorBinFormat.values());
+        
         add(EV3SensorBinFormat.U8, "u8");
         add(EV3SensorBinFormat.S8, "s8");
         add(EV3SensorBinFormat.U16, "u16");

@@ -8,6 +8,7 @@ public class EV3SensorModeMap extends BidirectionalEnumMap<EV3SensorMode> {
     public static final EV3SensorModeMap INSTANCE = new EV3SensorModeMap();
 
     public EV3SensorModeMap() {
+        super(EV3SensorMode.values());
     }
 
 }

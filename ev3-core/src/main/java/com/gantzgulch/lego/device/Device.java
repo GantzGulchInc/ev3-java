@@ -10,5 +10,5 @@ public interface Device<CMDS extends Enum<?>> {
     
     Set<CMDS> getCommands();
     
-    void setCommand(CMDS command);
+    void sendCommand(CMDS command);
 }

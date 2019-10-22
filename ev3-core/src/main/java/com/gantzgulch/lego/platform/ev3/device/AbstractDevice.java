@@ -62,7 +62,7 @@ public class AbstractDevice<CMDS extends Enum<?>> implements Device<CMDS> {
     }
     
     @Override
-    public void setCommand(final CMDS command) {
+    public void sendCommand(final CMDS command) {
         this.command.writeEnum(command, commandMap);
     }
     

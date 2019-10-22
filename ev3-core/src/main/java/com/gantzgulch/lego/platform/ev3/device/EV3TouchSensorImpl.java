@@ -20,6 +20,9 @@ public class EV3TouchSensorImpl extends AbstractSensorDevice<EV3SensorCommand,EV
         public static final EV3TouchSensorModeMap INSTANCE = new EV3TouchSensorModeMap();
         
         public EV3TouchSensorModeMap() {
+            
+            super(EV3TouchSensorMode.values());
+            
             add(EV3TouchSensorMode.TOUCH, "TOUCH");
         }
 

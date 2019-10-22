@@ -3,6 +3,8 @@ package com.gantzgulch.lego.device.ev3;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import com.gantzgulch.lego.unit.Speed;
+
 public interface EV3TachoMotor<CMDS extends Enum<?>> extends EV3Motor<CMDS> {
 
     int getCountPerRotation();
@@ -44,6 +46,8 @@ public interface EV3TachoMotor<CMDS extends Enum<?>> extends EV3Motor<CMDS> {
     int getSpeedSetPoint();
 
     void setSpeedSetPoint(int speed);
+    
+    void setSpeedSetPoint(Speed speed);
 
     int getRampUpSetPointMillis();
 

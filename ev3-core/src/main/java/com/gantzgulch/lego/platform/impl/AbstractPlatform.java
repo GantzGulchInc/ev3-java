@@ -3,6 +3,7 @@ package com.gantzgulch.lego.platform.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.gantzgulch.lego.device.Board;
 import com.gantzgulch.lego.device.InputDevice;
 import com.gantzgulch.lego.device.OutputDevice;
 import com.gantzgulch.lego.logging.EV3Logger;
@@ -26,18 +27,25 @@ public abstract class AbstractPlatform implements Platform {
     
     private final PlatformType type;
 
+    private final Board board;
+
     private final Map<Pair<Class<? extends InputDevice<?>>, InputPort>, InputDevice<?>> inputCache = new HashMap<>();
 
     private final Map<Pair<Class<? extends OutputDevice<?>>, OutputPort>, OutputDevice<?>> outputCache = new HashMap<>();
 
-
-    protected AbstractPlatform(final PlatformType type) {
+    protected AbstractPlatform(final PlatformType type, final Board board) {
 
         LOG.entering("ctor");
 
+        this.board = board;
         this.type = type;
     }
 
+    @Override
+    public Board getBoard() {
+        return board;
+    }
+    
     @Override
     public PlatformType getType() {
         return type;

@@ -9,6 +9,7 @@ import com.gantzgulch.lego.platform.PlatformType;
 import com.gantzgulch.lego.platform.ev3.EV3DeviceDescriptorMap.DeviceDescriptor;
 import com.gantzgulch.lego.platform.ev3.EV3DeviceDescriptorMap.InputDeviceDescriptorMap;
 import com.gantzgulch.lego.platform.ev3.EV3DeviceDescriptorMap.OutputDeviceDescriptorMap;
+import com.gantzgulch.lego.platform.ev3.device.EV3Board;
 import com.gantzgulch.lego.platform.impl.AbstractPlatform;
 import com.gantzgulch.lego.port.InputPort;
 import com.gantzgulch.lego.port.OutputPort;
@@ -22,7 +23,7 @@ public class EV3Platform extends AbstractPlatform {
     private final DeviceFinder deviceFinder = new DeviceFinder();
 
     public EV3Platform() {
-        super(PlatformType.EV3);
+        super(PlatformType.EV3, new EV3Board(Path.of("/sys/class/board-info/board0/subsystem/board0")));
     }
 
     @Override

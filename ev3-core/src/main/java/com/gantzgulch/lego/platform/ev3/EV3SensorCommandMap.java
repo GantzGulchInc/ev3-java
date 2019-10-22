@@ -8,7 +8,7 @@ public class EV3SensorCommandMap extends BidirectionalEnumMap<EV3SensorCommand> 
     public static final EV3SensorCommandMap INSTANCE = new EV3SensorCommandMap();
 
     public EV3SensorCommandMap() {
-
+        super( EV3SensorCommand.values() );
     }
 
 }

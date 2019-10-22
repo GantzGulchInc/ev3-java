@@ -23,7 +23,7 @@ public class WheelImpl implements Wheel{
     }
     
     @Override
-    public double getDiamterMMs() {
+    public double getDiameterMMs() {
         return diameter;
     }
 

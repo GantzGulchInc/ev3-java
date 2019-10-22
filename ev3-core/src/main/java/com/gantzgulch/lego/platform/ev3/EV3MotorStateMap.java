@@ -8,6 +8,9 @@ public class EV3MotorStateMap extends BidirectionalEnumMap<EV3MotorState> {
     public static final EV3MotorStateMap INSTANCE = new EV3MotorStateMap();
     
     public EV3MotorStateMap() {
+        
+        super(EV3MotorState.values());
+        
         add(EV3MotorState.HOLDING, "holding");
         add(EV3MotorState.OVERLOADED, "overloaded");
         add(EV3MotorState.RAMPING, "ramping");

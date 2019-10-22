@@ -20,6 +20,9 @@ public class EV3GyroSensorImpl extends AbstractSensorDevice<EV3SensorCommand,EV3
         public static final EV3GyroSensorModemap INSTANCE = new EV3GyroSensorModemap();
         
         public EV3GyroSensorModemap() {
+            
+            super(EV3GyroSensorMode.values());
+            
             add(EV3GyroSensorMode.GYRO_ANG, "GYRO-ANG");
             add(EV3GyroSensorMode.GYRO_RATE, "GYRO-RATE");
             add(EV3GyroSensorMode.GYRO_FAS, "GYRO-FAS");

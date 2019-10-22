@@ -8,6 +8,9 @@ public class OutputPortMap extends BidirectionalEnumMap<OutputPort> {
     public static final OutputPortMap INSTANCE = new OutputPortMap();
     
     public OutputPortMap() {
+        
+        super(OutputPort.values());
+        
         add(OutputPort.PORT_A, "ev3-ports:outA");
         add(OutputPort.PORT_B, "ev3-ports:outB");
         add(OutputPort.PORT_C, "ev3-ports:outC");

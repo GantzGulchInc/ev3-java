@@ -34,8 +34,16 @@ public class Attribute {
         this(type, resolve(sysPath, attributeName));
     }
 
+    public void open() {
+        try {
+            getOpenFileChannel();
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public byte[] readBytes() {
-    
+
         synchronized (buffer) {
 
             try {
@@ -46,25 +54,25 @@ public class Attribute {
 
                 buffer.clear();
 
-                while (fc.read(buffer) >= 0) {
+                while (fc.read(buffer) > 0) {
                     // Keep reading.
                 }
 
                 buffer.flip();
 
                 final byte[] bytes = new byte[buffer.remaining()];
-                
+
                 buffer.get(bytes);
 
                 return bytes;
-                
+
             } catch (final IOException e) {
                 throw new AttributeException("Unable to read attribute: " + sysPath, e);
             }
 
         }
     }
-    
+
     public String readString() {
 
         if (!type.isReadable()) {
@@ -81,7 +89,7 @@ public class Attribute {
 
                 buffer.clear();
 
-                while (fc.read(buffer) >= 0) {
+                while (fc.read(buffer) > 0) {
                     // Keep reading.
                 }
 
@@ -155,12 +163,14 @@ public class Attribute {
     public <E extends Enum<?>> Optional<E> readEnum(final BidirectionalEnumMap<E> enumMap) {
         return enumMap.get(readString());
     }
-    
+
     public <E extends Enum<?>> void writeEnum(final E enumValue, final BidirectionalEnumMap<E> enumMap) {
 
-        enumMap.get(enumValue).ifPresent(s -> {
-            writeString(s);
-        });
+        Optional<String> v = enumMap.get(enumValue);
+        
+        if( v.isPresent() ) {
+            writeString(v.get());
+        }
 
     }
 

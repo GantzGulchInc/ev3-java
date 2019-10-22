@@ -20,6 +20,9 @@ public class EV3ColorSensorImpl extends AbstractSensorDevice<EV3SensorCommand,EV
         public static final EV3ColorSensorModemap INSTANCE = new EV3ColorSensorModemap();
         
         public EV3ColorSensorModemap() {
+            
+            super(EV3ColorSensorMode.values());
+            
             add(EV3ColorSensorMode.COL_REFLECT, "COL-REFLECT");
             add(EV3ColorSensorMode.COL_AMBIENT, "COL-AMBIENT");
             add(EV3ColorSensorMode.COL_COLOR, "COL-COLOR");

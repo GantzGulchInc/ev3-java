@@ -7,7 +7,7 @@ public interface Wheel {
 
     double getWidthMMs();
     
-    double getDiamterMMs();
+    double getDiameterMMs();
     
     double getCircumferenceMMs();
     

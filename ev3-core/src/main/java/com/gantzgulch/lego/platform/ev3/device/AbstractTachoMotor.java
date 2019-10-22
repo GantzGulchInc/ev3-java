@@ -8,6 +8,7 @@ import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorCommand;
 import com.gantzgulch.lego.device.ev3.EV3TachoMotor;
 import com.gantzgulch.lego.platform.impl.Attribute;
 import com.gantzgulch.lego.platform.impl.AttributeType;
+import com.gantzgulch.lego.unit.Speed;
 import com.gantzgulch.lego.util.BidirectionalEnumMap;
 
 public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCommand> implements EV3TachoMotor<EV3MotorCommand> {
@@ -198,6 +199,22 @@ public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCo
         speedSetPoint.writeInteger(speed);
     }
 
+    @Override
+    public void setSpeedSetPoint(Speed speed) {
+        
+        int countsPerRotation = getCountPerRotation();
+        
+        int maxCountsPerSecond = getMaxSpeed();
+        
+        double maxRotationsPerSecond = (double) maxCountsPerSecond / (double)countsPerRotation;
+        
+        double rotationsPerSecond = speed.rotationsPerSecond(maxRotationsPerSecond);
+
+        int countsPerSecond = (int)(rotationsPerSecond * countsPerRotation);
+        
+        setSpeedSetPoint(countsPerSecond);
+    }
+    
     @Override
     public int getRampUpSetPointMillis() {
         return rampUpSetPoint.readInteger().orElse(0);
