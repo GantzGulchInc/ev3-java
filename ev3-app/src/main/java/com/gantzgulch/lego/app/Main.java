@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import com.gantzgulch.lego.device.Board;
 import com.gantzgulch.lego.device.ev3.EV3ColorSensor;
 import com.gantzgulch.lego.device.ev3.EV3ColorSensor.EV3ColorSensorMode;
 import com.gantzgulch.lego.device.ev3.EV3GyroSensor;
@@ -198,8 +197,6 @@ public class Main {
     public static void test_07() {
 
         final Platform platform = Platform.getInstance();
-        final Board board = platform.getBoard();
-        
         
         final EV3LargeMotor leftMotor = platform.findDevice(EV3LargeMotor.class, OutputPort.PORT_B);
         final EV3LargeMotor rightMotor = platform.findDevice(EV3LargeMotor.class, OutputPort.PORT_C);
@@ -210,7 +207,9 @@ public class Main {
             long now = System.currentTimeMillis();
             
             for(int j=0; j<1000; j++) {
-                board.getModel();
+                
+                leftMotor.getAddress();
+                
                 leftMotor.setDutyCycleSetPoint(0);
             }
             
@@ -225,22 +224,29 @@ public class Main {
         
         final Speed speed = new SpeedPercent(30.0);
 
+        //
+        // Configure the motors
+        //
+        
         leftMotor.setSpeedSetPoint(speed);
         rightMotor.setSpeedSetPoint(speed);
         
         leftMotor.setStopAction(EV3MotorStopAction.BRAKE);
         rightMotor.setStopAction(EV3MotorStopAction.BRAKE);
         
+        leftMotor.setRampUpSetPoint(2000, TimeUnit.MILLISECONDS);
+        rightMotor.setRampUpSetPoint(2000, TimeUnit.MILLISECONDS);
+
+        leftMotor.setRampDownSetPoint(2000, TimeUnit.MILLISECONDS);
+        rightMotor.setRampDownSetPoint(2000, TimeUnit.MILLISECONDS);
+
+        //
+        // Set distance and start the motors
+        //
+        
         leftMotor.setPositionSetPoint( leftMotor.getCountPerRotation() * 3);
         rightMotor.setPositionSetPoint( rightMotor.getCountPerRotation() * 3);
 
-        leftMotor.setRampUpSetPoint(1000, TimeUnit.MILLISECONDS);
-        rightMotor.setRampUpSetPoint(1000, TimeUnit.MILLISECONDS);
-
-        //
-        // Start the motors
-        //
-        
         leftMotor.sendCommand(EV3MotorCommand.RUN_TO_REL_POS);
         rightMotor.sendCommand(EV3MotorCommand.RUN_TO_REL_POS);
         
@@ -253,16 +259,16 @@ public class Main {
             LOG.info("test_07: angle: %d", value);
             Sleep.sleep(100, TimeUnit.MILLISECONDS);
         }
+
+        Sleep.sleep(500);
+
+        //
+        // Set distance and start the motors
+        //
 
         leftMotor.setPositionSetPoint( leftMotor.getCountPerRotation() * -3);
         rightMotor.setPositionSetPoint( rightMotor.getCountPerRotation() * -3);
         
-        Sleep.sleep(500);
-        
-        //
-        // Start the motors
-        //
-
         leftMotor.sendCommand(EV3MotorCommand.RUN_TO_REL_POS);
         rightMotor.sendCommand(EV3MotorCommand.RUN_TO_REL_POS);
 
@@ -275,19 +281,6 @@ public class Main {
             LOG.info("test_07: angle: %d", value);
             Sleep.sleep(100, TimeUnit.MILLISECONDS);
         }
-
-//        final MotorWrapper leftWrapper = MotorWrapper.create(leftMotor);
-//        final MotorWrapper rightWrapper = MotorWrapper.create(rightMotor);
-//        
-//        final Speed speed = new SpeedPercent(30.0);
-//        
-//        leftWrapper.setSpeed(speed);
-//        rightWrapper.setSpeed(speed);
-//        leftWrapper.setBrake(true);
-//        rightWrapper.setBrake(true);
-//        
-//        leftWrapper.onForRotations(3, false);
-//        rightWrapper.onForRotations(3, false);
         
     }
 
