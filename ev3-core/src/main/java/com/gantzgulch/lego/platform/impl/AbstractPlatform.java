@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.gantzgulch.lego.device.InputDevice;
-import com.gantzgulch.lego.device.LedPair;
-import com.gantzgulch.lego.device.LedPairId;
 import com.gantzgulch.lego.device.OutputDevice;
 import com.gantzgulch.lego.logging.EV3Logger;
 import com.gantzgulch.lego.platform.Platform;
@@ -62,32 +60,8 @@ public abstract class AbstractPlatform implements Platform {
     }
 
     @Override
-    public LedPair getLedPair(LedPairId deviceId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-//	@Override
-//	public LedPair getLedPair(final LedPairId deviceId) {
-//
-//		final String deviceKey = createDeviceKey(deviceId, deviceId.name());
-//		
-//		Optional<LedPair> lpo = getCachedDevice(deviceKey, LedPair.class); 
-//		
-//		if( lpo.isEmpty() ) {
-//			
-//			lpo = Optional.of( new LedPairImpl(deviceId) );
-//			
-//			addCachedDevice(deviceKey, lpo.get() );
-//			
-//		}
-//		
-//		return lpo.get();
-//	}
-
-    @Override
     public String toString() {
-        return "EV3PlatformImpl";
+        return type.name();
     }
 
 }

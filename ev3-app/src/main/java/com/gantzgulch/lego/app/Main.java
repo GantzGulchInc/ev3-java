@@ -5,12 +5,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import com.gantzgulch.lego.device.LedPair;
-import com.gantzgulch.lego.device.LedPairId;
 import com.gantzgulch.lego.device.ev3.EV3ColorSensor;
 import com.gantzgulch.lego.device.ev3.EV3ColorSensor.EV3ColorSensorMode;
-import com.gantzgulch.lego.device.ev3.EV3GyroSensor.EV3GyroSensorMode;
 import com.gantzgulch.lego.device.ev3.EV3GyroSensor;
+import com.gantzgulch.lego.device.ev3.EV3GyroSensor.EV3GyroSensorMode;
 import com.gantzgulch.lego.device.ev3.EV3LargeMotor;
 import com.gantzgulch.lego.device.ev3.EV3MediumMotor;
 import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorCommand;
@@ -27,51 +25,51 @@ public class Main {
 
     private static final EV3Logger LOG = EV3Logger.getLogger(Main.class);
 
-    public static void test_01() {
-
-        final Platform platform = Platform.getInstance();
-
-        LOG.info("Platform: %s", platform);
-
-        final LedPair led = platform.getLedPair(LedPairId.LED_0);
-
-        final LedPair led2 = platform.getLedPair(LedPairId.LED_0);
-
-        if (led == led2) {
-            LOG.info("They are the same devices.");
-        } else {
-            LOG.info("They are NOT the same devices.");
-        }
-
-        LOG.info("Led: setBrightness: %d,%d", 0, 0);
-
-        led.setBrightness(0, 0);
-
-        Sleep.sleep(5000);
-
-        LOG.info("Led: setBrightness: %d,%d", 0, led.getMaxBrightness1());
-
-        led.setBrightness(0, led.getMaxBrightness1());
-
-        Sleep.sleep(5000);
-
-        LOG.info("Led: setBrightness: %d,%d", led.getMaxBrightness0(), 0);
-
-        led.setBrightness(led.getMaxBrightness0(), 0);
-
-        Sleep.sleep(5000);
-
-        LOG.info("Led: setBrightness: %d,%d", led.getMaxBrightness0(), led.getMaxBrightness1());
-
-        led.setBrightness(led.getMaxBrightness0(), led.getMaxBrightness1());
-
-        Sleep.sleep(5000);
-
-        LOG.info("Led: setBrightness: %d,%d", 0, 0);
-
-        led.setBrightness(0, 0);
-
-    }
+//    public static void test_01() {
+//
+//        final Platform platform = Platform.getInstance();
+//
+//        LOG.info("Platform: %s", platform);
+//
+//        final LedPair led = platform.getLedPair(LedPairId.LED_0);
+//
+//        final LedPair led2 = platform.getLedPair(LedPairId.LED_0);
+//
+//        if (led == led2) {
+//            LOG.info("They are the same devices.");
+//        } else {
+//            LOG.info("They are NOT the same devices.");
+//        }
+//
+//        LOG.info("Led: setBrightness: %d,%d", 0, 0);
+//
+//        led.setBrightness(0, 0);
+//
+//        Sleep.sleep(5000);
+//
+//        LOG.info("Led: setBrightness: %d,%d", 0, led.getMaxBrightness1());
+//
+//        led.setBrightness(0, led.getMaxBrightness1());
+//
+//        Sleep.sleep(5000);
+//
+//        LOG.info("Led: setBrightness: %d,%d", led.getMaxBrightness0(), 0);
+//
+//        led.setBrightness(led.getMaxBrightness0(), 0);
+//
+//        Sleep.sleep(5000);
+//
+//        LOG.info("Led: setBrightness: %d,%d", led.getMaxBrightness0(), led.getMaxBrightness1());
+//
+//        led.setBrightness(led.getMaxBrightness0(), led.getMaxBrightness1());
+//
+//        Sleep.sleep(5000);
+//
+//        LOG.info("Led: setBrightness: %d,%d", 0, 0);
+//
+//        led.setBrightness(0, 0);
+//
+//    }
 
     public static void test_02() {
 

@@ -6,22 +6,26 @@ import java.util.logging.SimpleFormatter;
 public class CustomFormatter extends SimpleFormatter {
 
 	public CustomFormatter() {
-		
+
 	}
 	
 	@Override
 	public String format(final LogRecord record) {
 
-		final String shortClassName = trim(record.getSourceClassName());
-		
-		record.setSourceClassName(shortClassName);
+	    String shortClassName = record.getSourceClassName();
+	    
+	    if( shortClassName == null ) {
+	        shortClassName = record.getLoggerName();
+	    }
+	    
+		record.setSourceClassName( trim(shortClassName) );
 		
 		return super.format(record);
 	}
 	
 	private String trim(final String value) {
 		
-		// System.err.println("trim: value: '" + value + "'");
+		// System.err.println("CustomFormatter: trim: value: '" + value + "'");
 		
 		if( value == null ) {
 			return value;
