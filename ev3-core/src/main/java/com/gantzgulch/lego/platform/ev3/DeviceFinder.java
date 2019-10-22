@@ -30,34 +30,11 @@ public class DeviceFinder {
 
         List<Path> found = new ArrayList<>();
 
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(deviceClassPath)) {
+        final DeviceFilter deviceFilter = new DeviceFilter(deviceDriverName, deviceAddress);
+        
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(deviceClassPath, deviceFilter)) {
 
-            stream.forEach(p -> {
-
-                try {
-
-                    LOG.finest("findDevicePath: checking: %s", p);
-                    
-                    final String foundDeviceDriverName = readDeviceDriverName(p);
-
-                    LOG.finest("findDevicePath: driverName: %s", foundDeviceDriverName);
-                    
-                    final String foundDeviceAddress = readDeviceAddress(p);
-
-                    LOG.finest("findDevicePath: deviceAddress: %s", foundDeviceAddress);
-                    
-                    if (Objects.equals(deviceDriverName, foundDeviceDriverName) && Objects.equals(deviceAddress, foundDeviceAddress)) {
-                        
-                        LOG.finer("findDevicePath: found matchinge device...");
-                        
-                        found.add(p);
-                    }
-
-                } catch (final IOException | RuntimeException e) {
-                    LOG.warning(e, "findDevicePath: Skipping path: %s", p);
-                }
-
-            });
+            stream.forEach(found::add);
 
             if (found.size() > 1) {
                 throw new RuntimeException("Multiple devices found: " + found.size());
@@ -72,18 +49,55 @@ public class DeviceFinder {
         return found.size() > 0 ? Optional.of(found.get(0)) : Optional.empty();
     }
 
-    private String readDeviceDriverName(final Path path) throws IOException {
+    public static final class DeviceFilter implements DirectoryStream.Filter<Path> {
 
-        final Path driverNamePath = path.resolve("driver_name");
+        private static final EV3Logger LOG = EV3Logger.getLogger(DeviceFilter.class);
 
-        return FileOperator.readStringStripTrailing(driverNamePath, 100);
+        private final String deviceDriverName;
+        private final String deviceAddress;
+
+        public DeviceFilter(final String deviceDriverName, final String deviceAddress) {
+            this.deviceDriverName = deviceDriverName;
+            this.deviceAddress = deviceAddress;
+        }
+
+        @Override
+        public boolean accept(final Path p) throws IOException {
+
+            try {
+
+                LOG.finest("findDevicePath: checking: %s", p);
+
+                final String foundDeviceDriverName = readDeviceDriverName(p);
+
+                LOG.finest("findDevicePath: driverName: %s", foundDeviceDriverName);
+
+                final String foundDeviceAddress = readDeviceAddress(p);
+
+                LOG.finest("findDevicePath: deviceAddress: %s", foundDeviceAddress);
+
+                return Objects.equals(deviceDriverName, foundDeviceDriverName) && Objects.equals(deviceAddress, foundDeviceAddress);
+
+            } catch (final IOException | RuntimeException e) {
+                LOG.warning(e, "findDevicePath: Skipping path: %s", p);
+                return false;
+            }
+
+        }
+
+        private String readDeviceDriverName(final Path path) throws IOException {
+
+            final Path driverNamePath = path.resolve("driver_name");
+
+            return FileOperator.readStringStripTrailing(driverNamePath, 100);
+        }
+
+        private String readDeviceAddress(final Path path) throws IOException {
+
+            final Path addressPath = path.resolve("address");
+
+            return FileOperator.readStringStripTrailing(addressPath, 100);
+        }
+
     }
-
-    private String readDeviceAddress(final Path path) throws IOException {
-
-        final Path addressPath = path.resolve("address");
-
-        return FileOperator.readStringStripTrailing(addressPath, 100);
-    }
-
 }

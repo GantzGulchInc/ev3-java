@@ -34,6 +34,37 @@ public class Attribute {
         this(type, resolve(sysPath, attributeName));
     }
 
+    public byte[] readBytes() {
+    
+        synchronized (buffer) {
+
+            try {
+
+                final FileChannel fc = getOpenFileChannel();
+
+                fc.position(0);
+
+                buffer.clear();
+
+                while (fc.read(buffer) >= 0) {
+                    // Keep reading.
+                }
+
+                buffer.flip();
+
+                final byte[] bytes = new byte[buffer.remaining()];
+                
+                buffer.get(bytes);
+
+                return bytes;
+                
+            } catch (final IOException e) {
+                throw new AttributeException("Unable to read attribute: " + sysPath, e);
+            }
+
+        }
+    }
+    
     public String readString() {
 
         if (!type.isReadable()) {

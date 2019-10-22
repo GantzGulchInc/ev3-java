@@ -15,28 +15,22 @@ public interface EV3Motor<C extends Enum<?>> extends OutputDevice<C> {
     }
 
     public enum EV3MotorPolarity {
-
         NORMAL, //
         INVERSED;
-
     }
 
     public enum EV3MotorState {
-
         RUNNING, //
         RAMPING, //
         HOLDING, //
         OVERLOADED, //
         STALLED;
-
     }
 
     public enum EV3MotorStopAction {
-
         COAST, //
         BRAKE, //
         HOLD; //
-
     }
 
 }

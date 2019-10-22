@@ -66,7 +66,7 @@ public class AbstractSensorDevice<C extends Enum<?>, M extends Enum<?>> extends 
 
     @Override
     public byte[] getBinData() {
-        return null;
+        return binData.readBytes();
     }
 
     @Override
