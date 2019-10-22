@@ -2,7 +2,7 @@ package com.gantzgulch.lego.device.ev3;
 
 import com.gantzgulch.lego.device.OutputDevice;
 
-public interface EV3Motor<C extends Enum<?>> extends OutputDevice<C> {
+public interface EV3Motor<CMDS extends Enum<?>> extends OutputDevice<CMDS> {
 
     public enum EV3MotorCommand {
         RUN_FOREVER, //

@@ -2,13 +2,13 @@ package com.gantzgulch.lego.device;
 
 import java.util.Set;
 
-public interface Device<C extends Enum<?>> {
+public interface Device<CMDS extends Enum<?>> {
 
     String getAddress();
     
     String getDriverName();
     
-    Set<C> getCommands();
+    Set<CMDS> getCommands();
     
-    void setCommand(C command);
+    void setCommand(CMDS command);
 }

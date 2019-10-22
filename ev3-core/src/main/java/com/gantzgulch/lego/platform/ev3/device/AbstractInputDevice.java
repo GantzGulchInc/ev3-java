@@ -4,9 +4,9 @@ import java.nio.file.Path;
 
 import com.gantzgulch.lego.util.BidirectionalEnumMap;
 
-public class AbstractInputDevice<C extends Enum<?>> extends AbstractDevice<C> {
+public class AbstractInputDevice<CMDS extends Enum<?>> extends AbstractDevice<CMDS> {
 
-    public AbstractInputDevice(final Path sysFsPath, final BidirectionalEnumMap<C> commandMap) {
+    public AbstractInputDevice(final Path sysFsPath, final BidirectionalEnumMap<CMDS> commandMap) {
         
         super(sysFsPath, commandMap);
     }

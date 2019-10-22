@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.gantzgulch.lego.exception.DeviceException;
 import com.gantzgulch.lego.logging.EV3Logger;
 import com.gantzgulch.lego.util.FileOperator;
 
@@ -37,12 +38,14 @@ public class DeviceFinder {
             stream.forEach(found::add);
 
             if (found.size() > 1) {
-                throw new RuntimeException("Multiple devices found: " + found.size());
+                throw new DeviceException("Error finding device, multiple devices found: " + found.size());
             }
 
         } catch (final IOException e) {
 
             LOG.warning(e, "Error looking for device path: %s", e.getMessage());
+            
+            throw new DeviceException("Error finding device.", e);
 
         }
 

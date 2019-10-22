@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.gantzgulch.lego.device.InputDevice;
 
-public interface EV3Sensor<C extends Enum<?>, M extends Enum<?>> extends InputDevice<C> {
+public interface EV3Sensor<CMDS extends Enum<?>, MODES extends Enum<?>> extends InputDevice<CMDS> {
 
     byte[] getBinData();
     
@@ -13,11 +13,11 @@ public interface EV3Sensor<C extends Enum<?>, M extends Enum<?>> extends InputDe
     
     String getFwVersion();
     
-    M getMode();
+    MODES getMode();
     
-    void setMode(M mode);
+    void setMode(MODES mode);
     
-    Set<M> getModes();
+    Set<MODES> getModes();
     
     int getNumValues();
     

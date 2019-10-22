@@ -12,10 +12,34 @@ import com.gantzgulch.lego.util.BidirectionalEnumMap;
 
 public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCommand> implements EV3TachoMotor<EV3MotorCommand> {
 
+    public static final String ATTR_COUNT_PER_ROT = "count_per_rot";
+    public static final String ATTR_DUTY_CYCLE = "duty_cycle";
+    public static final String ATTR_DUTY_CYCLE_SP = "duty_cycle_sp";
+    public static final String ATTR_POLARITY = "polarity";
+    public static final String ATTR_POSITION = "position";
+    public static final String ATTR_HOLD_PID = "hold_pid";
+    public static final String ATTR_HOLD_PID_KD = "Kd";
+    public static final String ATTR_HOLD_PID_KI = "Ki";
+    public static final String ATTR_HOLD_PID_KP = "Kp";
+    public static final String ATTR_MAX_SPEED = "max_speed";
+    public static final String ATTR_POSITION_SP = "position_sp";
+    public static final String ATTR_SPEED = "speed";
+    public static final String ATTR_SPEED_SP = "speed_sp";
+    public static final String ATTR_RAMP_UP_SP = "ramp_up_sp";
+    public static final String ATTR_RAMP_DOWN_SP = "ramp_down_sp";
+    public static final String ATTR_SPEED_PID = "speed_pid";
+    public static final String ATTR_SPEED_PID_KD = "Kd";
+    public static final String ATTR_SPEED_PID_KI = "Ki";
+    public static final String ATTR_SPEED_PID_KP = "Kp";
+    public static final String ATTR_STATE = "state";
+    public static final String ATTR_STOP_ACTION = "stop_action";
+    public static final String ATTR_STOP_ACTIONS = "stop_actions";
+    public static final String ATTR_TIME_SP = "time_sp";
+
     private final BidirectionalEnumMap<EV3MotorStopAction> stopActionMap;
     private final BidirectionalEnumMap<EV3MotorState> stateMap;
     private final BidirectionalEnumMap<EV3MotorPolarity> polarityMap;
-    
+
     private final Attribute countPerRotation;
     private final Attribute dutyCycle;
     private final Attribute dutyCycleSetPoint;
@@ -38,44 +62,42 @@ public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCo
     private final Attribute stopActions;
     private final Attribute timeSetPoint; // Milliseconds
 
-    
     public AbstractTachoMotor(//
             final Path sysFsPath, //
             final BidirectionalEnumMap<EV3MotorCommand> commandMap, //
-            final BidirectionalEnumMap<EV3MotorStopAction> stopActionMap, 
-            final BidirectionalEnumMap<EV3MotorState> stateMap, 
+            final BidirectionalEnumMap<EV3MotorStopAction> stopActionMap, final BidirectionalEnumMap<EV3MotorState> stateMap,
             final BidirectionalEnumMap<EV3MotorPolarity> polarityMap) {
 
         super(sysFsPath, commandMap);
-        
+
         this.stopActionMap = stopActionMap;
         this.stateMap = stateMap;
         this.polarityMap = polarityMap;
-    
-        this.countPerRotation = new Attribute(AttributeType.READ_ONLY, this.sysFsPath, "count_per_rot");
-        this.dutyCycle = new Attribute(AttributeType.READ_ONLY, this.sysFsPath, "duty_cycle");
-        this.dutyCycleSetPoint = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, "duty_cycle_sp");
-        this.polarity = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, "polarity");
-        this.position = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, "position");
-        this.holdPidKd = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, "hold_pid","Kd");
-        this.holdPidKi = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, "hold_pid","Ki");
-        this.holdPidKp = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, "hold_pid","Kp");
-        this.maxSpeed = new Attribute(AttributeType.READ_ONLY, this.sysFsPath, "max_speed");
-        this.positionSetPoint = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, "position_sp");
-        this.speed = new Attribute(AttributeType.READ_ONLY, this.sysFsPath, "speed");
-        this.speedSetPoint = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, "speed_sp");
-        this.rampUpSetPoint = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, "ramp_up_sp");
-        this.rampDownSetPoint = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, "ramp_down_sp");
-        this.speedPidKd = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, "speed_pid","Kd");
-        this.speedPidKi = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, "speed_pid","Ki");
-        this.speedPidKp = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, "speed_pid","Kp");
-        this.state = new Attribute(AttributeType.READ_ONLY, this.sysFsPath, "state");
-        this.stopAction = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, "stop_action");
-        this.stopActions = new Attribute(AttributeType.READ_ONLY, this.sysFsPath, "stop_actions");
-        this.timeSetPoint = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, "time_sp");
-        
+
+        this.countPerRotation = new Attribute(AttributeType.READ_ONLY, this.sysFsPath, ATTR_COUNT_PER_ROT);
+        this.dutyCycle = new Attribute(AttributeType.READ_ONLY, this.sysFsPath, ATTR_DUTY_CYCLE);
+        this.dutyCycleSetPoint = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_DUTY_CYCLE_SP);
+        this.polarity = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_POLARITY);
+        this.position = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_POSITION);
+        this.holdPidKd = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_HOLD_PID, ATTR_HOLD_PID_KD);
+        this.holdPidKi = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_HOLD_PID, ATTR_HOLD_PID_KI);
+        this.holdPidKp = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_HOLD_PID, ATTR_HOLD_PID_KP);
+        this.maxSpeed = new Attribute(AttributeType.READ_ONLY, this.sysFsPath, ATTR_MAX_SPEED);
+        this.positionSetPoint = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_POSITION_SP);
+        this.speed = new Attribute(AttributeType.READ_ONLY, this.sysFsPath, ATTR_SPEED);
+        this.speedSetPoint = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_SPEED_SP);
+        this.rampUpSetPoint = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_RAMP_UP_SP);
+        this.rampDownSetPoint = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_RAMP_DOWN_SP);
+        this.speedPidKd = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_SPEED_PID, ATTR_SPEED_PID_KD);
+        this.speedPidKi = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_SPEED_PID, ATTR_SPEED_PID_KI);
+        this.speedPidKp = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_SPEED_PID, ATTR_SPEED_PID_KP);
+        this.state = new Attribute(AttributeType.READ_ONLY, this.sysFsPath, ATTR_STATE);
+        this.stopAction = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_STOP_ACTION);
+        this.stopActions = new Attribute(AttributeType.READ_ONLY, this.sysFsPath, ATTR_STOP_ACTIONS);
+        this.timeSetPoint = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_TIME_SP);
+
     }
-    
+
     @Override
     public int getCountPerRotation() {
         return countPerRotation.readInteger().orElse(0);
@@ -183,7 +205,7 @@ public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCo
 
     @Override
     public void setRampUpSetPoint(final long timeUnit, final TimeUnit unit) {
-        rampUpSetPoint.writeInteger( (int)  unit.toMillis(timeUnit));
+        rampUpSetPoint.writeInteger((int) unit.toMillis(timeUnit));
     }
 
     @Override
@@ -213,7 +235,7 @@ public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCo
 
     @Override
     public void setSpeedPidKi(final int newSpeedPidKi) {
-        
+
     }
 
     @Override
@@ -227,13 +249,13 @@ public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCo
     }
 
     @Override
-    public Set<EV3MotorState> getState(){
-        return stateMap.get(this.state.readStringArray() );
+    public Set<EV3MotorState> getState() {
+        return stateMap.get(this.state.readStringArray());
     }
 
     @Override
     public EV3MotorStopAction getStopAction() {
-        return stopActionMap.get( stopAction.readString() ).orElse(EV3MotorStopAction.BRAKE);
+        return stopActionMap.get(stopAction.readString()).orElse(EV3MotorStopAction.BRAKE);
     }
 
     @Override
@@ -242,8 +264,8 @@ public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCo
     }
 
     @Override
-    public Set<EV3MotorStopAction> getStopActions(){
-        return stopActionMap.get( stopActions.readStringArray() );
+    public Set<EV3MotorStopAction> getStopActions() {
+        return stopActionMap.get(stopActions.readStringArray());
     }
 
     @Override
@@ -253,12 +275,12 @@ public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCo
 
     @Override
     public void setTimeSetPoint(long timeUnit, TimeUnit unit) {
-        timeSetPoint.writeInteger( (int)unit.toMillis(timeUnit) );
+        timeSetPoint.writeInteger((int) unit.toMillis(timeUnit));
     }
-    
+
     @Override
     public String toString() {
-        
+
         final StringBuffer b = new StringBuffer();
 
         b.append("TachoMotor:\n");
@@ -286,7 +308,7 @@ public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCo
         b.append("  stopAction ............: ").append(stopAction.readString()).append("\n");
         b.append("  stopActions ...........: ").append(stopActions.readString()).append("\n");
         b.append("  timeSetPoint ..........: ").append(timeSetPoint.readString()).append("\n");
-        
+
         return b.toString();
     }
 

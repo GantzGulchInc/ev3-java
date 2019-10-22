@@ -3,7 +3,7 @@ package com.gantzgulch.lego.device.ev3;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-public interface EV3TachoMotor<C extends Enum<?>> extends EV3Motor<C> {
+public interface EV3TachoMotor<CMDS extends Enum<?>> extends EV3Motor<CMDS> {
 
     int getCountPerRotation();
 
