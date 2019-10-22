@@ -4,7 +4,7 @@ import com.gantzgulch.lego.device.OutputDevice;
 
 public interface EV3Motor<CMDS extends Enum<?>> extends OutputDevice<CMDS> {
 
-    public enum EV3MotorCommand {
+    public static enum EV3MotorCommand {
         RUN_FOREVER, //
         RUN_TO_ABS_POS, //
         RUN_TO_REL_POS, //
@@ -14,12 +14,12 @@ public interface EV3Motor<CMDS extends Enum<?>> extends OutputDevice<CMDS> {
         RESET;
     }
 
-    public enum EV3MotorPolarity {
+    public static enum EV3MotorPolarity {
         NORMAL, //
         INVERSED;
     }
 
-    public enum EV3MotorState {
+    public static enum EV3MotorState {
         RUNNING, //
         RAMPING, //
         HOLDING, //
@@ -27,7 +27,7 @@ public interface EV3Motor<CMDS extends Enum<?>> extends OutputDevice<CMDS> {
         STALLED;
     }
 
-    public enum EV3MotorStopAction {
+    public static enum EV3MotorStopAction {
         COAST, //
         BRAKE, //
         HOLD; //

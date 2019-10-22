@@ -41,6 +41,7 @@
 
 	<modules>
 		<module>ev3-core</module>
+		<module>ev3-lib</module>
 		<module>ev3-app</module>
 	</modules>
 
