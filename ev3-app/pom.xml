@@ -45,7 +45,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib</classpathPrefix>
-							<mainClass>com.gantzgulch.ev3.app.Main</mainClass>
+							<mainClass>com.gantzgulch.lego.app.Main</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
