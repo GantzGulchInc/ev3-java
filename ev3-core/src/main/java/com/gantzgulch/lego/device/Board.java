@@ -1,6 +1,8 @@
 package com.gantzgulch.lego.device;
 
-public interface Board {
+import java.io.Closeable;
+
+public interface Board extends Closeable {
 
     String getHwRevision();
     

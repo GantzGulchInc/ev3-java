@@ -15,6 +15,11 @@ public class EV3ColorSensorImpl extends AbstractSensorDevice<EV3SensorCommand,EV
         super(sysFsPath, EV3SensorCommandMap.INSTANCE, EV3SensorBinFormatMap.INSTANCE, EV3ColorSensorModemap.INSTANCE);
     }
     
+    @Override
+    public void close() {
+        super.close();
+    }
+
     public static class EV3ColorSensorModemap extends BidirectionalEnumMap<EV3ColorSensorMode> {
 
         public static final EV3ColorSensorModemap INSTANCE = new EV3ColorSensorModemap();
@@ -32,4 +37,6 @@ public class EV3ColorSensorImpl extends AbstractSensorDevice<EV3SensorCommand,EV
         }
 
     }
+    
+    
 }

@@ -21,6 +21,7 @@ import com.gantzgulch.lego.port.InputPort;
 import com.gantzgulch.lego.port.OutputPort;
 import com.gantzgulch.lego.unit.Speed;
 import com.gantzgulch.lego.unit.SpeedPercent;
+import com.gantzgulch.lego.util.Closeables;
 import com.gantzgulch.lego.util.Sleep;
 
 public class Main {
@@ -290,7 +291,13 @@ public class Main {
 
         LOG.info("Running...");
         
-        test_07();
+        try {
+        
+            test_07();
+            
+        }finally {
+            Closeables.close(Platform.getInstance());
+        }
 
     }
 

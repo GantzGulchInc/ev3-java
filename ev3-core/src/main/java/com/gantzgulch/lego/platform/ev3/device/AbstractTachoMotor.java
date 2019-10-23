@@ -10,6 +10,7 @@ import com.gantzgulch.lego.platform.impl.Attribute;
 import com.gantzgulch.lego.platform.impl.AttributeType;
 import com.gantzgulch.lego.unit.Speed;
 import com.gantzgulch.lego.util.BidirectionalEnumMap;
+import com.gantzgulch.lego.util.Closeables;
 
 public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCommand> implements EV3TachoMotor<EV3MotorCommand> {
 
@@ -75,27 +76,64 @@ public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCo
         this.stateMap = stateMap;
         this.polarityMap = polarityMap;
 
-        this.countPerRotation = new Attribute(AttributeType.READ_ONLY, this.sysFsPath, ATTR_COUNT_PER_ROT);
-        this.dutyCycle = new Attribute(AttributeType.READ_ONLY, this.sysFsPath, ATTR_DUTY_CYCLE);
-        this.dutyCycleSetPoint = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_DUTY_CYCLE_SP);
-        this.polarity = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_POLARITY);
-        this.position = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_POSITION);
-        this.holdPidKd = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_HOLD_PID, ATTR_HOLD_PID_KD);
-        this.holdPidKi = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_HOLD_PID, ATTR_HOLD_PID_KI);
-        this.holdPidKp = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_HOLD_PID, ATTR_HOLD_PID_KP);
-        this.maxSpeed = new Attribute(AttributeType.READ_ONLY, this.sysFsPath, ATTR_MAX_SPEED);
-        this.positionSetPoint = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_POSITION_SP);
-        this.speed = new Attribute(AttributeType.READ_ONLY, this.sysFsPath, ATTR_SPEED);
-        this.speedSetPoint = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_SPEED_SP);
-        this.rampUpSetPoint = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_RAMP_UP_SP);
-        this.rampDownSetPoint = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_RAMP_DOWN_SP);
-        this.speedPidKd = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_SPEED_PID, ATTR_SPEED_PID_KD);
-        this.speedPidKi = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_SPEED_PID, ATTR_SPEED_PID_KI);
-        this.speedPidKp = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_SPEED_PID, ATTR_SPEED_PID_KP);
-        this.state = new Attribute(AttributeType.READ_ONLY, this.sysFsPath, ATTR_STATE);
-        this.stopAction = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_STOP_ACTION);
-        this.stopActions = new Attribute(AttributeType.READ_ONLY, this.sysFsPath, ATTR_STOP_ACTIONS);
-        this.timeSetPoint = new Attribute(AttributeType.READ_WRITE, this.sysFsPath, ATTR_TIME_SP);
+        this.countPerRotation = new Attribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_COUNT_PER_ROT);
+        this.dutyCycle = new Attribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_DUTY_CYCLE);
+        this.dutyCycleSetPoint = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_DUTY_CYCLE_SP);
+        this.polarity = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_POLARITY);
+        this.position = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_POSITION);
+        this.holdPidKd = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_HOLD_PID, ATTR_HOLD_PID_KD);
+        this.holdPidKi = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_HOLD_PID, ATTR_HOLD_PID_KI);
+        this.holdPidKp = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_HOLD_PID, ATTR_HOLD_PID_KP);
+        this.maxSpeed = new Attribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_MAX_SPEED);
+        this.positionSetPoint = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_POSITION_SP);
+        this.speed = new Attribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_SPEED);
+        this.speedSetPoint = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_SPEED_SP);
+        this.rampUpSetPoint = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_RAMP_UP_SP);
+        this.rampDownSetPoint = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_RAMP_DOWN_SP);
+        this.speedPidKd = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_SPEED_PID, ATTR_SPEED_PID_KD);
+        this.speedPidKi = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_SPEED_PID, ATTR_SPEED_PID_KI);
+        this.speedPidKp = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_SPEED_PID, ATTR_SPEED_PID_KP);
+        this.state = new Attribute(AttributeType.READ_ONLY, true, this.sysFsPath, ATTR_STATE);
+        this.stopAction = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_STOP_ACTION);
+        this.stopActions = new Attribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_STOP_ACTIONS);
+        this.timeSetPoint = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_TIME_SP);
+
+    }
+
+    @Override
+    public void close() {
+
+        try {
+            
+            sendCommand(EV3MotorCommand.STOP);
+            
+        } catch (final RuntimeException e) {
+            LOG.warning(e, "close: Error stopping motor: %s", e.getMessage());
+        }
+
+        Closeables.close(countPerRotation);
+        Closeables.close(dutyCycle);
+        Closeables.close(dutyCycleSetPoint);
+        Closeables.close(maxSpeed);
+        Closeables.close(polarity);
+        Closeables.close(position);
+        Closeables.close(holdPidKd);
+        Closeables.close(holdPidKi);
+        Closeables.close(holdPidKp);
+        Closeables.close(positionSetPoint);
+        Closeables.close(speed);
+        Closeables.close(speedSetPoint);
+        Closeables.close(rampUpSetPoint);
+        Closeables.close(rampDownSetPoint);
+        Closeables.close(speedPidKd);
+        Closeables.close(speedPidKi);
+        Closeables.close(speedPidKp);
+        Closeables.close(state);
+        Closeables.close(stopAction);
+        Closeables.close(stopActions);
+        Closeables.close(timeSetPoint);
+        
+        super.close();
 
     }
 
@@ -201,20 +239,20 @@ public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCo
 
     @Override
     public void setSpeedSetPoint(Speed speed) {
-        
+
         int countsPerRotation = getCountPerRotation();
-        
+
         int maxCountsPerSecond = getMaxSpeed();
-        
-        double maxRotationsPerSecond = (double) maxCountsPerSecond / (double)countsPerRotation;
-        
+
+        double maxRotationsPerSecond = (double) maxCountsPerSecond / (double) countsPerRotation;
+
         double rotationsPerSecond = speed.rotationsPerSecond(maxRotationsPerSecond);
 
-        int countsPerSecond = (int)(rotationsPerSecond * countsPerRotation);
-        
+        int countsPerSecond = (int) (rotationsPerSecond * countsPerRotation);
+
         setSpeedSetPoint(countsPerSecond);
     }
-    
+
     @Override
     public int getRampUpSetPointMillis() {
         return rampUpSetPoint.readInteger().orElse(0);

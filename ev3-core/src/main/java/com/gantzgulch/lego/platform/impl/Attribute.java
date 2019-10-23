@@ -1,5 +1,6 @@
 package com.gantzgulch.lego.platform.impl;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -12,7 +13,7 @@ import com.gantzgulch.lego.exception.AttributeException;
 import com.gantzgulch.lego.util.BidirectionalEnumMap;
 import com.gantzgulch.lego.util.StringUtil;
 
-public class Attribute {
+public class Attribute implements Closeable {
 
     public static final Charset UTF_8 = StandardCharsets.UTF_8;
 
@@ -24,24 +25,35 @@ public class Attribute {
 
     private final ByteBuffer buffer;
 
-    public Attribute(final AttributeType type, final Path sysPath) {
+    public Attribute(final AttributeType type, boolean preWarm, final Path sysPath) {
         this.type = type;
         this.sysPath = sysPath;
         this.buffer = ByteBuffer.allocate(200);
-    }
-
-    public Attribute(final AttributeType type, final Path sysPath, final String... attributeName) {
-        this(type, resolve(sysPath, attributeName));
-    }
-
-    public void open() {
-        try {
-            getOpenFileChannel();
-        } catch (final IOException e) {
-            throw new RuntimeException(e);
+        
+        if( preWarm ) {
+            
+            try {
+                getOpenFileChannel();
+            }catch(final IOException | RuntimeException e) {
+                throw new AttributeException("Unable to create attribute.", e);
+            }
+            
         }
     }
 
+    public Attribute(final AttributeType type, boolean preWarm, final Path sysPath, final String... attributeName) {
+        this(type, preWarm, resolve(sysPath, attributeName));
+    }
+
+    @Override
+    public void close() throws IOException {
+        
+        if( fileChannel != null ) {
+            fileChannel.close();
+        }
+        
+    }
+    
     public byte[] readBytes() {
 
         synchronized (buffer) {

@@ -8,25 +8,27 @@ import com.gantzgulch.lego.device.ev3.EV3Sensor;
 import com.gantzgulch.lego.platform.impl.Attribute;
 import com.gantzgulch.lego.platform.impl.AttributeType;
 import com.gantzgulch.lego.util.BidirectionalEnumMap;
+import com.gantzgulch.lego.util.Closeables;
 
-public class AbstractSensorDevice<CMDS extends Enum<?>, MODES extends Enum<?>> extends AbstractInputDevice<CMDS> implements EV3Sensor<CMDS, MODES> {
+public class AbstractSensorDevice<CMDS extends Enum<?>, MODES extends Enum<?>> extends AbstractInputDevice<CMDS>
+        implements EV3Sensor<CMDS, MODES> {
 
     public static final String ATTR_BIN_DATA = "bin_data";
     public static final String ATTR_BIN_DATA_FORMAT = "bin_data_format";
     public static final String ATTR_DECIMALS = "decimals";
     public static final String ATTR_FW_VERSION = "fw_version";
-    public static final String ATTR_MODE =  "mode";
+    public static final String ATTR_MODE = "mode";
     public static final String ATTR_MODES = "modes";
-    public static final String ATTR_NUM_VALUES =  "num_values";
-    public static final String ATTR_POLL_MS =  "poll_ms";
-    public static final String ATTR_UNITS =  "units";
-    public static final String ATTR_VALUE0 =  "value0";
-    public static final String ATTR_VALUE1 =  "value1";
-    public static final String ATTR_VALUE2 =  "value2";
-    public static final String ATTR_VALUE3 =  "value3";
-    public static final String ATTR_VALUE4 =  "value4";
+    public static final String ATTR_NUM_VALUES = "num_values";
+    public static final String ATTR_POLL_MS = "poll_ms";
+    public static final String ATTR_UNITS = "units";
+    public static final String ATTR_VALUE0 = "value0";
+    public static final String ATTR_VALUE1 = "value1";
+    public static final String ATTR_VALUE2 = "value2";
+    public static final String ATTR_VALUE3 = "value3";
+    public static final String ATTR_VALUE4 = "value4";
     public static final String ATTR_VALUE5 = "value5";
-    public static final String ATTR_VALUE6 =  "value6";
+    public static final String ATTR_VALUE6 = "value6";
     public static final String ATTR_VALUE7 = "value7";
 
     private final BidirectionalEnumMap<EV3SensorBinFormat> binFormatMap;
@@ -49,35 +51,59 @@ public class AbstractSensorDevice<CMDS extends Enum<?>, MODES extends Enum<?>> e
     private final Attribute value5;
     private final Attribute value6;
     private final Attribute value7;
-       
+
     public AbstractSensorDevice(//
             final Path sysFsPath, //
             final BidirectionalEnumMap<CMDS> commandMap, //
             final BidirectionalEnumMap<EV3SensorBinFormat> binFormatMap, //
             final BidirectionalEnumMap<MODES> modeMap) {
-        
+
         super(sysFsPath, commandMap);
-        
+
         this.binFormatMap = binFormatMap;
         this.modeMap = modeMap;
-        this.binData = new Attribute(AttributeType.READ_ONLY, sysFsPath, ATTR_BIN_DATA);
-        this.binDataFormat = new Attribute(AttributeType.READ_ONLY, sysFsPath, ATTR_BIN_DATA_FORMAT);
-        this.decimals = new Attribute(AttributeType.READ_ONLY, sysFsPath, ATTR_DECIMALS);
-        this.fwVersion = new Attribute(AttributeType.READ_ONLY, sysFsPath, ATTR_FW_VERSION);
-        this.mode = new Attribute(AttributeType.READ_WRITE, sysFsPath, ATTR_MODE);
-        this.modes = new Attribute(AttributeType.READ_ONLY, sysFsPath, ATTR_MODES);
-        this.numValues = new Attribute(AttributeType.READ_ONLY, sysFsPath, ATTR_NUM_VALUES);
-        this.pollMillis = new Attribute(AttributeType.READ_WRITE, sysFsPath, ATTR_POLL_MS);
-        this.units = new Attribute(AttributeType.READ_ONLY, sysFsPath, ATTR_UNITS);
-        this.value0 = new Attribute(AttributeType.READ_ONLY, sysFsPath, ATTR_VALUE0);
-        this.value1 = new Attribute(AttributeType.READ_ONLY, sysFsPath, ATTR_VALUE1);
-        this.value2 = new Attribute(AttributeType.READ_ONLY, sysFsPath, ATTR_VALUE2);
-        this.value3 = new Attribute(AttributeType.READ_ONLY, sysFsPath, ATTR_VALUE3);
-        this.value4 = new Attribute(AttributeType.READ_ONLY, sysFsPath, ATTR_VALUE4);
-        this.value5 = new Attribute(AttributeType.READ_ONLY, sysFsPath, ATTR_VALUE5);
-        this.value6 = new Attribute(AttributeType.READ_ONLY, sysFsPath, ATTR_VALUE6);
-        this.value7 = new Attribute(AttributeType.READ_ONLY, sysFsPath, ATTR_VALUE7);
-        
+        this.binData = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_BIN_DATA);
+        this.binDataFormat = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_BIN_DATA_FORMAT);
+        this.decimals = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_DECIMALS);
+        this.fwVersion = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_FW_VERSION);
+        this.mode = new Attribute(AttributeType.READ_WRITE, false, sysFsPath, ATTR_MODE);
+        this.modes = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_MODES);
+        this.numValues = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_NUM_VALUES);
+        this.pollMillis = new Attribute(AttributeType.READ_WRITE, false, sysFsPath, ATTR_POLL_MS);
+        this.units = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_UNITS);
+        this.value0 = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE0);
+        this.value1 = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE1);
+        this.value2 = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE2);
+        this.value3 = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE3);
+        this.value4 = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE4);
+        this.value5 = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE5);
+        this.value6 = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE6);
+        this.value7 = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE7);
+
+    }
+
+    @Override
+    public void close() {
+
+        Closeables.close(binData);
+        Closeables.close(binDataFormat);
+        Closeables.close(decimals);
+        Closeables.close(fwVersion);
+        Closeables.close(mode);
+        Closeables.close(modes);
+        Closeables.close(numValues);
+        Closeables.close(pollMillis);
+        Closeables.close(units);
+        Closeables.close(value0);
+        Closeables.close(value1);
+        Closeables.close(value2);
+        Closeables.close(value3);
+        Closeables.close(value4);
+        Closeables.close(value5);
+        Closeables.close(value6);
+        Closeables.close(value7);
+
+        super.close();
     }
 
     @Override
@@ -94,19 +120,19 @@ public class AbstractSensorDevice<CMDS extends Enum<?>, MODES extends Enum<?>> e
     public String getFwVersion() {
         return fwVersion.readString();
     }
-    
+
     @Override
     public MODES getMode() {
         return modeMap.get(mode.readString()).orElse(null);
     }
-    
+
     @Override
     public void setMode(final MODES newMode) {
         mode.writeEnum(newMode, modeMap);
     }
-    
+
     @Override
-    public Set<MODES> getModes(){
+    public Set<MODES> getModes() {
         return modeMap.get(modes.readStringArray());
     }
 
@@ -122,7 +148,7 @@ public class AbstractSensorDevice<CMDS extends Enum<?>, MODES extends Enum<?>> e
 
     @Override
     public void setPollMillis(long timeUnit, TimeUnit unit) {
-        pollMillis.writeInteger( (int) unit.toMillis(timeUnit));
+        pollMillis.writeInteger((int) unit.toMillis(timeUnit));
     }
 
     @Override
@@ -211,6 +237,6 @@ public class AbstractSensorDevice<CMDS extends Enum<?>, MODES extends Enum<?>> e
     }
 
     private double convertDouble(final int value) {
-        return ( (double) value ) / Math.pow(10.0, decimals.readInteger().orElse(0));
+        return ((double) value) / Math.pow(10.0, decimals.readInteger().orElse(0));
     }
 }

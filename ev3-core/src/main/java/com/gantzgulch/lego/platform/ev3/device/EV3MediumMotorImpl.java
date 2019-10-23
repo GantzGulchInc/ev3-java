@@ -14,4 +14,8 @@ public class EV3MediumMotorImpl extends AbstractTachoMotor implements EV3MediumM
         super(sysFsPath, EV3MotorCommandMap.INSTANCE, EV3MotorStopActionMap.INSTANCE, EV3MotorStateMap.INSTANCE, EV3MotorPolarityMap.INSTANCE);
     }
 
+    @Override
+    public void close() {
+        super.close();
+    }
 }

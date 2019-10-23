@@ -20,8 +20,8 @@ public class LedImpl implements Led {
 		
 		this.sysPath = sysPath;
 		
-		this.maxBrightness = new Attribute(AttributeType.READ_ONLY, this.sysPath, "max_brightness");
-		this.brightness = new Attribute(AttributeType.READ_WRITE, this.sysPath, "brightness");
+		this.maxBrightness = new Attribute(AttributeType.READ_ONLY, false, this.sysPath, "max_brightness");
+		this.brightness = new Attribute(AttributeType.READ_WRITE, false, this.sysPath, "brightness");
 	}
 
 	@Override

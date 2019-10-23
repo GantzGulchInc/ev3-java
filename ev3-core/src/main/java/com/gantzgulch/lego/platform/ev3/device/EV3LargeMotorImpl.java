@@ -14,4 +14,8 @@ public class EV3LargeMotorImpl extends AbstractTachoMotor implements EV3LargeMot
         super(sysFsPath, EV3MotorCommandMap.INSTANCE, EV3MotorStopActionMap.INSTANCE, EV3MotorStateMap.INSTANCE, EV3MotorPolarityMap.INSTANCE);
     }
 
+    @Override
+    public void close() {
+        super.close();
+    }
 }

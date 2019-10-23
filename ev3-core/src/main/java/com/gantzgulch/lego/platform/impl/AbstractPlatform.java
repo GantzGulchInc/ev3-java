@@ -11,6 +11,7 @@ import com.gantzgulch.lego.platform.Platform;
 import com.gantzgulch.lego.platform.PlatformType;
 import com.gantzgulch.lego.port.InputPort;
 import com.gantzgulch.lego.port.OutputPort;
+import com.gantzgulch.lego.util.Closeables;
 import com.gantzgulch.lego.util.Pair;
 
 public abstract class AbstractPlatform implements Platform {
@@ -24,7 +25,7 @@ public abstract class AbstractPlatform implements Platform {
     public static AbstractPlatform getInstance() {
         return PlatformSingleton.INSTANCE;
     }
-    
+
     private final PlatformType type;
 
     private final Board board;
@@ -45,26 +46,59 @@ public abstract class AbstractPlatform implements Platform {
     public Board getBoard() {
         return board;
     }
-    
+
     @Override
     public PlatformType getType() {
         return type;
     }
-    
+
+    @Override
+    public void close() {
+
+        synchronized (inputCache) {
+
+            inputCache//
+                    .values() //
+                    .forEach(Closeables::close);
+
+            inputCache.clear();
+        }
+
+        synchronized (outputCache) {
+
+            outputCache //
+                    .values() //
+                    .forEach(Closeables::close);
+
+            outputCache.clear();
+        }
+        
+        Closeables.close(board);
+        
+    }
+
     protected <D extends InputDevice<?>> D getCachedDevice(final Class<D> deviceClass, final InputPort port) {
-        return deviceClass.cast(inputCache.get(new Pair<>(deviceClass, port)));
+        synchronized (inputCache) {
+            return deviceClass.cast(inputCache.get(new Pair<>(deviceClass, port)));
+        }
     }
 
     protected void addCachedDevice(final Class<? extends InputDevice<?>> deviceClass, final InputPort port, final InputDevice<?> device) {
-        inputCache.put(new Pair<>(deviceClass, port), device);
+        synchronized (inputCache) {
+            inputCache.put(new Pair<>(deviceClass, port), device);
+        }
     }
 
     protected <D extends OutputDevice<?>> D getCachedDevice(final Class<D> deviceClass, final OutputPort port) {
-        return deviceClass.cast(outputCache.get(new Pair<>(deviceClass, port)));
+        synchronized (outputCache) {
+            return deviceClass.cast(outputCache.get(new Pair<>(deviceClass, port)));
+        }
     }
 
     protected void addCachedDevice(final Class<? extends OutputDevice<?>> deviceClass, final OutputPort port, final OutputDevice<?> device) {
-        outputCache.put(new Pair<>(deviceClass, port), device);
+        synchronized (outputCache) {
+            outputCache.put(new Pair<>(deviceClass, port), device);
+        }
     }
 
     @Override

@@ -27,14 +27,19 @@ public class EV3Platform extends AbstractPlatform {
     }
 
     @Override
+    public void close() {
+        super.close();
+    }
+
+    @Override
     public <D extends InputDevice<?>> D findDevice(final Class<D> deviceClass, final InputPort port) {
 
         D device = getCachedDevice(deviceClass, port);
-        
-        if( device != null ) {
+
+        if (device != null) {
             return device;
         }
-        
+
         final Optional<DeviceDescriptor<D, ? extends InputDevice<?>>> dd = inputDeviceMap.find(deviceClass);
 
         if (dd.isEmpty()) {
@@ -49,14 +54,14 @@ public class EV3Platform extends AbstractPlatform {
 
         final Optional<Path> devicePath = deviceFinder.findDevicePath(dd.get().getSysFsClass(), dd.get().getDriverName(), address);
 
-        if( devicePath.isEmpty() ) {
+        if (devicePath.isEmpty()) {
             throw new RuntimeException("Device not found.");
         }
 
         device = dd.get().createDevice(devicePath.get());
-        
+
         addCachedDevice(deviceClass, port, device);
-        
+
         return device;
     }
 
@@ -64,11 +69,11 @@ public class EV3Platform extends AbstractPlatform {
     public <D extends OutputDevice<?>> D findDevice(final Class<D> deviceClass, final OutputPort port) {
 
         D device = getCachedDevice(deviceClass, port);
-        
-        if( device != null ) {
+
+        if (device != null) {
             return device;
         }
-        
+
         final Optional<DeviceDescriptor<D, ? extends OutputDevice<?>>> dd = outputDeviceMap.find(deviceClass);
 
         if (dd.isEmpty()) {
@@ -83,14 +88,14 @@ public class EV3Platform extends AbstractPlatform {
 
         final Optional<Path> devicePath = deviceFinder.findDevicePath(dd.get().getSysFsClass(), dd.get().getDriverName(), address);
 
-        if( devicePath.isEmpty() ) {
+        if (devicePath.isEmpty()) {
             throw new RuntimeException("Device not found.");
         }
 
-        device =  dd.get().createDevice(devicePath.get());
-        
+        device = dd.get().createDevice(devicePath.get());
+
         addCachedDevice(deviceClass, port, device);
-        
+
         return device;
 
     }

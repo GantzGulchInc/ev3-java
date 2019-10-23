@@ -11,4 +11,9 @@ public class AbstractInputDevice<CMDS extends Enum<?>> extends AbstractDevice<CM
         super(sysFsPath, commandMap);
     }
 
+    @Override
+    public void close() {
+        super.close();
+    }
+    
 }

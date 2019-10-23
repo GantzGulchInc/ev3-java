@@ -9,6 +9,7 @@ import com.gantzgulch.lego.device.Board;
 import com.gantzgulch.lego.logging.EV3Logger;
 import com.gantzgulch.lego.platform.impl.Attribute;
 import com.gantzgulch.lego.platform.impl.AttributeType;
+import com.gantzgulch.lego.util.Closeables;
 
 public class EV3Board implements Board {
 
@@ -25,7 +26,12 @@ public class EV3Board implements Board {
     private final Attribute uevent;
 
     public EV3Board(final Path sysFsPath) {
-        this.uevent = new Attribute(AttributeType.READ_ONLY, sysFsPath, "uevent");
+        this.uevent = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, "uevent");
+    }
+
+    @Override
+    public void close() {
+        Closeables.close(uevent);
     }
 
     @Override
@@ -58,9 +64,9 @@ public class EV3Board implements Board {
         final Properties props = new Properties();
 
         try {
-            
+
             props.load(new StringReader(value));
-            
+
         } catch (final IOException e) {
             LOG.warning(e, "Error parsing board properties.");
         }
