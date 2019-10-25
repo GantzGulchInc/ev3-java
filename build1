@@ -1,0 +1,1 @@
+mvn clean package && scp ev3-app/target/ev3-app.tar robot@10.42.0.53:/tmp

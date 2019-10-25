@@ -1,29 +1,92 @@
 package com.gantzgulch.lego.platform.brickpi;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
-import com.gantzgulch.lego.device.InputDevice;
-import com.gantzgulch.lego.device.OutputDevice;
+import com.gantzgulch.lego.device.Board;
+import com.gantzgulch.lego.device.Device;
+import com.gantzgulch.lego.device.Port;
+import com.gantzgulch.lego.device.led.Led;
+import com.gantzgulch.lego.exception.DeviceNotFoundException;
+import com.gantzgulch.lego.exception.PortNotFoundException;
 import com.gantzgulch.lego.platform.PlatformType;
-import com.gantzgulch.lego.platform.ev3.device.EV3Board;
+import com.gantzgulch.lego.platform.device.BoardImpl;
+import com.gantzgulch.lego.platform.ev3.DeviceFinder;
+import com.gantzgulch.lego.platform.ev3.PortModeMap;
 import com.gantzgulch.lego.platform.impl.AbstractPlatform;
+import com.gantzgulch.lego.platform.impl.DeviceDescriptorMap.DeviceDescriptor;
+import com.gantzgulch.lego.platform.impl.PortImpl;
 import com.gantzgulch.lego.port.InputPort;
 import com.gantzgulch.lego.port.OutputPort;
 
 public class BrickPiPlatform extends AbstractPlatform {
 
+    private final DeviceFinder deviceFinder = new DeviceFinder();
+    
+    private final BrickPiDeviceDescriptorMap deviceMap = new BrickPiDeviceDescriptorMap();
+    
     public BrickPiPlatform() {
-        super(PlatformType.BRICK_PI, new EV3Board(Path.of("/sys/class/board-info/board0/subsystem/board0")));
+        super(PlatformType.BRICK_PI, createBoards());
     }
 
     @Override
-    public <D extends OutputDevice<?>> D findDevice(Class<D> deviceClass, OutputPort port) {
+    public Led findLed(int ledIndex, int ledColor) {
         return null;
     }
 
     @Override
-    public <D extends InputDevice<?>> D findDevice(Class<D> deviceClass, InputPort port) {
-        return null;
+    public Port findPort(final InputPort port) {
+        return findPort(BrickPiInputPortMap.INSTANCE.get(port).orElse(""));
+    }
+
+    @Override
+    public Port findPort(final OutputPort port) {
+        return findPort(BrickPiOutputPortMap.INSTANCE.get(port).orElse(""));
+    }
+
+    private Port findPort(final String address) {
+
+        final DeviceFinder df = new DeviceFinder();
+
+        final Optional<Path> portSysPath = df.findPortPath(address);
+
+        if (portSysPath.isEmpty()) {
+            throw new PortNotFoundException("No such port with address: " + address);
+        }
+
+        return new PortImpl(portSysPath.get(), PortModeMap.INSTANCE);
+    }
+
+    protected <D extends Device<?>> D findDeviceImpl(final Class<D> deviceClass, final Port port) {
+
+        final Optional<DeviceDescriptor<D, ? extends Device<?>>> dd = deviceMap.find(deviceClass);
+
+        if (dd.isEmpty()) {
+            throw new DeviceNotFoundException("No implementation found for: " + deviceClass.getName());
+        }
+
+        final String address = port.getAddress();
+
+        final Optional<Path> devicePath = deviceFinder.findDevicePath(dd.get().getSysFsClass(), dd.get().getDriverName(), address);
+
+        if (devicePath.isEmpty()) {
+            throw new RuntimeException("Device not found.");
+        }
+
+        D device = dd.get().createDevice(devicePath.get());
+
+        return device;
+    }
+
+    private static final Board[] createBoards() {
+        
+        final Board[] boards = new Board[2];
+        
+        boards[0] = new BoardImpl(Path.of("/sys/class/board-info/board0/subsystem/board0"));
+        boards[1] = new BoardImpl(Path.of("/sys/class/board-info/board1/subsystem/board1"));
+                
+        return boards;
+        
     }
 
 }

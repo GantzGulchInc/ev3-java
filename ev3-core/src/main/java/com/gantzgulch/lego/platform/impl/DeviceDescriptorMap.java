@@ -1,4 +1,4 @@
-package com.gantzgulch.lego.platform.ev3;
+package com.gantzgulch.lego.platform.impl;
 
 import java.lang.reflect.Constructor;
 import java.nio.file.Path;
@@ -7,43 +7,14 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.gantzgulch.lego.device.Device;
-import com.gantzgulch.lego.device.InputDevice;
-import com.gantzgulch.lego.device.OutputDevice;
-import com.gantzgulch.lego.device.ev3.EV3ColorSensor;
-import com.gantzgulch.lego.device.ev3.EV3GyroSensor;
-import com.gantzgulch.lego.device.ev3.EV3LargeMotor;
-import com.gantzgulch.lego.device.ev3.EV3MediumMotor;
-import com.gantzgulch.lego.device.ev3.EV3TouchSensor;
 import com.gantzgulch.lego.logging.EV3Logger;
-import com.gantzgulch.lego.platform.ev3.device.EV3ColorSensorImpl;
-import com.gantzgulch.lego.platform.ev3.device.EV3GyroSensorImpl;
-import com.gantzgulch.lego.platform.ev3.device.EV3LargeMotorImpl;
-import com.gantzgulch.lego.platform.ev3.device.EV3MediumMotorImpl;
-import com.gantzgulch.lego.platform.ev3.device.EV3TouchSensorImpl;
 import com.gantzgulch.lego.util.Cast;
 
-public class EV3DeviceDescriptorMap<T extends Device<?>, U extends Device<?>> {
-
-    public static class OutputDeviceDescriptorMap extends EV3DeviceDescriptorMap<OutputDevice<?>, OutputDevice<?>> {
-
-        public OutputDeviceDescriptorMap() {
-            add(EV3LargeMotor.class, EV3LargeMotorImpl.class, "tacho-motor", "lego-ev3-l-motor");
-            add(EV3MediumMotor.class, EV3MediumMotorImpl.class, "tacho-motor", "lego-ev3-m-motor");
-        }
-    }
-
-    public static class InputDeviceDescriptorMap extends EV3DeviceDescriptorMap<InputDevice<?>, InputDevice<?>> {
-
-        public InputDeviceDescriptorMap() {
-            add(EV3GyroSensor.class, EV3GyroSensorImpl.class, "lego-sensor", "lego-ev3-gyro");
-            add(EV3ColorSensor.class, EV3ColorSensorImpl.class, "lego-sensor", "lego-ev3-color");
-            add(EV3TouchSensor.class, EV3TouchSensorImpl.class, "lego-sensor", "lego-ev3-touch");
-        }
-    }
+public class DeviceDescriptorMap<T extends Device<?>, U extends Device<?>> {
 
     private Map<Class<? extends T>, DeviceDescriptor<? extends T, ? extends U>> map = new HashMap<>();
 
-    public EV3DeviceDescriptorMap() {
+    public DeviceDescriptorMap() {
 
     }
 

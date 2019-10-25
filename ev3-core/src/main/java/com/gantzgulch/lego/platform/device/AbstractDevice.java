@@ -1,4 +1,4 @@
-package com.gantzgulch.lego.platform.ev3.device;
+package com.gantzgulch.lego.platform.device;
 
 import java.nio.file.Path;
 import java.util.Set;

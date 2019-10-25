@@ -1,10 +1,11 @@
-package com.gantzgulch.lego.platform.ev3.device;
+package com.gantzgulch.lego.platform.device.ev3;
 
 import java.nio.file.Path;
 
 import com.gantzgulch.lego.device.ev3.EV3GyroSensor;
 import com.gantzgulch.lego.device.ev3.EV3GyroSensor.EV3GyroSensorMode;
 import com.gantzgulch.lego.device.ev3.EV3Sensor.EV3SensorCommand;
+import com.gantzgulch.lego.platform.device.AbstractSensorDevice;
 import com.gantzgulch.lego.platform.ev3.EV3SensorBinFormatMap;
 import com.gantzgulch.lego.platform.ev3.EV3SensorCommandMap;
 import com.gantzgulch.lego.util.BidirectionalEnumMap;

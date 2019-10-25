@@ -201,7 +201,7 @@ public class Main {
         
         final EV3LargeMotor leftMotor = platform.findDevice(EV3LargeMotor.class, OutputPort.PORT_B);
         final EV3LargeMotor rightMotor = platform.findDevice(EV3LargeMotor.class, OutputPort.PORT_C);
-        final EV3GyroSensor gyro = platform.findDevice(EV3GyroSensor.class, InputPort.PORT_1);
+        // final EV3GyroSensor gyro = platform.findDevice(EV3GyroSensor.class, InputPort.PORT_1);
 
         for(int i=0; i<5; i++) {
             
@@ -221,7 +221,7 @@ public class Main {
         
         
         
-        gyro.setMode(EV3GyroSensorMode.GYRO_ANG);
+        // gyro.setMode(EV3GyroSensorMode.GYRO_ANG);
         
         final Speed speed = new SpeedPercent(30.0);
 
@@ -255,9 +255,10 @@ public class Main {
         // Display Gyro value while rolling
         //
         
-        while( leftMotor.getState().contains(EV3MotorState.RUNNING) && rightMotor.getState().contains(EV3MotorState.RUNNING)) {
-            int value = gyro.getValue0();
-            LOG.info("test_07: angle: %d", value);
+        while( leftMotor.getState().contains(EV3MotorState.RUNNING) || rightMotor.getState().contains(EV3MotorState.RUNNING)) {
+            // int value = gyro.getValue0();
+            // LOG.info("test_07: angle: %d", value);
+            LOG.info("test_07: running...");
             Sleep.sleep(100, TimeUnit.MILLISECONDS);
         }
 
@@ -277,9 +278,10 @@ public class Main {
         // Display Gyro value while rolling
         //
 
-        while( leftMotor.getState().contains(EV3MotorState.RUNNING) && rightMotor.getState().contains(EV3MotorState.RUNNING)) {
-            int value = gyro.getValue0();
-            LOG.info("test_07: angle: %d", value);
+        while( leftMotor.getState().contains(EV3MotorState.RUNNING) || rightMotor.getState().contains(EV3MotorState.RUNNING)) {
+            // int value = gyro.getValue0();
+            // LOG.info("test_07: angle: %d", value);
+            LOG.info("test_07: running 2...");
             Sleep.sleep(100, TimeUnit.MILLISECONDS);
         }
         

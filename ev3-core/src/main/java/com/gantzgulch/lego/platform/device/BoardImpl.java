@@ -1,4 +1,4 @@
-package com.gantzgulch.lego.platform.ev3.device;
+package com.gantzgulch.lego.platform.device;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -11,7 +11,7 @@ import com.gantzgulch.lego.platform.impl.Attribute;
 import com.gantzgulch.lego.platform.impl.AttributeType;
 import com.gantzgulch.lego.util.Closeables;
 
-public class EV3Board implements Board {
+public class BoardImpl implements Board {
 
     public static final String ATTR_UEVENT = "uevent";
 
@@ -21,11 +21,11 @@ public class EV3Board implements Board {
     public static final String BOARD_INFO_SERIAL_NUM = "BOARD_INFO_SERIAL_NUM";
     public static final String BOARD_INFO_TYPE = "BOARD_INFO_TYPE";
 
-    private static final EV3Logger LOG = EV3Logger.getLogger(EV3Board.class);
+    private static final EV3Logger LOG = EV3Logger.getLogger(BoardImpl.class);
 
     private final Attribute uevent;
 
-    public EV3Board(final Path sysFsPath) {
+    public BoardImpl(final Path sysFsPath) {
         this.uevent = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, "uevent");
     }
 
