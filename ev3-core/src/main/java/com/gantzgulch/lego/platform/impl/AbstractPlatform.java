@@ -13,6 +13,7 @@ import com.gantzgulch.lego.platform.Platform;
 import com.gantzgulch.lego.platform.PlatformType;
 import com.gantzgulch.lego.port.InputPort;
 import com.gantzgulch.lego.port.OutputPort;
+import com.gantzgulch.lego.util.BidirectionalEnumMap;
 import com.gantzgulch.lego.util.Closeables;
 import com.gantzgulch.lego.util.Pair;
 
@@ -24,20 +25,33 @@ public abstract class AbstractPlatform implements Platform {
 
     private final Board[] boards;
 
+    private final BidirectionalEnumMap<OutputPort> outputPortAddressMap;
+    
+    private final BidirectionalEnumMap<InputPort> inputPortAddressMap;
+
     private final Map<Pair<Class<? extends InputDevice<?>>, InputPort>, InputDevice<?>> inputCache = new HashMap<>();
 
     private final Map<Pair<Class<? extends OutputDevice<?>>, OutputPort>, OutputDevice<?>> outputCache = new HashMap<>();
 
     protected AbstractPlatform(//
             final PlatformType type, //
-            final Board[] board) {
+            final Board[] board, //
+            final BidirectionalEnumMap<OutputPort> outputPortAddressMap, //
+            final BidirectionalEnumMap<InputPort> inputPortAddressMap) {
 
+        this.outputPortAddressMap = outputPortAddressMap;
+        this.inputPortAddressMap = inputPortAddressMap;
         LOG.entering("ctor");
 
         this.boards = board;
         this.type = type;
     }
 
+    @Override
+    public int getBoardCount() {
+        return boards.length;
+    }
+    
     @Override
     public Board findBoard(final int boardIndex) {
         return boards[boardIndex];
@@ -48,6 +62,17 @@ public abstract class AbstractPlatform implements Platform {
         return type;
     }
 
+    @Override
+    public Port findPort(final InputPort port) {
+        return findPort(inputPortAddressMap.get(port).orElse(""));
+    }
+
+    @Override
+    public Port findPort(final OutputPort port) {
+        return findPort(outputPortAddressMap.get(port).orElse(""));
+    }
+
+    
     @Override
     public void close() {
 
@@ -122,6 +147,8 @@ public abstract class AbstractPlatform implements Platform {
     public String toString() {
         return type.name();
     }
+
+    protected abstract Port findPort(final String address);
     
     protected abstract <D extends Device<?>> D findDeviceImpl(final Class<D> deviceClass, final Port port);
 

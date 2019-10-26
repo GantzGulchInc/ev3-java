@@ -16,17 +16,15 @@ import com.gantzgulch.lego.platform.ev3.PortModeMap;
 import com.gantzgulch.lego.platform.impl.AbstractPlatform;
 import com.gantzgulch.lego.platform.impl.DeviceDescriptorMap.DeviceDescriptor;
 import com.gantzgulch.lego.platform.impl.PortImpl;
-import com.gantzgulch.lego.port.InputPort;
-import com.gantzgulch.lego.port.OutputPort;
 
 public class BrickPiPlatform extends AbstractPlatform {
 
     private final DeviceFinder deviceFinder = new DeviceFinder();
-    
+
     private final BrickPiDeviceDescriptorMap deviceMap = new BrickPiDeviceDescriptorMap();
-    
+
     public BrickPiPlatform() {
-        super(PlatformType.BRICK_PI, createBoards());
+        super(PlatformType.BRICK_PI, createBoards(), BrickPiOutputPortMap.INSTANCE, BrickPiInputPortMap.INSTANCE);
     }
 
     @Override
@@ -34,21 +32,9 @@ public class BrickPiPlatform extends AbstractPlatform {
         return null;
     }
 
-    @Override
-    public Port findPort(final InputPort port) {
-        return findPort(BrickPiInputPortMap.INSTANCE.get(port).orElse(""));
-    }
+    protected Port findPort(final String address) {
 
-    @Override
-    public Port findPort(final OutputPort port) {
-        return findPort(BrickPiOutputPortMap.INSTANCE.get(port).orElse(""));
-    }
-
-    private Port findPort(final String address) {
-
-        final DeviceFinder df = new DeviceFinder();
-
-        final Optional<Path> portSysPath = df.findPortPath(address);
+        final Optional<Path> portSysPath = deviceFinder.findPortPath(address);
 
         if (portSysPath.isEmpty()) {
             throw new PortNotFoundException("No such port with address: " + address);
@@ -79,14 +65,14 @@ public class BrickPiPlatform extends AbstractPlatform {
     }
 
     private static final Board[] createBoards() {
-        
+
         final Board[] boards = new Board[2];
-        
+
         boards[0] = new BoardImpl(Path.of("/sys/class/board-info/board0/subsystem/board0"));
         boards[1] = new BoardImpl(Path.of("/sys/class/board-info/board1/subsystem/board1"));
-                
+
         return boards;
-        
+
     }
 
 }

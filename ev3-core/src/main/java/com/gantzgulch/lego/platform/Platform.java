@@ -17,6 +17,8 @@ public interface Platform extends Closeable {
 
     PlatformType getType();
 
+    int getBoardCount();
+    
     Board findBoard(int boardIndex);
 
     Led findLed(int ledIndex, int ledColor);

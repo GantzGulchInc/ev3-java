@@ -12,10 +12,8 @@ import com.gantzgulch.lego.exception.PortNotFoundException;
 import com.gantzgulch.lego.platform.PlatformType;
 import com.gantzgulch.lego.platform.device.BoardImpl;
 import com.gantzgulch.lego.platform.impl.AbstractPlatform;
-import com.gantzgulch.lego.platform.impl.PortImpl;
 import com.gantzgulch.lego.platform.impl.DeviceDescriptorMap.DeviceDescriptor;
-import com.gantzgulch.lego.port.InputPort;
-import com.gantzgulch.lego.port.OutputPort;
+import com.gantzgulch.lego.platform.impl.PortImpl;
 
 public class EV3Platform extends AbstractPlatform {
 
@@ -24,7 +22,7 @@ public class EV3Platform extends AbstractPlatform {
     private final DeviceFinder deviceFinder = new DeviceFinder();
 
     public EV3Platform() {
-        super(PlatformType.EV3, createBoards());
+        super(PlatformType.EV3, createBoards(), OutputPortMap.INSTANCE, InputPortMap.INSTANCE);
     }
 
     @Override
@@ -37,17 +35,7 @@ public class EV3Platform extends AbstractPlatform {
         return null;
     }
 
-    @Override
-    public Port findPort(final InputPort port) {
-        return findPort(InputPortMap.INSTANCE.get(port).orElse(""));
-    }
-
-    @Override
-    public Port findPort(final OutputPort port) {
-        return findPort(OutputPortMap.INSTANCE.get(port).orElse(""));
-    }
-
-    private Port findPort(final String address) {
+    protected Port findPort(final String address) {
 
         final Optional<Path> portSysPath = deviceFinder.findPortPath(address);
 
