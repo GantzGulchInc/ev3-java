@@ -1,7 +1,5 @@
 package com.gantzgulch.lego.platform.impl;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,9 +11,6 @@ import com.gantzgulch.lego.device.Port;
 import com.gantzgulch.lego.logging.EV3Logger;
 import com.gantzgulch.lego.platform.Platform;
 import com.gantzgulch.lego.platform.PlatformType;
-import com.gantzgulch.lego.platform.brickpi.BrickPiPlatform;
-import com.gantzgulch.lego.platform.device.BoardImpl;
-import com.gantzgulch.lego.platform.ev3.EV3Platform;
 import com.gantzgulch.lego.port.InputPort;
 import com.gantzgulch.lego.port.OutputPort;
 import com.gantzgulch.lego.util.Closeables;
@@ -24,29 +19,6 @@ import com.gantzgulch.lego.util.Pair;
 public abstract class AbstractPlatform implements Platform {
 
     protected final EV3Logger LOG = EV3Logger.getLogger(getClass());
-
-    private static Platform instance = null;
-
-    public synchronized static Platform getInstance() {
-
-        if (instance == null) {
-
-            try (final Board board = new BoardImpl(Path.of("/sys/class/board-info/board0"))) {
-
-                if (board.getModel().contains("Raspberry")) {
-                    instance = new BrickPiPlatform();
-                } else {
-                    instance = new EV3Platform();
-                }
-                
-            }catch(final IOException e) {
-                throw new RuntimeException(e);
-            }
-
-        }
-
-        return instance;
-    }
 
     private final PlatformType type;
 
@@ -146,11 +118,11 @@ public abstract class AbstractPlatform implements Platform {
 
     }
 
-    protected abstract <D extends Device<?>> D findDeviceImpl(final Class<D> deviceClass, final Port port);
-
     @Override
     public String toString() {
         return type.name();
     }
+    
+    protected abstract <D extends Device<?>> D findDeviceImpl(final Class<D> deviceClass, final Port port);
 
 }

@@ -28,6 +28,19 @@ public class Main {
 
     private static final EV3Logger LOG = EV3Logger.getLogger(Main.class);
 
+    /**
+     * Identify platform.
+     */
+    public static void test_00() {
+        
+        final Platform platform = Platform.getInstance();
+        
+        LOG.info("Platform: %s", platform);
+        
+        LOG.info("Platform Type: %s", platform.getType());
+        
+    }
+    
 //    public static void test_01() {
 //
 //        final Platform platform = Platform.getInstance();
@@ -295,7 +308,7 @@ public class Main {
         
         try {
         
-            test_07();
+            test_00();
             
         }finally {
             Closeables.close(Platform.getInstance());

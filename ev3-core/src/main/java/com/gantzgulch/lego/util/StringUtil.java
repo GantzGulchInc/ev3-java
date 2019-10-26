@@ -1,6 +1,9 @@
 package com.gantzgulch.lego.util;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.Optional;
+import java.util.Properties;
 
 import com.gantzgulch.lego.logging.EV3Logger;
 
@@ -37,5 +40,20 @@ public final class StringUtil {
             
             return Optional.empty();
         }
+    }
+    
+    public static Properties parseProperties(final String value) {
+
+        final Properties props = new Properties();
+
+        try {
+
+            props.load(new StringReader(value));
+
+        } catch (final IOException e) {
+            LOG.warning(e, "Error parsing board properties.");
+        }
+
+        return props;
     }
 }

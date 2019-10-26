@@ -4,6 +4,8 @@ import java.io.Closeable;
 
 public interface Board extends Closeable {
 
+    boolean exists();
+    
     String getHwRevision();
     
     String getModel();
