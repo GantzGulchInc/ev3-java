@@ -5,6 +5,8 @@ import java.util.Set;
 
 public interface Port extends Closeable {
 
+    PortType getType();
+    
     String getAddress();
     
     String getDriverName();
@@ -27,5 +29,10 @@ public interface Port extends Closeable {
         OTHER_UART, //
         RAW;
         
+    }
+    
+    public static enum PortType {
+        INPUT, //
+        OUTPUT;
     }
 }

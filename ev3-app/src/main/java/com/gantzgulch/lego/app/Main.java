@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import com.gantzgulch.lego.device.InputPort;
+import com.gantzgulch.lego.device.OutputPort;
 import com.gantzgulch.lego.device.ev3.EV3ColorSensor;
 import com.gantzgulch.lego.device.ev3.EV3ColorSensor.EV3ColorSensorMode;
 import com.gantzgulch.lego.device.ev3.EV3GyroSensor;
@@ -14,15 +16,13 @@ import com.gantzgulch.lego.device.ev3.EV3MediumMotor;
 import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorCommand;
 import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorState;
 import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorStopAction;
-import com.gantzgulch.lego.logging.EV3Logger;
 import com.gantzgulch.lego.platform.Platform;
-import com.gantzgulch.lego.platform.ev3.DeviceFinder;
-import com.gantzgulch.lego.port.InputPort;
-import com.gantzgulch.lego.port.OutputPort;
+import com.gantzgulch.lego.platform.common.DeviceFinder;
 import com.gantzgulch.lego.unit.Speed;
 import com.gantzgulch.lego.unit.SpeedPercent;
-import com.gantzgulch.lego.util.Closeables;
-import com.gantzgulch.lego.util.Sleep;
+import com.gantzgulch.lego.util.lang.Closeables;
+import com.gantzgulch.lego.util.lang.Sleep;
+import com.gantzgulch.lego.util.logger.EV3Logger;
 
 public class Main {
 

@@ -6,12 +6,12 @@ import com.gantzgulch.lego.device.ev3.EV3GyroSensor;
 import com.gantzgulch.lego.device.ev3.EV3LargeMotor;
 import com.gantzgulch.lego.device.ev3.EV3MediumMotor;
 import com.gantzgulch.lego.device.ev3.EV3TouchSensor;
-import com.gantzgulch.lego.platform.device.ev3.EV3ColorSensorImpl;
-import com.gantzgulch.lego.platform.device.ev3.EV3GyroSensorImpl;
-import com.gantzgulch.lego.platform.device.ev3.EV3LargeMotorImpl;
-import com.gantzgulch.lego.platform.device.ev3.EV3MediumMotorImpl;
-import com.gantzgulch.lego.platform.device.ev3.EV3TouchSensorImpl;
-import com.gantzgulch.lego.platform.impl.DeviceDescriptorMap;
+import com.gantzgulch.lego.platform.common.DeviceDescriptorMap;
+import com.gantzgulch.lego.platform.ev3.device.EV3ColorSensorImpl;
+import com.gantzgulch.lego.platform.ev3.device.EV3GyroSensorImpl;
+import com.gantzgulch.lego.platform.ev3.device.EV3LargeMotorImpl;
+import com.gantzgulch.lego.platform.ev3.device.EV3MediumMotorImpl;
+import com.gantzgulch.lego.platform.ev3.device.EV3TouchSensorImpl;
 
 public class BrickPiDeviceDescriptorMap extends DeviceDescriptorMap<Device<?>, Device<?>> {
 

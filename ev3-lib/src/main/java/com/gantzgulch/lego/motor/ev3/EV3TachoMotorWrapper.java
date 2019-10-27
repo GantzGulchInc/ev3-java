@@ -5,12 +5,12 @@ import java.util.concurrent.TimeUnit;
 import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorCommand;
 import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorState;
 import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorStopAction;
-import com.gantzgulch.lego.logging.EV3Logger;
 import com.gantzgulch.lego.device.ev3.EV3TachoMotor;
 import com.gantzgulch.lego.motor.MotorWrapper;
 import com.gantzgulch.lego.unit.Speed;
 import com.gantzgulch.lego.units.LengthUnit;
-import com.gantzgulch.lego.util.Sleep;
+import com.gantzgulch.lego.util.lang.Sleep;
+import com.gantzgulch.lego.util.logger.EV3Logger;
 import com.gantzgulch.lego.wheel.Wheel;
 
 public class EV3TachoMotorWrapper implements MotorWrapper {

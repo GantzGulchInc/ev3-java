@@ -6,16 +6,17 @@ import java.util.Optional;
 import com.gantzgulch.lego.device.Board;
 import com.gantzgulch.lego.device.Device;
 import com.gantzgulch.lego.device.Port;
-import com.gantzgulch.lego.device.led.Led;
-import com.gantzgulch.lego.exception.DeviceNotFoundException;
-import com.gantzgulch.lego.exception.PortNotFoundException;
+import com.gantzgulch.lego.device.Port.PortType;
+import com.gantzgulch.lego.device.ev3.EV3Led;
 import com.gantzgulch.lego.platform.PlatformType;
-import com.gantzgulch.lego.platform.device.BoardImpl;
-import com.gantzgulch.lego.platform.ev3.DeviceFinder;
-import com.gantzgulch.lego.platform.ev3.PortModeMap;
-import com.gantzgulch.lego.platform.impl.AbstractPlatform;
-import com.gantzgulch.lego.platform.impl.DeviceDescriptorMap.DeviceDescriptor;
-import com.gantzgulch.lego.platform.impl.PortImpl;
+import com.gantzgulch.lego.platform.common.AbstractPlatform;
+import com.gantzgulch.lego.platform.common.DeviceDescriptorMap.DeviceDescriptor;
+import com.gantzgulch.lego.platform.common.DeviceFinder;
+import com.gantzgulch.lego.platform.common.device.BoardImpl;
+import com.gantzgulch.lego.platform.common.device.PortImpl;
+import com.gantzgulch.lego.platform.ev3.EV3PortModeMap;
+import com.gantzgulch.lego.util.exception.DeviceNotFoundException;
+import com.gantzgulch.lego.util.exception.PortNotFoundException;
 
 public class BrickPiPlatform extends AbstractPlatform {
 
@@ -28,11 +29,11 @@ public class BrickPiPlatform extends AbstractPlatform {
     }
 
     @Override
-    public Led findLed(int ledIndex, int ledColor) {
+    public EV3Led findLed(int ledIndex, int ledColor) {
         return null;
     }
 
-    protected Port findPort(final String address) {
+    protected Port findPort(final PortType type, final String address) {
 
         final Optional<Path> portSysPath = deviceFinder.findPortPath(address);
 
@@ -40,7 +41,7 @@ public class BrickPiPlatform extends AbstractPlatform {
             throw new PortNotFoundException("No such port with address: " + address);
         }
 
-        return new PortImpl(portSysPath.get(), PortModeMap.INSTANCE);
+        return new PortImpl(type, portSysPath.get(), EV3PortModeMap.INSTANCE);
     }
 
     protected <D extends Device<?>> D findDeviceImpl(final Class<D> deviceClass, final Port port) {

@@ -1,7 +1,7 @@
 package com.gantzgulch.lego.platform.brickpi;
 
-import com.gantzgulch.lego.port.OutputPort;
-import com.gantzgulch.lego.util.BidirectionalEnumMap;
+import com.gantzgulch.lego.device.OutputPort;
+import com.gantzgulch.lego.util.lang.BidirectionalEnumMap;
 
 public class BrickPiOutputPortMap extends BidirectionalEnumMap<OutputPort> {
 

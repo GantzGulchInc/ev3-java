@@ -4,14 +4,14 @@ import java.io.Closeable;
 
 import com.gantzgulch.lego.device.Board;
 import com.gantzgulch.lego.device.InputDevice;
+import com.gantzgulch.lego.device.InputPort;
 import com.gantzgulch.lego.device.OutputDevice;
+import com.gantzgulch.lego.device.OutputPort;
 import com.gantzgulch.lego.device.Port;
-import com.gantzgulch.lego.device.led.Led;
-import com.gantzgulch.lego.exception.DeviceNotFoundException;
-import com.gantzgulch.lego.exception.PortNotFoundException;
-import com.gantzgulch.lego.platform.impl.PlatformFactory;
-import com.gantzgulch.lego.port.InputPort;
-import com.gantzgulch.lego.port.OutputPort;
+import com.gantzgulch.lego.device.ev3.EV3Led;
+import com.gantzgulch.lego.platform.common.PlatformFactory;
+import com.gantzgulch.lego.util.exception.DeviceNotFoundException;
+import com.gantzgulch.lego.util.exception.PortNotFoundException;
 
 public interface Platform extends Closeable {
 
@@ -21,7 +21,7 @@ public interface Platform extends Closeable {
     
     Board findBoard(int boardIndex);
 
-    Led findLed(int ledIndex, int ledColor);
+    EV3Led findLed(int ledIndex, int ledColor);
 
     Port findPort(OutputPort port) throws PortNotFoundException;
 
