@@ -9,6 +9,7 @@ import com.gantzgulch.lego.device.OutputDevice;
 import com.gantzgulch.lego.device.OutputPort;
 import com.gantzgulch.lego.device.Port;
 import com.gantzgulch.lego.device.ev3.EV3Led;
+import com.gantzgulch.lego.device.ev3.EV3Led.LedColor;
 import com.gantzgulch.lego.platform.common.PlatformFactory;
 import com.gantzgulch.lego.util.exception.DeviceNotFoundException;
 import com.gantzgulch.lego.util.exception.PortNotFoundException;
@@ -21,7 +22,7 @@ public interface Platform extends Closeable {
     
     Board findBoard(int boardIndex);
 
-    EV3Led findLed(int ledIndex, int ledColor);
+    EV3Led findLed(int ledIndex, LedColor ledColor);
 
     Port findPort(OutputPort port) throws PortNotFoundException;
 

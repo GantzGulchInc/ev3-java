@@ -10,6 +10,8 @@ public interface EV3Led {
     int getBrightness();
 
     void setBrightness(int brightness);
+    
+    void setBrightnessPercent(double percent);
 
     void setDelayOn(long timeUnit, final TimeUnit unit);
 
@@ -46,5 +48,11 @@ public interface EV3Led {
         LEGO_EV3_BATTERY_CHARGING_BLINK_FULL_SOLID, //
         RFKILL0;
 
+    }
+    
+    public static enum LedColor {
+        
+        GREEN, //
+        RED;
     }
 }

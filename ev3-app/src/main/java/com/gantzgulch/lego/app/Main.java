@@ -1,5 +1,6 @@
 package com.gantzgulch.lego.app;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.Set;
@@ -11,13 +12,16 @@ import com.gantzgulch.lego.device.ev3.EV3ColorSensor;
 import com.gantzgulch.lego.device.ev3.EV3ColorSensor.EV3ColorSensorMode;
 import com.gantzgulch.lego.device.ev3.EV3GyroSensor;
 import com.gantzgulch.lego.device.ev3.EV3GyroSensor.EV3GyroSensorMode;
+import com.gantzgulch.lego.device.ev3.EV3Led.LedColor;
 import com.gantzgulch.lego.device.ev3.EV3LargeMotor;
+import com.gantzgulch.lego.device.ev3.EV3Led;
 import com.gantzgulch.lego.device.ev3.EV3MediumMotor;
 import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorCommand;
 import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorState;
 import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorStopAction;
 import com.gantzgulch.lego.platform.Platform;
 import com.gantzgulch.lego.platform.common.DeviceFinder;
+import com.gantzgulch.lego.platform.ev3.device.EV3ButtonImpl;
 import com.gantzgulch.lego.unit.Speed;
 import com.gantzgulch.lego.unit.SpeedPercent;
 import com.gantzgulch.lego.util.lang.Closeables;
@@ -41,51 +45,29 @@ public class Main {
         
     }
     
-//    public static void test_01() {
-//
-//        final Platform platform = Platform.getInstance();
-//
-//        LOG.info("Platform: %s", platform);
-//
-//        final LedPair led = platform.getLedPair(LedPairId.LED_0);
-//
-//        final LedPair led2 = platform.getLedPair(LedPairId.LED_0);
-//
-//        if (led == led2) {
-//            LOG.info("They are the same devices.");
-//        } else {
-//            LOG.info("They are NOT the same devices.");
-//        }
-//
-//        LOG.info("Led: setBrightness: %d,%d", 0, 0);
-//
-//        led.setBrightness(0, 0);
-//
-//        Sleep.sleep(5000);
-//
-//        LOG.info("Led: setBrightness: %d,%d", 0, led.getMaxBrightness1());
-//
-//        led.setBrightness(0, led.getMaxBrightness1());
-//
-//        Sleep.sleep(5000);
-//
-//        LOG.info("Led: setBrightness: %d,%d", led.getMaxBrightness0(), 0);
-//
-//        led.setBrightness(led.getMaxBrightness0(), 0);
-//
-//        Sleep.sleep(5000);
-//
-//        LOG.info("Led: setBrightness: %d,%d", led.getMaxBrightness0(), led.getMaxBrightness1());
-//
-//        led.setBrightness(led.getMaxBrightness0(), led.getMaxBrightness1());
-//
-//        Sleep.sleep(5000);
-//
-//        LOG.info("Led: setBrightness: %d,%d", 0, 0);
-//
-//        led.setBrightness(0, 0);
-//
-//    }
+    public static void test_01() {
+
+        final Platform platform = Platform.getInstance();
+
+        LOG.info("Platform: %s", platform);
+
+        final EV3Led led0Green = platform.findLed(0, LedColor.GREEN);
+        final EV3Led led0Red = platform.findLed(0, LedColor.RED);
+        
+        final EV3Led led1Green = platform.findLed(1, LedColor.GREEN);
+        final EV3Led led1Red = platform.findLed(1, LedColor.RED);
+
+        led0Green.setBrightnessPercent(0);
+        led0Red.setBrightnessPercent(0);
+        
+        Sleep.sleep(3, TimeUnit.SECONDS);
+        
+        led0Green.setBrightnessPercent(100);
+        led0Red.setBrightnessPercent(100);
+
+        Sleep.sleep(3, TimeUnit.SECONDS);
+
+    }
 
     public static void test_02() {
 
@@ -300,7 +282,26 @@ public class Main {
         
     }
 
+    public static void test_08() {
 
+        try {
+            
+            LOG.info("test_08: creating button.");
+            
+            final EV3ButtonImpl b = new EV3ButtonImpl();
+            
+            LOG.info("test_08: waiting.");
+
+            Sleep.sleep(30000);
+            
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+        
+        
+        
+        
+    }
     
     public static void main(final String[] args) {
 
@@ -308,7 +309,7 @@ public class Main {
         
         try {
         
-            test_00();
+            test_08();
             
         }finally {
             Closeables.close(Platform.getInstance());

@@ -11,8 +11,11 @@ import com.gantzgulch.lego.device.OutputDevice;
 import com.gantzgulch.lego.device.OutputPort;
 import com.gantzgulch.lego.device.Port;
 import com.gantzgulch.lego.device.Port.PortType;
+import com.gantzgulch.lego.device.ev3.EV3Led;
+import com.gantzgulch.lego.device.ev3.EV3Led.LedColor;
 import com.gantzgulch.lego.platform.Platform;
 import com.gantzgulch.lego.platform.PlatformType;
+import com.gantzgulch.lego.util.exception.DeviceNotFoundException;
 import com.gantzgulch.lego.util.lang.BidirectionalEnumMap;
 import com.gantzgulch.lego.util.lang.Closeables;
 import com.gantzgulch.lego.util.lang.Pair;
@@ -63,6 +66,21 @@ public abstract class AbstractPlatform implements Platform {
         return type;
     }
 
+    @Override
+    public EV3Led findLed(int ledIndex, LedColor ledColor) {
+    
+        final Map<Pair<Integer,LedColor>, EV3Led> ledMap = getLedMap();
+        
+        final EV3Led  led = ledMap.get( new Pair<>(ledIndex, ledColor) );
+        
+        if( led == null ) {
+            throw new DeviceNotFoundException("Unable to find led.");
+        }
+
+        return led;
+    }
+    
+    
     @Override
     public Port findPort(final InputPort port) {
         return findPort(PortType.INPUT, inputPortAddressMap.get(port).orElse(""));
@@ -153,4 +171,5 @@ public abstract class AbstractPlatform implements Platform {
     
     protected abstract <D extends Device<?>> D findDeviceImpl(final Class<D> deviceClass, final Port port);
 
+    protected abstract Map<Pair<Integer,LedColor>, EV3Led> getLedMap();
 }

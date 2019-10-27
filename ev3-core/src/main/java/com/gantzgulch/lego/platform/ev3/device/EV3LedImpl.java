@@ -47,6 +47,17 @@ public class EV3LedImpl implements EV3Led {
     public int getMaxBrightness() {
         return maxBrightness.readInteger().orElse(0);
     }
+    
+    @Override
+    public void setBrightnessPercent(final double percent) {
+        
+        final double normalPercent = Math.min(100, Math.max(0, percent) );
+        
+        final int level = (int)(normalPercent / 100.0 * getMaxBrightness());
+        
+        setBrightness(level);
+        
+    }
 
     @Override
     public void setBrightness(final int newBrightness) {
