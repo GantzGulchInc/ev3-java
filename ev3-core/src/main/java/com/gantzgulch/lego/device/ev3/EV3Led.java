@@ -1,7 +1,7 @@
 package com.gantzgulch.lego.device.ev3;
 
+import java.time.Duration;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 public interface EV3Led {
 
@@ -13,11 +13,11 @@ public interface EV3Led {
     
     void setBrightnessPercent(double percent);
 
-    void setDelayOn(long timeUnit, final TimeUnit unit);
+    void setDelayOn(Duration duration);
 
     int getDelayOn();
 
-    void setDelayOff(long timeUnit, final TimeUnit unit);
+    void setDelayOff(Duration duration);
 
     int getDelayOff();
 

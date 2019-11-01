@@ -26,7 +26,19 @@
 
 		<dependency>
 			<groupId>com.gantzgulch.ev3</groupId>
-			<artifactId>ev3-lib</artifactId>
+			<artifactId>ev3-core-mock</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.gantzgulch.ev3</groupId>
+			<artifactId>ev3-tank</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.gantzgulch.ev3</groupId>
+			<artifactId>ev3-tank-shell</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

@@ -6,4 +6,10 @@ public class SpeedDPM extends SpeedRPS {
         super(   degreesPerMinute / 360.0 / 60.0 );
     }
 
+
+    @Override
+    public String toString() {
+        return "Speed:" + Double.toString(rps * 360.0 / 60.0) + "dpm";
+    }
+
 }

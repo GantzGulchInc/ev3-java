@@ -1,8 +1,8 @@
 package com.gantzgulch.lego.platform.common.device;
 
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import com.gantzgulch.lego.device.ev3.EV3Sensor;
 import com.gantzgulch.lego.platform.common.Attribute;
@@ -147,8 +147,8 @@ public class AbstractSensorDevice<CMDS extends Enum<?>, MODES extends Enum<?>> e
     }
 
     @Override
-    public void setPollMillis(long timeUnit, TimeUnit unit) {
-        pollMillis.writeInteger((int) unit.toMillis(timeUnit));
+    public void setPollMillis(final Duration duration) {
+        pollMillis.writeInteger((int) duration.toMillis());
     }
 
     @Override

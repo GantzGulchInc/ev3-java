@@ -1,13 +1,13 @@
 package com.gantzgulch.lego.platform.common.device;
 
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorCommand;
+import com.gantzgulch.lego.device.ev3.EV3TachoMotor;
 import com.gantzgulch.lego.platform.common.Attribute;
 import com.gantzgulch.lego.platform.common.AttributeType;
-import com.gantzgulch.lego.device.ev3.EV3TachoMotor;
 import com.gantzgulch.lego.unit.Speed;
 import com.gantzgulch.lego.util.lang.BidirectionalEnumMap;
 import com.gantzgulch.lego.util.lang.Closeables;
@@ -104,9 +104,9 @@ public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCo
     public void close() {
 
         try {
-            
+
             sendCommand(EV3MotorCommand.STOP);
-            
+
         } catch (final RuntimeException e) {
             LOG.warning(e, "close: Error stopping motor: %s", e.getMessage());
         }
@@ -132,7 +132,7 @@ public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCo
         Closeables.close(stopAction);
         Closeables.close(stopActions);
         Closeables.close(timeSetPoint);
-        
+
         super.close();
 
     }
@@ -254,23 +254,23 @@ public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCo
     }
 
     @Override
-    public int getRampUpSetPointMillis() {
-        return rampUpSetPoint.readInteger().orElse(0);
+    public Duration getRampUpSetPoint() {
+        return Duration.ofMillis(rampUpSetPoint.readInteger().orElse(0));
     }
 
     @Override
-    public void setRampUpSetPoint(final long timeUnit, final TimeUnit unit) {
-        rampUpSetPoint.writeInteger((int) unit.toMillis(timeUnit));
+    public void setRampUpSetPoint(final Duration duration) {
+        rampUpSetPoint.writeInteger((int) duration.toMillis());
     }
 
     @Override
-    public int getRampDownSetPointMillis() {
-        return rampDownSetPoint.readInteger().orElse(0);
+    public Duration getRampDownSetPoint() {
+        return Duration.ofMillis(rampDownSetPoint.readInteger().orElse(0));
     }
 
     @Override
-    public void setRampDownSetPoint(final long timeUnit, final TimeUnit unit) {
-        rampDownSetPoint.writeInteger((int) unit.toMillis(timeUnit));
+    public void setRampDownSetPoint(final Duration duration) {
+        rampDownSetPoint.writeInteger((int) duration.toMillis());
     }
 
     @Override
@@ -324,13 +324,18 @@ public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCo
     }
 
     @Override
-    public int getTimeSetPointMillis() {
-        return timeSetPoint.readInteger().orElse(0);
+    public Duration getTimeSetPoint() {
+        return Duration.ofMillis(timeSetPoint.readInteger().orElse(0));
     }
 
     @Override
-    public void setTimeSetPoint(long timeUnit, TimeUnit unit) {
-        timeSetPoint.writeInteger((int) unit.toMillis(timeUnit));
+    public void setTimeSetPoint(final Duration duration) {
+        timeSetPoint.writeInteger((int) duration.toMillis());
+    }
+
+    @Override
+    public boolean isRunning() {
+        return getState().contains(EV3MotorState.RUNNING);
     }
 
     @Override

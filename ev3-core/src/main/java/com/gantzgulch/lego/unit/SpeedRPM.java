@@ -6,4 +6,10 @@ public class SpeedRPM extends SpeedRPS {
         super( rotationsPerMinute / 60.0 );
     }
 
+
+
+    @Override
+    public String toString() {
+        return "Speed:" + Double.toString(rps * 60.0) + "rpm";
+    }
 }

@@ -1,7 +1,7 @@
 package com.gantzgulch.lego.device.ev3;
 
+import java.time.Duration;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import com.gantzgulch.lego.device.InputDevice;
 
@@ -23,7 +23,7 @@ public interface EV3Sensor<CMDS extends Enum<?>, MODES extends Enum<?>> extends 
     
     int getPollMillis();
     
-    void setPollMillis(long timeUnit, TimeUnit unit);
+    void setPollMillis(Duration duration);
     
     String getUnits();
     

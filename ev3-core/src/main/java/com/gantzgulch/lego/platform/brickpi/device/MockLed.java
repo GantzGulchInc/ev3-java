@@ -1,5 +1,6 @@
 package com.gantzgulch.lego.platform.brickpi.device;
 
+import java.time.Duration;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -44,18 +45,18 @@ public class MockLed implements EV3Led {
     }
 
     @Override
-    public void setDelayOn(final long timeUnit, final TimeUnit unit) {
-        this.delayOn = (int) (unit.toMillis(timeUnit));
+    public void setDelayOn(final Duration duration) {
+        this.delayOn = (int) duration.toMillis();
     }
-
+    
     @Override
     public int getDelayOn() {
         return delayOn;
     }
 
     @Override
-    public void setDelayOff(final long timeUnit, final TimeUnit unit) {
-        this.delayOff = (int) (unit.toMillis(timeUnit));
+    public void setDelayOff(final Duration duration) {
+        this.delayOff = (int) duration.toMillis();
     }
 
     @Override

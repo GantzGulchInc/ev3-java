@@ -1,7 +1,7 @@
 package com.gantzgulch.lego.device.ev3;
 
+import java.time.Duration;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import com.gantzgulch.lego.unit.Speed;
 
@@ -49,13 +49,13 @@ public interface EV3TachoMotor<CMDS extends Enum<?>> extends EV3Motor<CMDS> {
     
     void setSpeedSetPoint(Speed speed);
 
-    int getRampUpSetPointMillis();
+    Duration getRampUpSetPoint();
 
-    void setRampUpSetPoint(long timeUnit, TimeUnit unit);
+    void setRampUpSetPoint(Duration duration);
 
-    int getRampDownSetPointMillis();
+    Duration getRampDownSetPoint();
 
-    void setRampDownSetPoint(long timeUnit, TimeUnit unit);
+    void setRampDownSetPoint(Duration duration);
 
     int getSpeedPidKd();
 
@@ -77,8 +77,9 @@ public interface EV3TachoMotor<CMDS extends Enum<?>> extends EV3Motor<CMDS> {
 
     Set<EV3MotorStopAction> getStopActions();
 
-    int getTimeSetPointMillis();
+    Duration getTimeSetPoint();
 
-    void setTimeSetPoint(long timeUnit, TimeUnit unit);
+    void setTimeSetPoint(Duration duration);
 
+    boolean isRunning();
 }

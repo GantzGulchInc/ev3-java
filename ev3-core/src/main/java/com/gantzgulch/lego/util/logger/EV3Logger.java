@@ -243,8 +243,6 @@ public class EV3Logger {
             return true;
 
         } catch (final RuntimeException | IOException e) {
-            e.printStackTrace();
-
             return false;
         }
 

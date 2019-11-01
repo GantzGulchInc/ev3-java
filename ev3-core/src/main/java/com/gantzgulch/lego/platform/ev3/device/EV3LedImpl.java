@@ -1,8 +1,8 @@
 package com.gantzgulch.lego.platform.ev3.device;
 
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import com.gantzgulch.lego.device.ev3.EV3Led;
 import com.gantzgulch.lego.platform.common.Attribute;
@@ -70,8 +70,8 @@ public class EV3LedImpl implements EV3Led {
     }
 
     @Override
-    public void setDelayOn(long timeUnit, TimeUnit unit) {
-        delayOn.writeInteger((int) unit.toMillis(timeUnit));
+    public void setDelayOn(final Duration duration) {
+        delayOn.writeInteger((int) duration.toMillis());
     }
 
     @Override
@@ -80,8 +80,8 @@ public class EV3LedImpl implements EV3Led {
     }
 
     @Override
-    public void setDelayOff(long timeUnit, TimeUnit unit) {
-        delayOff.writeInteger((int) unit.toMillis(timeUnit));
+    public void setDelayOff(final Duration duration) {
+        delayOff.writeInteger((int) duration.toMillis());
     }
 
     @Override

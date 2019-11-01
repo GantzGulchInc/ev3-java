@@ -76,12 +76,6 @@ public class EV3ButtonImpl implements EV3Button, Runnable {
 
                 LOG.info("run: type: %d   code: %d  value: %d", type, code, value);
 
-                // int type = this.dis.readShort(); // 2 bytes
-                // int code = this.dis.readShort(); // 2 bytes
-                // int value = this.dis.readInt(); // 4 bytes
-
-                // LOG.info("run: type: %d, code: %d, value: %d", type, code, value);
-
             } catch (final IOException e) {
 
                 LOG.warning(e, "Unexpected exception reading stream: " + e.getMessage());

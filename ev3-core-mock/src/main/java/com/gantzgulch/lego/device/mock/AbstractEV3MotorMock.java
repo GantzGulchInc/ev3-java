@@ -1,0 +1,444 @@
+package com.gantzgulch.lego.device.mock;
+
+import java.io.IOException;
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+import com.gantzgulch.lego.device.ev3.EV3LargeMotor;
+import com.gantzgulch.lego.unit.Speed;
+import com.gantzgulch.lego.util.lang.Sleep;
+import com.gantzgulch.lego.util.logger.EV3Logger;
+
+public class AbstractEV3MotorMock implements EV3LargeMotor {
+
+    protected final EV3Logger LOG = EV3Logger.getLogger(getClass());
+
+    private final String address;
+
+    private final String driverName;
+
+    private BlockingDeque<EV3MotorCommand> pendingCommands = new LinkedBlockingDeque<>(50);
+
+    private final int countPerRotation;
+
+    private int dutyCycle;
+
+    private int dutyCycleSetPoint;
+
+    private int position = 0;
+
+    private int holdPidKd;
+
+    private int holdPidKi;
+
+    private int holdPidKp;
+
+    private final int maxSpeed;
+
+    private int positionSetPoint;
+
+    private int speed;
+
+    private int speedSetPoint;
+
+    private Duration rampUpSetPoint = Duration.ofMillis(0);
+
+    private Duration rampDownSetPoint = Duration.ofMillis(0);
+
+    private int speedPidKd;
+
+    private int speedPidKi;
+
+    private int speedPidKp;
+
+    private EV3MotorPolarity polarity = EV3MotorPolarity.NORMAL;
+
+    private Set<EV3MotorState> state = Collections.synchronizedSet(new HashSet<>());
+
+    private EV3MotorStopAction stopAction;
+
+    private Duration timeSetPoint = Duration.ofMillis(0);
+
+    private MotorThread thread;
+
+    private boolean isClosed = false;
+
+    public AbstractEV3MotorMock(final int countPerRotation, final int maxSpeed, final String address, final String driverName) {
+        this.countPerRotation = countPerRotation;
+        this.maxSpeed = maxSpeed;
+        this.address = address;
+        this.driverName = driverName;
+        this.thread = new MotorThread(this);
+        this.thread.start();
+    }
+
+    @Override
+    public int getCountPerRotation() {
+        return countPerRotation;
+    }
+
+    @Override
+    public int getDutyCycle() {
+        return dutyCycle;
+    }
+
+    @Override
+    public int getDutyCycleSetPoint() {
+        return dutyCycleSetPoint;
+    }
+
+    @Override
+    public void setDutyCycleSetPoint(int newDutyCycleSetPoint) {
+        this.dutyCycleSetPoint = newDutyCycleSetPoint;
+    }
+
+    @Override
+    public EV3MotorPolarity getPolarity() {
+        return polarity;
+    }
+
+    @Override
+    public void setPolarity(EV3MotorPolarity newPolarity) {
+        this.polarity = newPolarity;
+    }
+
+    @Override
+    public int getPosition() {
+        return position;
+    }
+
+    @Override
+    public void setPosition(int newPosition) {
+        this.position = newPosition;
+    }
+
+    @Override
+    public int getHoldPidKd() {
+        return holdPidKd;
+    }
+
+    @Override
+    public void setHoldPidKd(int newHoldPidKd) {
+        this.holdPidKd = newHoldPidKd;
+    }
+
+    @Override
+    public int getHoldPidKi() {
+        return holdPidKi;
+    }
+
+    @Override
+    public void setHoldPidKi(int newHoldPidKi) {
+        this.holdPidKi = newHoldPidKi;
+    }
+
+    @Override
+    public int getHoldPidKp() {
+        return holdPidKp;
+    }
+
+    @Override
+    public void setHoldPidKp(int newHoldPidKp) {
+        this.holdPidKp = newHoldPidKp;
+    }
+
+    @Override
+    public int getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    @Override
+    public int getPositionSetPoint() {
+        return positionSetPoint;
+    }
+
+    @Override
+    public void setPositionSetPoint(int newPositionSetPoint) {
+        this.positionSetPoint = newPositionSetPoint;
+    }
+
+    @Override
+    public int getSpeed() {
+        return speed;
+    }
+
+    @Override
+    public int getSpeedSetPoint() {
+        return speedSetPoint;
+    }
+
+    @Override
+    public void setSpeedSetPoint(final int speed) {
+        this.speedSetPoint = speed;
+    }
+
+    @Override
+    public void setSpeedSetPoint(Speed speed) {
+
+        int countsPerRotation = getCountPerRotation();
+
+        int maxCountsPerSecond = getMaxSpeed();
+
+        double maxRotationsPerSecond = (double) maxCountsPerSecond / (double) countsPerRotation;
+
+        double rotationsPerSecond = speed.rotationsPerSecond(maxRotationsPerSecond);
+
+        int countsPerSecond = (int) (rotationsPerSecond * countsPerRotation);
+
+        setSpeedSetPoint(countsPerSecond);
+    }
+
+    @Override
+    public Duration getRampUpSetPoint() {
+        return rampUpSetPoint;
+    }
+
+    @Override
+    public void setRampUpSetPoint(final Duration duration) {
+        rampUpSetPoint = duration;
+    }
+
+    @Override
+    public Duration getRampDownSetPoint() {
+        return rampDownSetPoint;
+    }
+
+    @Override
+    public void setRampDownSetPoint(final Duration duration) {
+        this.rampUpSetPoint = duration;
+    }
+
+    @Override
+    public int getSpeedPidKd() {
+        return speedPidKd;
+    }
+
+    @Override
+    public void setSpeedPidKd(int newSpeedPidKd) {
+        speedPidKd = newSpeedPidKd;
+    }
+
+    @Override
+    public int getSpeedPidKi() {
+        return speedPidKi;
+    }
+
+    @Override
+    public void setSpeedPidKi(int newSpeedPidKi) {
+        speedPidKi = newSpeedPidKi;
+    }
+
+    @Override
+    public int getSpeedPidKp() {
+        return speedPidKp;
+    }
+
+    @Override
+    public void setSpeedPidKp(int newSpeedPidKp) {
+        speedPidKp = newSpeedPidKp;
+    }
+
+    @Override
+    public Set<EV3MotorState> getState() {
+        return state;
+    }
+
+    @Override
+    public EV3MotorStopAction getStopAction() {
+        return stopAction;
+    }
+
+    @Override
+    public void setStopAction(EV3MotorStopAction newStopAction) {
+        stopAction = newStopAction;
+    }
+
+    @Override
+    public Set<EV3MotorStopAction> getStopActions() {
+
+        return Arrays//
+                .stream(EV3MotorStopAction.values())//
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Duration getTimeSetPoint() {
+        return timeSetPoint;
+    }
+
+    @Override
+    public void setTimeSetPoint(final Duration duration) {
+        timeSetPoint = duration;
+    }
+
+    @Override
+    public boolean isRunning() {
+        return state.contains(EV3MotorState.RUNNING);
+    }
+
+    @Override
+    public String getAddress() {
+        return address;
+    }
+
+    @Override
+    public String getDriverName() {
+        return driverName;
+    }
+
+    @Override
+    public Set<EV3MotorCommand> getCommands() {
+
+        return Arrays //
+                .stream(EV3MotorCommand.values()) //
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public void sendCommand(final EV3MotorCommand command) {
+
+        pendingCommands.addLast(command);
+
+    }
+
+    @Override
+    public void close() throws IOException {
+
+        isClosed = true;
+
+        thread.interrupt();
+
+    }
+
+    private class MotorThread extends Thread {
+
+        private final AbstractEV3MotorMock motor;
+
+        public MotorThread(final AbstractEV3MotorMock motor) {
+            
+            setDaemon(true);
+            
+            this.motor = motor;
+        }
+        
+        @Override
+        public void run() {
+
+            while (!isClosed) {
+
+                try {
+
+                    final EV3MotorCommand command = pendingCommands.pollFirst(50, TimeUnit.MILLISECONDS);
+                    
+                    LOG.finest("run: command: %s", command);
+                    
+                    if( command != null ) {
+                        
+                        switch(command) {
+                        
+                        case RESET:
+                            reset();
+                            break;
+                        case RUN_DIRECT:
+                            runDirect();
+                            break;
+                        case RUN_FOREVER:
+                            runForever();
+                            break;
+                        case RUN_TIMED:
+                            runTimed();
+                            break;
+                        case RUN_TO_ABS_POS:
+                            runToAbsPos();
+                            break;
+                        case RUN_TO_REL_POS:
+                            runToRelPos();
+                            break;
+                        case STOP:
+                            stopAll();
+                            break;
+                        }
+                        
+                    }
+                } catch (final InterruptedException e) {
+                    LOG.finer(e, "run: Interrupted.");
+                }
+            }
+        }
+
+        private void reset() {
+            
+        }
+        
+        private void runDirect() {
+            
+        }
+        
+        private void runForever() {
+            
+        }
+        
+        private void runTimed() {
+            
+        }
+        
+        private void runToAbsPos() {
+            
+        }
+
+        private void runToRelPos() {
+            
+            LOG.finest("runToRelPos: entering");
+            
+            motor.state.clear();
+            
+            motor.state.add(EV3MotorState.RUNNING);
+            
+            int targetPosition = position + positionSetPoint;
+            
+            int sign = position > targetPosition ? -1 : 1;
+            
+            LOG.finest("runToRelPos: sign: %d", sign);
+            
+            LOG.finest("runToRelPos: speedSetPoint: %d", speedSetPoint);
+            
+            int incPerLoop = Math.abs(speedSetPoint) / 100;
+            
+            LOG.finest("runToRelPos: position: %d", position);
+            LOG.finest("runToRelPos: positionSetPoint: %d", positionSetPoint);
+            
+            LOG.finest("runToRelPos: incPerLoop: %s", incPerLoop);
+            
+            while(true) {
+                
+                int diff = Math.abs( position - targetPosition );
+                
+                if( diff < incPerLoop ) {
+                    
+                    position = targetPosition;
+                    
+                    break;
+                }
+
+                position += sign * incPerLoop;
+                
+                // LOG.finest("runToRelPos: position: %d", position);
+                
+                Sleep.sleep(10, TimeUnit.MILLISECONDS);
+            }
+            
+            motor.state.clear();
+        }
+        
+        private void stopAll() {
+            
+        }
+    }
+}

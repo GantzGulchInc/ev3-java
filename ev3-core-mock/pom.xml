@@ -11,13 +11,13 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>ev3-lib</artifactId>
+	<artifactId>ev3-core-mock</artifactId>
 
-	<name>EV3 Library</name>
-	<description>EV3 user friendly library.</description>
+	<name>EV3 Core Mock</name>
+	<description>Core mock objects library.</description>
 
 	<dependencies>
-
+	
 		<dependency>
 			<groupId>com.gantzgulch.ev3</groupId>
 			<artifactId>ev3-core</artifactId>

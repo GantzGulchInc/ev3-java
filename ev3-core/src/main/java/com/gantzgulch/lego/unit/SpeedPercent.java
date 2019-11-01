@@ -12,4 +12,13 @@ public class SpeedPercent implements Speed {
     public double rotationsPerSecond(final double maxRotationsPerSecond) {
         return percent / 100.0 * maxRotationsPerSecond;
     }
+    
+    public double getPercent() {
+        return percent;
+    }
+
+    @Override
+    public String toString() {
+        return "Speed:" + Double.toString(percent) + "%";
+    }
 }
