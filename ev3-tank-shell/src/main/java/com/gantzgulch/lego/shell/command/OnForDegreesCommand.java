@@ -17,7 +17,7 @@ public class OnForDegreesCommand extends AbstractCommand {
     private boolean wait = true;
 
     public OnForDegreesCommand(final String[] args) {
-        super(args);
+        super(true, args);
     }
 
     @Override
@@ -58,6 +58,11 @@ public class OnForDegreesCommand extends AbstractCommand {
 
         tank.onForDegrees(leftSpeed, rightSpeed, degrees, brake, wait);
         
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("%s %s %s %f %b %b", args[0], leftSpeed, rightSpeed, degrees, brake, wait);
     }
 
     @Override

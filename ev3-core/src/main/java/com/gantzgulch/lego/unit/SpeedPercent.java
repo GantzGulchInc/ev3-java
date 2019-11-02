@@ -13,7 +13,7 @@ public class SpeedPercent implements Speed {
 
     @Override
     public int toNative(final EV3TachoMotor<EV3MotorCommand> motor) {
-        return (int)( percent / 100.0 * motor.getCountPerRotation() );
+        return (int)( percent / 100.0 * motor.getMaxSpeed() );
     }
     
     public double getPercent() {
@@ -22,6 +22,6 @@ public class SpeedPercent implements Speed {
 
     @Override
     public String toString() {
-        return "Speed:" + Double.toString(percent) + "%";
+        return String.format("%f%%", percent);
     }
 }

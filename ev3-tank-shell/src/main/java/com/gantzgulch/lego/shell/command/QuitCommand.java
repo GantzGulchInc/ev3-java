@@ -7,7 +7,7 @@ public class QuitCommand extends AbstractCommand {
 
 
     public QuitCommand(final String[] args) {
-        super(args);
+        super(false, args);
     }
 
     @Override

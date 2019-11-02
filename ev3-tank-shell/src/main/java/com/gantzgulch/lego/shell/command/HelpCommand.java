@@ -7,7 +7,7 @@ public class HelpCommand extends AbstractCommand {
 
 
     public HelpCommand(final String[] args) {
-        super(args);
+        super(false, args);
     }
 
     @Override

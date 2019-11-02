@@ -18,6 +18,6 @@ public class SpeedNative implements Speed {
     
     @Override
     public String toString() {
-        return "Speed:" + Double.toString(nativeSpeed) + "%";
+        return String.format("%fn", nativeSpeed);
     }
 }

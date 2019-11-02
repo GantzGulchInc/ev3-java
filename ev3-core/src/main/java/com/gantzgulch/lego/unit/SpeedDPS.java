@@ -21,6 +21,6 @@ public class SpeedDPS implements Speed {
     
     @Override
     public String toString() {
-        return "Speed:" + Double.toString(dps) + "dps";
+        return String.format("%fdps", dps);
     }
 }

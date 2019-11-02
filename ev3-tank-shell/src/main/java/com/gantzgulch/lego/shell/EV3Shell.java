@@ -2,6 +2,7 @@ package com.gantzgulch.lego.shell;
 
 import java.util.Scanner;
 
+import com.gantzgulch.lego.shell.record.Recorder;
 import com.gantzgulch.lego.tank.Tank;
 
 public class EV3Shell implements Runnable {
@@ -10,11 +11,14 @@ public class EV3Shell implements Runnable {
 
     private final CommandParser parser;
 
+    private final Recorder recorder;
+    
     private boolean isRunning = true;
     
     public EV3Shell(final Tank tank) {
         this.tank = tank;
         this.parser = new CommandParser();
+        this.recorder = new Recorder(this, this.tank);
     }
 
     public void run() {
@@ -35,6 +39,8 @@ public class EV3Shell implements Runnable {
                     command = parser.parse(line);
 
                     command.execute(this, tank);
+                    
+                    recorder.record(command);
 
                 } catch (final RuntimeException e) {
                     
@@ -54,5 +60,9 @@ public class EV3Shell implements Runnable {
     
     public void stop() {
         isRunning = false;
+    }
+    
+    public Recorder getRecorder() {
+        return recorder;
     }
 }

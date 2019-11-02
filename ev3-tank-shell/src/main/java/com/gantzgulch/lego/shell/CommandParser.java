@@ -10,8 +10,9 @@ import com.gantzgulch.lego.shell.command.OnForDegreesCommand;
 import com.gantzgulch.lego.shell.command.OnForDurationCommand;
 import com.gantzgulch.lego.shell.command.OnForRotationsCommand;
 import com.gantzgulch.lego.shell.command.QuitCommand;
-import com.gantzgulch.lego.shell.command.SetRampDown;
-import com.gantzgulch.lego.shell.command.SetRampUp;
+import com.gantzgulch.lego.shell.command.RecorderCommand;
+import com.gantzgulch.lego.shell.command.SetRampDownCommand;
+import com.gantzgulch.lego.shell.command.SetRampUpCommand;
 import com.gantzgulch.lego.shell.command.SteerForRotationsCommand;
 
 public class CommandParser {
@@ -26,8 +27,9 @@ public class CommandParser {
         commandParserMap.put("onForDegrees", OnForDegreesCommand::parse);
         commandParserMap.put("onForDuration", OnForDurationCommand::parse);
         commandParserMap.put("steerForRotations", SteerForRotationsCommand::parse);
-        commandParserMap.put("setRampUp", SetRampUp::parse);
-        commandParserMap.put("setRampDown", SetRampDown::parse);
+        commandParserMap.put("setRampUp", SetRampUpCommand::parse);
+        commandParserMap.put("setRampDown", SetRampDownCommand::parse);
+        commandParserMap.put("recorder", RecorderCommand::parse);
         commandParserMap.put("quit", QuitCommand::parse);
     }
 

@@ -26,6 +26,6 @@ public class SpeedRPM implements Speed {
     
     @Override
     public String toString() {
-        return "Speed:" + Double.toString(rpm) + "rpm";
+        return String.format("%frpm", rpm);
     }
 }

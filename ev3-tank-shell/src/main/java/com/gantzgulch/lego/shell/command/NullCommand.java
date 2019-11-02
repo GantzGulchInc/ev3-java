@@ -6,7 +6,7 @@ import com.gantzgulch.lego.tank.Tank;
 public class NullCommand extends AbstractCommand {
 
     public NullCommand(final String[] args) {
-        super(args);
+        super(false, args);
     }
 
     @Override

@@ -17,7 +17,7 @@ public class SteerForRotationsCommand extends AbstractCommand {
     private boolean wait = true;
 
     public SteerForRotationsCommand(final String[] args) {
-        super(args);
+        super(true, args);
     }
 
     @Override
@@ -65,6 +65,12 @@ public class SteerForRotationsCommand extends AbstractCommand {
         return "steerForRotations:help";
     }
 
+    
+    @Override
+    public String toString() {
+        return String.format("%s %d %s %f %b %b", args[0], steering, speed, rotations, brake, wait);
+    }
+    
     public static final SteerForRotationsCommand parse(final String[] args) {
         return new SteerForRotationsCommand(args);
     }

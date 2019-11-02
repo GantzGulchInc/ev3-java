@@ -20,7 +20,7 @@ public class OnForDurationCommand extends AbstractCommand {
     private boolean wait = true;
 
     public OnForDurationCommand(final String[] args) {
-        super(args);
+        super(true, args);
     }
 
     @Override
@@ -67,6 +67,13 @@ public class OnForDurationCommand extends AbstractCommand {
     public String help() {
         return "onForDuration:help";
     }
+    
+    @Override
+    public String toString() {
+        return String.format("%s %s %s %dms %b %b", args[0], leftSpeed, rightSpeed, duration.toMillis(), brake, wait);
+    }
+
+
 
     public static final OnForDurationCommand parse(final String[] args) {
         return new OnForDurationCommand(args);

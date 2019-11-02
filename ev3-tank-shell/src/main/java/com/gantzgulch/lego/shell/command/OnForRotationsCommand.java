@@ -17,7 +17,7 @@ public class OnForRotationsCommand extends AbstractCommand {
     private boolean wait = true;
 
     public OnForRotationsCommand(final String[] args) {
-        super(args);
+        super(true, args);
     }
 
     @Override
@@ -64,7 +64,12 @@ public class OnForRotationsCommand extends AbstractCommand {
     public String help() {
         return "onForRotations:help";
     }
-
+    
+    @Override
+    public String toString() {
+        return String.format("%s %s %s %f %b %b", args[0], leftSpeed, rightSpeed, rotations, brake, wait);
+    }
+    
     public static final OnForRotationsCommand parse(final String[] args) {
         return new OnForRotationsCommand(args);
     }

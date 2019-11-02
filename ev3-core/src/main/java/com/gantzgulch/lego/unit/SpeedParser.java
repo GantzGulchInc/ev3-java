@@ -23,6 +23,8 @@ public class SpeedParser {
 
     private static final Pattern PATTERN_DPS = Pattern.compile(REGEX_DOUBLE + "dps");
 
+    private static final Pattern PATTERN_NATIVE = Pattern.compile(REGEX_DOUBLE + "n");
+
     private static final List<Pair<Pattern,Function<Double,Speed>>> SPEED_PARSERS = createSpeedParser();
     
     public static Optional<Speed> parse(final String value) {
@@ -52,6 +54,7 @@ public class SpeedParser {
         l.add( new Pair<>(PATTERN_RPS, d -> { return new SpeedRPS(d); } ) );
         l.add( new Pair<>(PATTERN_DPM, d -> { return new SpeedDPM(d); } ) );
         l.add( new Pair<>(PATTERN_DPS, d -> { return new SpeedDPS(d); } ) );
+        l.add( new Pair<>(PATTERN_NATIVE, d -> { return new SpeedNative(d); } ) );
         
         return l;
     }

@@ -4,6 +4,8 @@ import com.gantzgulch.lego.tank.Tank;
 
 public interface Command {
 
+    boolean isRecordable();
+    
     void execute(EV3Shell shell, Tank tank);
  
     String help();

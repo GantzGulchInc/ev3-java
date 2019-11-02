@@ -24,7 +24,7 @@ public class SpeedRPS implements Speed {
 
     @Override
     public String toString() {
-        return "Speed:" + Double.toString(rps) + "rps";
+        return String.format("%frps", rps);
     }
 
 }

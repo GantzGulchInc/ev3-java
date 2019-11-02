@@ -6,12 +6,12 @@ import com.gantzgulch.lego.shell.EV3Shell;
 import com.gantzgulch.lego.tank.Tank;
 import com.gantzgulch.lego.unit.DurationParser;
 
-public class SetRampUp extends AbstractCommand {
+public class SetRampUpCommand extends AbstractCommand {
 
     private Duration duration;
 
-    public SetRampUp(final String[] args) {
-        super(args);
+    public SetRampUpCommand(final String[] args) {
+        super(true, args);
     }
 
     @Override
@@ -45,8 +45,14 @@ public class SetRampUp extends AbstractCommand {
     public String help() {
         return "setRampUp:help";
     }
+    
+    @Override
+    public String toString() {
+        return String.format("%s %dms", args[0], duration.toMillis());
+    }
 
-    public static final SetRampUp parse(final String[] args) {
-        return new SetRampUp(args);
+
+    public static final SetRampUpCommand parse(final String[] args) {
+        return new SetRampUpCommand(args);
     }
 }

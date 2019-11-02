@@ -23,7 +23,7 @@ public class SpeedDPM implements Speed {
 
     @Override
     public String toString() {
-        return "Speed:" + Double.toString(dpm) + "dpm";
+        return String.format("%fdpm", dpm);
     }
 
 }
