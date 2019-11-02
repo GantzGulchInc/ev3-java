@@ -240,17 +240,8 @@ public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCo
     @Override
     public void setSpeedSetPoint(Speed speed) {
 
-        int countsPerRotation = getCountPerRotation();
-
-        int maxCountsPerSecond = getMaxSpeed();
-
-        double maxRotationsPerSecond = (double) maxCountsPerSecond / (double) countsPerRotation;
-
-        double rotationsPerSecond = speed.rotationsPerSecond(maxRotationsPerSecond);
-
-        int countsPerSecond = (int) (rotationsPerSecond * countsPerRotation);
-
-        setSpeedSetPoint(countsPerSecond);
+        setSpeedSetPoint( speed.toNative(this) );
+        
     }
 
     @Override

@@ -11,17 +11,17 @@ import com.gantzgulch.lego.util.lang.Pair;
 
 public class SpeedParser {
 
-    private static final Pattern PATTERN_PERCENT = Pattern.compile("(\\d+(?:\\.\\d+)?)%");
+    private static final String REGEX_DOUBLE = "(\\-?\\d+(?:\\.\\d+)?)";
     
-    //private static final Pattern PATTERN_PERCENT = Pattern.compile("(\\d+()\\.\\d+?)\\%");
+    private static final Pattern PATTERN_PERCENT = Pattern.compile(REGEX_DOUBLE + "%");
     
-    private static final Pattern PATTERN_RPM = Pattern.compile("(\\d+(?:\\.\\d+)?)rpm");
+    private static final Pattern PATTERN_RPM = Pattern.compile(REGEX_DOUBLE + "rpm");
 
-    private static final Pattern PATTERN_RPS = Pattern.compile("(\\d+(?:\\.\\d+)?)rps");
+    private static final Pattern PATTERN_RPS = Pattern.compile(REGEX_DOUBLE + "rps");
 
-    private static final Pattern PATTERN_DPM = Pattern.compile("(\\d+(?:\\.\\d+)?)dpm");
+    private static final Pattern PATTERN_DPM = Pattern.compile(REGEX_DOUBLE + "dpm");
 
-    private static final Pattern PATTERN_DPS = Pattern.compile("(\\d+(?:\\.\\d+)?)dps");
+    private static final Pattern PATTERN_DPS = Pattern.compile(REGEX_DOUBLE + "dps");
 
     private static final List<Pair<Pattern,Function<Double,Speed>>> SPEED_PARSERS = createSpeedParser();
     

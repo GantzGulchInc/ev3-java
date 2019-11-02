@@ -1,15 +1,17 @@
 package com.gantzgulch.lego.tank.impl;
 
 import java.time.Duration;
-import java.util.NavigableMap;
+import java.util.concurrent.TimeUnit;
 
 import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorCommand;
 import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorStopAction;
 import com.gantzgulch.lego.device.ev3.EV3TachoMotor;
 import com.gantzgulch.lego.tank.Tank;
 import com.gantzgulch.lego.unit.Speed;
+import com.gantzgulch.lego.unit.SpeedNative;
 import com.gantzgulch.lego.units.LengthUnit;
 import com.gantzgulch.lego.util.lang.Pair;
+import com.gantzgulch.lego.util.lang.Sleep;
 import com.gantzgulch.lego.util.logger.EV3Logger;
 import com.gantzgulch.lego.wheel.Wheel;
 
@@ -46,8 +48,8 @@ public class EV3TachoTank implements Tank {
     @Override
     public void onForDegrees(final Speed leftSpeed, final Speed rightSpeed, final double degrees, final boolean brake, final boolean wait) {
 
-        int leftSpeedNative = computeNativeSpeed(leftSpeed, leftMotor);
-        int rightSpeedNative = computeNativeSpeed(rightSpeed, rightMotor);
+        int leftSpeedNative = leftSpeed.toNative(leftMotor);
+        int rightSpeedNative = rightSpeed.toNative(rightMotor);
         
         double leftDegrees;
         double rightDegrees;
@@ -71,14 +73,19 @@ public class EV3TachoTank implements Tank {
             rightDegrees = degrees;
         }
 
+        leftDegrees *= Math.signum(leftSpeedNative);
+        
         setSpeedAndStopAction(leftMotor, leftSpeedNative, brake);
         leftMotor.setPositionSetPoint( computePosition(leftDegrees, leftMotor));
 
+        rightDegrees *= Math.signum(rightSpeedNative);
+        
         setSpeedAndStopAction(rightMotor, rightSpeedNative, brake);
         rightMotor.setPositionSetPoint( computePosition(rightDegrees, rightMotor));
         
         sendCommand(EV3MotorCommand.RUN_TO_REL_POS);
         
+        waitForIt(wait);
     }
     
     @Override
@@ -89,6 +96,55 @@ public class EV3TachoTank implements Tank {
         onForDegrees(leftSpeed, rightSpeed, rotations * 360.0, brake, wait);
     }
 
+    @Override
+    public void onForDuration(final Speed leftSpeed, final Speed rightSpeed, final Duration duration, final boolean brake, final boolean wait) {
+        
+        int leftSpeedNative = leftSpeed.toNative(leftMotor);
+        int rightSpeedNative = rightSpeed.toNative(rightMotor);
+
+        setSpeedAndStopAction(leftMotor, leftSpeedNative, brake);
+        setSpeedAndStopAction(rightMotor, rightSpeedNative, brake);
+        
+        leftMotor.setTimeSetPoint(duration);
+        rightMotor.setTimeSetPoint(duration);
+        
+        sendCommand(EV3MotorCommand.RUN_TIMED);
+        
+        waitForIt(wait);
+    }
+    
+    @Override
+    public void steerForRotations(final int steering, final Speed speed, final double rotations, final boolean brake, final boolean wait) {
+        
+        final Pair<Integer,Integer> speeds = computeSteering(steering, speed);
+        
+        onForRotations(new SpeedNative(speeds.getLeft()), new SpeedNative(speeds.getRight()), rotations, brake, wait);
+    }
+    
+    private Pair<Integer,Integer> computeSteering(final int steering, final Speed speed) {
+
+        int speedNative = speed.toNative(leftMotor);
+        
+        int leftSpeed = speedNative;
+        int rightSpeed = speedNative;
+        
+        double speedFactor = (50.0 - Math.abs( (double) steering)) / 50.0;
+        
+        if( steering >= 0 ) {
+            rightSpeed *= speedFactor;
+        } else {
+            leftSpeed *= speedFactor;
+        }
+
+        return new Pair<>(leftSpeed,rightSpeed);
+    }
+    
+    private void waitForIt(final boolean wait) {
+        
+        while( wait && ( leftMotor.isRunning() || rightMotor.isRunning() ) ) {
+            Sleep.sleep(50, TimeUnit.MILLISECONDS);
+        }
+    }
     private void sendCommand(final EV3MotorCommand command) {
         leftMotor.sendCommand(command);
         rightMotor.sendCommand(command);
@@ -100,27 +156,6 @@ public class EV3TachoTank implements Tank {
         
         motor.setSpeedSetPoint(speedNative);
         motor.setStopAction(brake ? EV3MotorStopAction.BRAKE : EV3MotorStopAction.COAST);
-    }
-    
-    private int computeNativeSpeed(final Speed speed, final EV3TachoMotor<EV3MotorCommand> motor) {
-        
-        LOG.fine("computeNativeSpeed: speed: %s", speed);
-        
-        LOG.fine("computeNativeSpeed: maxSpeed: %d", motor.getMaxSpeed());
-
-        double maxRotationsPerSecond = motor.getMaxSpeed() / motor.getCountPerRotation();
-        
-        double rotationsPerSecond = speed.rotationsPerSecond(maxRotationsPerSecond);
-
-        LOG.fine("computeNativeSpeed: rotationsPerSecond: %f", rotationsPerSecond);
-        
-        LOG.fine("computeNativeSpeed: countPerRotation: %d", motor.getCountPerRotation());
-
-        int nativeSpeed = (int)(rotationsPerSecond * motor.getCountPerRotation());
-        
-        LOG.fine("computeNativeSpeed: nativeSpeed: %d", nativeSpeed);
-        
-        return nativeSpeed;
     }
     
     private int computePosition(final double degrees, final EV3TachoMotor<EV3MotorCommand> motor) {

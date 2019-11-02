@@ -18,6 +18,10 @@ public interface Tank {
     
     void onForRotations(Speed leftSpeed, Speed rightSpeed, double rotations, boolean brake, boolean wait);
     
+    void onForDuration(Speed leftSpeed, Speed rightSpeed, Duration duration, boolean brake, boolean wait);
+    
+    void steerForRotations(int steering, Speed speed, double rotations, boolean brake, boolean wait);
+    
     public static Tank create(EV3TachoMotor<EV3MotorCommand> leftMotor, EV3TachoMotor<EV3MotorCommand> rightMotor, Wheel wheel) {
         return new EV3TachoTank(leftMotor, rightMotor, wheel);
     }

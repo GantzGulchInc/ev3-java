@@ -2,7 +2,6 @@ package com.gantzgulch.lego.platform.brickpi.device;
 
 import java.time.Duration;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import com.gantzgulch.lego.device.ev3.EV3Led;
 

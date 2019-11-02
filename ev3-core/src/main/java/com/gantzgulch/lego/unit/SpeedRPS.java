@@ -1,5 +1,8 @@
 package com.gantzgulch.lego.unit;
 
+import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorCommand;
+import com.gantzgulch.lego.device.ev3.EV3TachoMotor;
+
 public class SpeedRPS implements Speed {
 
     protected final double rps;
@@ -9,15 +12,12 @@ public class SpeedRPS implements Speed {
     }
 
     @Override
-    public double rotationsPerSecond(final double maxRotationsPerSecond) {
-
-        if (Math.abs(rps) > maxRotationsPerSecond) {
-            return maxRotationsPerSecond * Math.signum(rps);
-        }
-
-        return rps;
+    public int toNative(final EV3TachoMotor<EV3MotorCommand> motor) {
+        
+        return (int)(rps * motor.getCountPerRotation());
+        
     }
-
+    
     public double getRps() {
         return rps;
     }

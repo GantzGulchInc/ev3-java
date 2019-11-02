@@ -22,7 +22,7 @@ public class SpeedRPMTest {
         
         SpeedRPM srpm = (SpeedRPM)s;
         
-        assertThat(srpm.getRps(), closeTo(45.2 / 60.0, delta));
+        assertThat(srpm.getRpm(), closeTo(45.2, delta));
         
         
     }

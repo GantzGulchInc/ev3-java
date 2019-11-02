@@ -20,7 +20,6 @@ import com.gantzgulch.lego.device.ev3.EV3MediumMotor;
 import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorCommand;
 import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorState;
 import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorStopAction;
-import com.gantzgulch.lego.device.mock.EV3LargeMotorMock;
 import com.gantzgulch.lego.platform.Platform;
 import com.gantzgulch.lego.platform.common.DeviceFinder;
 import com.gantzgulch.lego.platform.ev3.device.EV3ButtonImpl;
