@@ -17,7 +17,13 @@ public class SpeedRPM implements Speed {
         
         double rps = rpm / 60.0;
         
-        return (int)( rps * motor.getCountPerRotation());
+        int nativeSpeed = (int)( rps * motor.getCountPerRotation());
+        
+        if( Math.abs(nativeSpeed) > Math.abs( motor.getMaxSpeed()) ) {
+            throw new IllegalArgumentException(String.format("Speed [%f rpm / %d] exceeds motor capacity: %d", rpm, nativeSpeed, motor.getMaxSpeed() ) );
+        }
+        
+        return nativeSpeed;
     }
 
     public double getRpm() {

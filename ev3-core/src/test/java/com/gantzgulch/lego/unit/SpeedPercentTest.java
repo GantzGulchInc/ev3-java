@@ -1,56 +1,84 @@
 package com.gantzgulch.lego.unit;
 
-import static org.hamcrest.Matchers.closeTo;
-import static org.hamcrest.Matchers.isA;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import org.junit.Test;
+import java.util.Arrays;
 
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorCommand;
+import com.gantzgulch.lego.device.ev3.EV3TachoMotor;
+
+@RunWith(MockitoJUnitRunner.class)
 public class SpeedPercentTest {
 
-    public static final double delta = 0.000000001;
-    
-    public SpeedPercentTest() {
-    }
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
-    
-    @Test
-    public void parseValidPercent() {
-        
-        Speed s = null;
-        
-        s = Speed.parse("45.2%");
-        
-        assertThat(s, isA(SpeedPercent.class));
-        
-        SpeedPercent sp = (SpeedPercent)(s); 
-        
-        assertThat(sp.getPercent(), closeTo(45.2, delta));
-        
+    @Mock
+    private EV3TachoMotor<EV3MotorCommand> motor;
+
+    @Before
+    public void before() {
+        Mockito.when(motor.getMaxSpeed()).thenReturn(1050);
     }
 
     @Test
-    public void parseValidPercent2() {
-        
-        Speed s = null;
-        
-        s = Speed.parse("45%");
-        
-        assertThat(s, isA(SpeedPercent.class));
-        
-        SpeedPercent sp = (SpeedPercent)(s); 
-        
-        assertThat(sp.getPercent(), closeTo(45, delta));
-        
-    }
-        
+    public void testSpeedPercent() {
 
+        Arrays.asList(new SpeedPercentData[] { //
+                new SpeedPercentData(0.0, 0), //
+                new SpeedPercentData(50.0, 525), //
+                new SpeedPercentData(40.5, 425), //
+                new SpeedPercentData(100.0, 1050), //
+                new SpeedPercentData(-100.0, -1050), //
+                new SpeedPercentData(-40.5, -425), //
+                new SpeedPercentData(-50.0, -525) }) //
+                .stream() //
+                .forEach(d -> {
 
-    @Test(expected = IllegalArgumentException.class)
-    public void parseInvalidPercent() {
-        
-        Speed.parse("4A5.2%");
-        
+                    final SpeedPercent s = new SpeedPercent(d.percent);
+
+                    assertThat(s.toNative(motor), equalTo(d.nativeValue));
+
+                });
+
     }
 
+    @Test
+    public void testOver() {
+
+        thrown.expect(IllegalArgumentException.class);
+
+        new SpeedPercent(101.0);
+
+    }
+
+    @Test
+    public void testUnder() {
+
+        thrown.expect(IllegalArgumentException.class);
+
+        new SpeedPercent(-101.0);
+
+    }
+
+    private static class SpeedPercentData {
+
+        public final double percent;
+        public final int nativeValue;
+
+        public SpeedPercentData(final double percent, final int nativeValue) {
+            this.percent = percent;
+            this.nativeValue = nativeValue;
+        }
+    }
 }

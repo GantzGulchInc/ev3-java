@@ -3,7 +3,6 @@ package com.gantzgulch.lego.cli;
 import static org.junit.Assert.assertThat;
 
 import org.hamcrest.Matchers;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.gantzgulch.lego.shell.CommandParser;
@@ -31,11 +30,12 @@ public class CommandParserTest {
 
 
     @Test
-    @Ignore
     public void testParseNullCommand() {
         
         final CommandParser parser = new CommandParser();
         
+        assertThat(parser.parse(null), Matchers.isA(NullCommand.class) );
+
         assertThat(parser.parse(""), Matchers.isA(NullCommand.class) );
         
         assertThat(parser.parse("     "), Matchers.isA(NullCommand.class) );

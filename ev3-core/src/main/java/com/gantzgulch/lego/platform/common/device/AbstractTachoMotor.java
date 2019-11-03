@@ -1,5 +1,7 @@
 package com.gantzgulch.lego.platform.common.device;
 
+import static com.gantzgulch.lego.platform.common.AttributeFactory.createAttribute;
+
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Set;
@@ -76,27 +78,27 @@ public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCo
         this.stateMap = stateMap;
         this.polarityMap = polarityMap;
 
-        this.countPerRotation = new Attribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_COUNT_PER_ROT);
-        this.dutyCycle = new Attribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_DUTY_CYCLE);
-        this.dutyCycleSetPoint = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_DUTY_CYCLE_SP);
-        this.polarity = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_POLARITY);
-        this.position = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_POSITION);
-        this.holdPidKd = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_HOLD_PID, ATTR_HOLD_PID_KD);
-        this.holdPidKi = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_HOLD_PID, ATTR_HOLD_PID_KI);
-        this.holdPidKp = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_HOLD_PID, ATTR_HOLD_PID_KP);
-        this.maxSpeed = new Attribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_MAX_SPEED);
-        this.positionSetPoint = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_POSITION_SP);
-        this.speed = new Attribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_SPEED);
-        this.speedSetPoint = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_SPEED_SP);
-        this.rampUpSetPoint = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_RAMP_UP_SP);
-        this.rampDownSetPoint = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_RAMP_DOWN_SP);
-        this.speedPidKd = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_SPEED_PID, ATTR_SPEED_PID_KD);
-        this.speedPidKi = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_SPEED_PID, ATTR_SPEED_PID_KI);
-        this.speedPidKp = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_SPEED_PID, ATTR_SPEED_PID_KP);
-        this.state = new Attribute(AttributeType.READ_ONLY, true, this.sysFsPath, ATTR_STATE);
-        this.stopAction = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_STOP_ACTION);
-        this.stopActions = new Attribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_STOP_ACTIONS);
-        this.timeSetPoint = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_TIME_SP);
+        this.countPerRotation = createAttribute(AttributeType.READ_ONLY_CACHED, false, this.sysFsPath, ATTR_COUNT_PER_ROT);
+        this.dutyCycle = createAttribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_DUTY_CYCLE);
+        this.dutyCycleSetPoint = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_DUTY_CYCLE_SP);
+        this.polarity = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_POLARITY);
+        this.position = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_POSITION);
+        this.holdPidKd = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_HOLD_PID, ATTR_HOLD_PID_KD);
+        this.holdPidKi = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_HOLD_PID, ATTR_HOLD_PID_KI);
+        this.holdPidKp = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_HOLD_PID, ATTR_HOLD_PID_KP);
+        this.maxSpeed = createAttribute(AttributeType.READ_ONLY_CACHED, false, this.sysFsPath, ATTR_MAX_SPEED);
+        this.positionSetPoint = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_POSITION_SP);
+        this.speed = createAttribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_SPEED);
+        this.speedSetPoint = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_SPEED_SP);
+        this.rampUpSetPoint = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_RAMP_UP_SP);
+        this.rampDownSetPoint = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_RAMP_DOWN_SP);
+        this.speedPidKd = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_SPEED_PID, ATTR_SPEED_PID_KD);
+        this.speedPidKi = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_SPEED_PID, ATTR_SPEED_PID_KI);
+        this.speedPidKp = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_SPEED_PID, ATTR_SPEED_PID_KP);
+        this.state = createAttribute(AttributeType.READ_ONLY, true, this.sysFsPath, ATTR_STATE);
+        this.stopAction = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_STOP_ACTION);
+        this.stopActions = createAttribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_STOP_ACTIONS);
+        this.timeSetPoint = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_TIME_SP);
 
     }
 
@@ -240,8 +242,8 @@ public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCo
     @Override
     public void setSpeedSetPoint(Speed speed) {
 
-        setSpeedSetPoint( speed.toNative(this) );
-        
+        setSpeedSetPoint(speed.toNative(this));
+
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.gantzgulch.lego.platform.common.device;
 
+import static com.gantzgulch.lego.platform.common.AttributeFactory.createAttribute;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -29,7 +31,7 @@ public class BoardImpl implements Board {
 
     public BoardImpl(final Path sysFsPath) {
         this.sysFsPath = sysFsPath;
-        this.uevent = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, "uevent");
+        this.uevent = createAttribute(AttributeType.READ_ONLY, false, sysFsPath, "uevent");
     }
 
     @Override

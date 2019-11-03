@@ -14,6 +14,7 @@ public class DurationParser {
 
     private static final String REGEX_LONG = "(\\d+)";
 
+    private static final Pattern PATTERN_MINUTES = Pattern.compile(REGEX_LONG+"m");
     private static final Pattern PATTERN_SECONDS = Pattern.compile(REGEX_LONG+"s");
     private static final Pattern PATTERN_MILLI_SECONDS = Pattern.compile(REGEX_LONG+"ms");
 
@@ -37,27 +38,29 @@ public class DurationParser {
         throw new IllegalArgumentException("Unable to parse duration: " + value);
     }
     
+    private static Optional<Duration> accept(final Pair<Pattern,Function<Long,Duration>> pair, final String value) {
+        
+        final Matcher matcher = pair.getLeft().matcher(value);
+        
+        if (matcher.matches()) {
+            
+            final Long d = Long.parseLong(matcher.group(1));
+            
+            return Optional.of( pair.getRight().apply(d) );
+        }
+        
+        return Optional.empty();
+    }
+
     private static List<Pair<Pattern,Function<Long,Duration>>> createDurationParser() {
         
         final List<Pair<Pattern,Function<Long,Duration>>> l = new ArrayList<>();
         
         l.add( new Pair<>(PATTERN_SECONDS, d -> { return Duration.ofSeconds(d); } ) );
         l.add( new Pair<>(PATTERN_MILLI_SECONDS, d -> { return Duration.ofMillis(d); } ) );
+        l.add( new Pair<>(PATTERN_MINUTES, d -> { return Duration.ofMinutes(d); } ) );
         
         return l;
     }
 
-    private static Optional<Duration> accept(final Pair<Pattern,Function<Long,Duration>> pair, final String value) {
-        
-        final Matcher matcher = pair.getLeft().matcher(value);
-
-        if (matcher.matches()) {
-
-            final Long d = Long.parseLong(matcher.group(1));
-            
-            return Optional.of( pair.getRight().apply(d) );
-        }
-
-        return Optional.empty();
-    }
 }

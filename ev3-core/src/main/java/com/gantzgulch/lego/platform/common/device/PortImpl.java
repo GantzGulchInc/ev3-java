@@ -1,5 +1,7 @@
 package com.gantzgulch.lego.platform.common.device;
 
+import static com.gantzgulch.lego.platform.common.AttributeFactory.createAttribute;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Set;
@@ -15,23 +17,21 @@ public class PortImpl implements Port {
     private final PortType type;
     private final Path sysFsPath;
     private final BidirectionalEnumMap<PortMode> portModeMap;
-    
+
     private final Attribute address;
     private final Attribute driverName;
     private final Attribute mode;
     private final Attribute modes;
 
-    
-    
     public PortImpl(final PortType type, final Path sysFsPath, final BidirectionalEnumMap<PortMode> portModeMap) {
-    
+
         this.type = type;
         this.sysFsPath = sysFsPath;
         this.portModeMap = portModeMap;
-        this.address = new Attribute(AttributeType.READ_ONLY, false, this.sysFsPath, "address");
-        this.driverName = new Attribute(AttributeType.READ_ONLY, false, this.sysFsPath, "driver_name");
-        this.mode = new Attribute(AttributeType.READ_WRITE, false, this.sysFsPath, "mode");
-        this.modes = new Attribute(AttributeType.READ_ONLY, false, this.sysFsPath, "modes");
+        this.address = createAttribute(AttributeType.READ_ONLY_CACHED, false, this.sysFsPath, "address");
+        this.driverName = createAttribute(AttributeType.READ_ONLY, false, this.sysFsPath, "driver_name");
+        this.mode = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, "mode");
+        this.modes = createAttribute(AttributeType.READ_ONLY, false, this.sysFsPath, "modes");
     }
 
     @Override
@@ -46,12 +46,12 @@ public class PortImpl implements Port {
     public PortType getType() {
         return type;
     }
-    
+
     @Override
     public String getAddress() {
         return address.readString();
     }
-    
+
     @Override
     public String getDriverName() {
         return driverName.readString();

@@ -18,7 +18,7 @@ import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorCommand;
 import com.gantzgulch.lego.device.ev3.EV3TachoMotor;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SpeedRPMTest {
+public class SpeedDPMTest {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -35,18 +35,16 @@ public class SpeedRPMTest {
     @Test
     public void testSpeedPercent() {
 
-        Arrays.asList(new SpeedRPMData[] { //
-                new SpeedRPMData(0.0, 0), //
-                new SpeedRPMData(60.0, 360), //
-                new SpeedRPMData(120.0, 720), //
-                new SpeedRPMData(45.25, 271), //
-                new SpeedRPMData(-45.25, -271), //
-                new SpeedRPMData(-60, -360), //
-                new SpeedRPMData(-1, -6) }) //
+        Arrays.asList(new SpeedDPMData[] { //
+                new SpeedDPMData(0.0, 0), //
+                new SpeedDPMData(360, 6), //
+                new SpeedDPMData(720, 12), //
+                new SpeedDPMData(-720, -12), //
+                new SpeedDPMData(-360, -6) }) //
                 .stream() //
                 .forEach(d -> {
 
-                    final SpeedRPM s = new SpeedRPM(d.rpm);
+                    final SpeedDPM s = new SpeedDPM(d.dpm);
 
                     assertThat(s.toNative(motor), equalTo(d.nativeValue));
 
@@ -54,36 +52,35 @@ public class SpeedRPMTest {
 
     }
 
-    
     @Test
     public void testOver() {
 
-        SpeedRPM s = new SpeedRPM(176.5);
+        SpeedDPM s = new SpeedDPM(63060);
 
         thrown.expect(IllegalArgumentException.class);
 
         s.toNative(motor);
 
     }
-    
+
     @Test
     public void testUnder() {
 
-        SpeedRPM s = new SpeedRPM(-176.5);
+        SpeedDPM s = new SpeedDPM(-63060);
 
         thrown.expect(IllegalArgumentException.class);
 
-        s.toNative(motor);
+        System.out.println("native: " + s.toNative(motor));
 
     }
-    
-    private static class SpeedRPMData {
 
-        public final double rpm;
+    private static class SpeedDPMData {
+
+        public final double dpm;
         public final int nativeValue;
 
-        public SpeedRPMData(final double rpm, final int nativeValue) {
-            this.rpm = rpm;
+        public SpeedDPMData(final double dpm, final int nativeValue) {
+            this.dpm = dpm;
             this.nativeValue = nativeValue;
         }
     }

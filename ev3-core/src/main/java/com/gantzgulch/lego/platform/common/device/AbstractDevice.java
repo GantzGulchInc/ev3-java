@@ -1,5 +1,7 @@
 package com.gantzgulch.lego.platform.common.device;
 
+import static com.gantzgulch.lego.platform.common.AttributeFactory.createAttribute;
+
 import java.nio.file.Path;
 import java.util.Set;
 
@@ -36,10 +38,10 @@ public class AbstractDevice<CMDS extends Enum<?>> implements Device<CMDS> {
         this.sysFsPath = sysFsPath;
         this.commandMap = commandMap;
 
-        this.address = new Attribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_ADDRESS);
-        this.driverName = new Attribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_DRIVER_NAME);
-        this.command = new Attribute(AttributeType.WRITE_ONLY, true, this.sysFsPath, ATTR_COMMAND);
-        this.commands = new Attribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_COMMANDS);
+        this.address = createAttribute(AttributeType.READ_ONLY_CACHED, false, this.sysFsPath, ATTR_ADDRESS);
+        this.driverName = createAttribute(AttributeType.READ_ONLY_CACHED, false, this.sysFsPath, ATTR_DRIVER_NAME);
+        this.command = createAttribute(AttributeType.WRITE_ONLY, true, this.sysFsPath, ATTR_COMMAND);
+        this.commands = createAttribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_COMMANDS);
     }
 
     @Override

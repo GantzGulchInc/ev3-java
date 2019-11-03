@@ -15,8 +15,14 @@ public class SpeedDPS implements Speed {
     public int toNative(final EV3TachoMotor<EV3MotorCommand> motor) {
         
         double rps = dps / 360.0;
-                
-        return (int)( rps * motor.getCountPerRotation() );
+        
+        int nativeSpeed = (int)( rps * motor.getCountPerRotation() );
+        
+        if( Math.abs(nativeSpeed) > Math.abs( motor.getMaxSpeed()) ) {
+            throw new IllegalArgumentException(String.format("Speed [%f dps / %d] exceeds motor capacity: %d", dps, nativeSpeed, motor.getMaxSpeed() ) );
+        }
+        
+        return nativeSpeed;
     }
     
     @Override

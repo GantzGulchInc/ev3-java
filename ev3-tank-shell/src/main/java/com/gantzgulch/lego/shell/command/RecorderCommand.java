@@ -39,6 +39,9 @@ public class RecorderCommand extends AbstractCommand {
             
         case LIST:
             shell.getRecorder().list();
+            
+        case CLEAR:
+            shell.getRecorder().clear();
             break;
         }
     }
@@ -54,7 +57,7 @@ public class RecorderCommand extends AbstractCommand {
 
     public static enum RecorderCommands {
 
-        ON("on"), OFF("off"), REPLAY("replay"), LIST("list");
+        ON("on"), OFF("off"), REPLAY("replay"), LIST("list"), CLEAR("clear");
 
         private final String value;
 

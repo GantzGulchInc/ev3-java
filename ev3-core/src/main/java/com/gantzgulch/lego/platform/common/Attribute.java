@@ -1,211 +1,26 @@
 package com.gantzgulch.lego.platform.common;
 
 import java.io.Closeable;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.util.Optional;
 
-import com.gantzgulch.lego.util.exception.AttributeException;
 import com.gantzgulch.lego.util.lang.BidirectionalEnumMap;
-import com.gantzgulch.lego.util.lang.StringUtil;
 
-public class Attribute implements Closeable {
+public interface Attribute extends Closeable {
 
-    public static final Charset UTF_8 = StandardCharsets.UTF_8;
+    byte[] readBytes();
 
-    private final AttributeType type;
+    String readString();
 
-    private final Path sysPath;
-
-    private FileChannel fileChannel;
-
-    private final ByteBuffer buffer;
-
-    public Attribute(final AttributeType type, boolean preWarm, final Path sysPath) {
-        this.type = type;
-        this.sysPath = sysPath;
-        this.buffer = ByteBuffer.allocate(200);
-        
-        if( preWarm ) {
-            
-            try {
-                getOpenFileChannel();
-            }catch(final IOException | RuntimeException e) {
-                throw new AttributeException("Unable to create attribute.", e);
-            }
-            
-        }
-    }
-
-    public Attribute(final AttributeType type, boolean preWarm, final Path sysPath, final String... attributeName) {
-        this(type, preWarm, resolve(sysPath, attributeName));
-    }
-
-    @Override
-    public void close() throws IOException {
-        
-        if( fileChannel != null ) {
-            fileChannel.close();
-        }
-        
-    }
+    void writeString(String value);
     
-    public byte[] readBytes() {
+    String[] readStringArray();
 
-        synchronized (buffer) {
+    Optional<Integer> readInteger();
 
-            try {
+    void writeInteger(int value);
 
-                final FileChannel fc = getOpenFileChannel();
+    <E extends Enum<?>> Optional<E> readEnum(BidirectionalEnumMap<E> enumMap);
 
-                fc.position(0);
-
-                buffer.clear();
-
-                while (fc.read(buffer) > 0) {
-                    // Keep reading.
-                }
-
-                buffer.flip();
-
-                final byte[] bytes = new byte[buffer.remaining()];
-
-                buffer.get(bytes);
-
-                return bytes;
-
-            } catch (final IOException e) {
-                throw new AttributeException("Unable to read attribute: " + sysPath, e);
-            }
-
-        }
-    }
-
-    public String readString() {
-
-        if (!type.isReadable()) {
-            throw new AttributeException("Attribute is not readable: " + sysPath);
-        }
-
-        synchronized (buffer) {
-
-            try {
-
-                final FileChannel fc = getOpenFileChannel();
-
-                fc.position(0);
-
-                buffer.clear();
-
-                while (fc.read(buffer) > 0) {
-                    // Keep reading.
-                }
-
-                buffer.flip();
-
-                while (buffer.hasRemaining()) {
-
-                    int pos = buffer.limit() - 1;
-
-                    byte b = buffer.get(pos);
-
-                    if (b == '\n' || b == '\r') {
-                        buffer.limit(pos);
-                    } else {
-                        break;
-                    }
-                }
-
-                return UTF_8.decode(buffer).toString();
-
-            } catch (final IOException e) {
-                throw new AttributeException("Unable to read attribute: " + sysPath, e);
-            }
-
-        }
-
-    }
-
-    public void writeString(final String value) {
-
-        if (!type.isWritable()) {
-            throw new AttributeException("Attribute is not writable: " + sysPath);
-        }
-
-        synchronized (buffer) {
-
-            try {
-
-                buffer.clear();
-
-                buffer.put(value.getBytes(UTF_8));
-
-                buffer.put((byte) '\n');
-
-                buffer.flip();
-
-                final FileChannel fc = getOpenFileChannel();
-
-                fc.position(0);
-
-                fc.write(buffer);
-
-            } catch (final IOException e) {
-                throw new AttributeException("Error writing value.", e);
-            }
-        }
-    }
-
-    public String[] readStringArray() {
-        return readString().split(" ");
-    }
-
-    public Optional<Integer> readInteger() {
-        return StringUtil.parseInteger(readString());
-    }
-
-    public void writeInteger(final int value) {
-        writeString(Integer.toString(value));
-    }
-
-    public <E extends Enum<?>> Optional<E> readEnum(final BidirectionalEnumMap<E> enumMap) {
-        return enumMap.get(readString());
-    }
-
-    public <E extends Enum<?>> void writeEnum(final E enumValue, final BidirectionalEnumMap<E> enumMap) {
-
-        Optional<String> v = enumMap.get(enumValue);
-        
-        if( v.isPresent() ) {
-            writeString(v.get());
-        }
-
-    }
-
-    private FileChannel getOpenFileChannel() throws IOException {
-
-        if (fileChannel == null) {
-
-            fileChannel = FileChannel.open(sysPath, type.getOpenOptions());
-
-        }
-
-        return fileChannel;
-    }
-
-    private static Path resolve(final Path path, String... attributeName) {
-
-        Path result = path;
-
-        for (final String an : attributeName) {
-            result = result.resolve(an);
-        }
-
-        return result;
-    }
+    <E extends Enum<?>> void writeEnum(E enumValue, BidirectionalEnumMap<E> enumMap);
 
 }

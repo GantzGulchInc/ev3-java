@@ -8,6 +8,11 @@ public class SpeedPercent implements Speed {
     private final double percent;
 
     public SpeedPercent(final double percent) {
+        
+        if( percent < -100.0 || percent > 100.0) {
+            throw new IllegalArgumentException("Invalid percentage: must be between -100.0 and 100.0");
+        }
+        
         this.percent = percent;
     }
 

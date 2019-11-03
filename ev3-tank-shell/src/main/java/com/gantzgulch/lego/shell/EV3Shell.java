@@ -23,17 +23,17 @@ public class EV3Shell implements Runnable {
 
     public void run() {
 
+        Command command = null;
+        
         try (final Scanner scanner = new Scanner(System.in)) {
 
             while (isRunning) {
 
-                System.out.print(">");
+                System.out.print("ev3>");
                 System.out.flush();
 
                 final String line = scanner.nextLine();
 
-                Command command = null;
-                
                 try {
 
                     command = parser.parse(line);

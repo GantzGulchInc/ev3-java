@@ -17,10 +17,10 @@ import com.gantzgulch.lego.shell.command.SteerForRotationsCommand;
 
 public class CommandParser {
 
-    private Map<String,Function<String[],Command>> commandParserMap = new HashMap<>();
-    
+    private Map<String, Function<String[], Command>> commandParserMap = new HashMap<>();
+
     public CommandParser() {
-        
+
         commandParserMap.put("help", HelpCommand::parse);
         commandParserMap.put("?", HelpCommand::parse);
         commandParserMap.put("onForRotations", OnForRotationsCommand::parse);
@@ -34,30 +34,33 @@ public class CommandParser {
     }
 
     public Command parse(final String commandString) {
-        
+
         final String[] args = split(commandString);
-    
-        if( args.length == 0 ) {
-            return NullCommand.parse( new String[0] );
+
+        if (args.length == 0) {
+            return NullCommand.parse(new String[0]);
         }
-        
-        final Function<String[],Command> func = commandParserMap.get(args[0]);
-        
-        if( func == null ) {
-            throw new IllegalArgumentException("Unknown command: " + args[0] );
+
+        if (args.length == 1 && args[0].length() == 0) {
+            return NullCommand.parse(new String[0]);
         }
-        
+
+        final Function<String[], Command> func = commandParserMap.get(args[0]);
+
+        if (func == null) {
+            throw new IllegalArgumentException("Unknown command: " + args[0]);
+        }
+
         return func.apply(args);
     }
-    
-    
+
     public String[] split(final String commandString) {
-        
-        if( commandString == null ) {
+
+        if (commandString == null) {
             return new String[0];
         }
 
         return commandString.strip().split("\\s+");
     }
-    
+
 }

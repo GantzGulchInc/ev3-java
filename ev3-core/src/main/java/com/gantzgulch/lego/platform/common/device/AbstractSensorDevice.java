@@ -1,5 +1,7 @@
 package com.gantzgulch.lego.platform.common.device;
 
+import static com.gantzgulch.lego.platform.common.AttributeFactory.createAttribute;
+
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Set;
@@ -62,23 +64,23 @@ public class AbstractSensorDevice<CMDS extends Enum<?>, MODES extends Enum<?>> e
 
         this.binFormatMap = binFormatMap;
         this.modeMap = modeMap;
-        this.binData = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_BIN_DATA);
-        this.binDataFormat = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_BIN_DATA_FORMAT);
-        this.decimals = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_DECIMALS);
-        this.fwVersion = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_FW_VERSION);
-        this.mode = new Attribute(AttributeType.READ_WRITE, false, sysFsPath, ATTR_MODE);
-        this.modes = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_MODES);
-        this.numValues = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_NUM_VALUES);
-        this.pollMillis = new Attribute(AttributeType.READ_WRITE, false, sysFsPath, ATTR_POLL_MS);
-        this.units = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_UNITS);
-        this.value0 = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE0);
-        this.value1 = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE1);
-        this.value2 = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE2);
-        this.value3 = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE3);
-        this.value4 = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE4);
-        this.value5 = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE5);
-        this.value6 = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE6);
-        this.value7 = new Attribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE7);
+        this.binData = createAttribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_BIN_DATA);
+        this.binDataFormat = createAttribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_BIN_DATA_FORMAT);
+        this.decimals = createAttribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_DECIMALS);
+        this.fwVersion = createAttribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_FW_VERSION);
+        this.mode = createAttribute(AttributeType.READ_WRITE, false, sysFsPath, ATTR_MODE);
+        this.modes = createAttribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_MODES);
+        this.numValues = createAttribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_NUM_VALUES);
+        this.pollMillis = createAttribute(AttributeType.READ_WRITE, false, sysFsPath, ATTR_POLL_MS);
+        this.units = createAttribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_UNITS);
+        this.value0 = createAttribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE0);
+        this.value1 = createAttribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE1);
+        this.value2 = createAttribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE2);
+        this.value3 = createAttribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE3);
+        this.value4 = createAttribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE4);
+        this.value5 = createAttribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE5);
+        this.value6 = createAttribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE6);
+        this.value7 = createAttribute(AttributeType.READ_ONLY, false, sysFsPath, ATTR_VALUE7);
 
     }
 

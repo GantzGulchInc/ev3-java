@@ -1,0 +1,18 @@
+
+Available commands:
+
+onForDegrees [leftSpeed] [rightSpeed] [degrees] [brake] [wait]
+
+onForDuration [leftSpeed] [rightSpeed] [duration] [brake] [wait]
+
+onForRotations [leftSpeed] [rightSpeed] [rotations] [brake] [wait]
+
+quit
+
+recorder [on|off|replay|list|clear]
+
+setRampDown [duration]
+
+setRampUp [duration]
+
+steerForRotations [steering] [speed] [rotations] [brake] [wait]

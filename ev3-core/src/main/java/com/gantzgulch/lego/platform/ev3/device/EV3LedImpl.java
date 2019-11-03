@@ -1,5 +1,7 @@
 package com.gantzgulch.lego.platform.ev3.device;
 
+import static com.gantzgulch.lego.platform.common.AttributeFactory.createAttribute;
+
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Optional;
@@ -36,27 +38,27 @@ public class EV3LedImpl implements EV3Led {
         this.sysPath = sysPath;
         this.triggerMap = triggerMap;
 
-        this.maxBrightness = new Attribute(AttributeType.READ_ONLY, false, this.sysPath, ATTR_MAX_BRIGHTNESS);
-        this.brightness = new Attribute(AttributeType.READ_WRITE, false, this.sysPath, ATTR_BRIGHTNESS);
-        this.delayOn = new Attribute(AttributeType.READ_WRITE, false, this.sysPath, ATTR_DELAY_ON);
-        this.delayOff = new Attribute(AttributeType.READ_WRITE, false, this.sysPath, ATTR_DELAY_OFF);
-        this.trigger = new Attribute(AttributeType.READ_WRITE, false, this.sysPath, ATTR_TRIGGER);
+        this.maxBrightness = createAttribute(AttributeType.READ_ONLY, false, this.sysPath, ATTR_MAX_BRIGHTNESS);
+        this.brightness = createAttribute(AttributeType.READ_WRITE, false, this.sysPath, ATTR_BRIGHTNESS);
+        this.delayOn = createAttribute(AttributeType.READ_WRITE, false, this.sysPath, ATTR_DELAY_ON);
+        this.delayOff = createAttribute(AttributeType.READ_WRITE, false, this.sysPath, ATTR_DELAY_OFF);
+        this.trigger = createAttribute(AttributeType.READ_WRITE, false, this.sysPath, ATTR_TRIGGER);
     }
 
     @Override
     public int getMaxBrightness() {
         return maxBrightness.readInteger().orElse(0);
     }
-    
+
     @Override
     public void setBrightnessPercent(final double percent) {
-        
-        final double normalPercent = Math.min(100, Math.max(0, percent) );
-        
-        final int level = (int)(normalPercent / 100.0 * getMaxBrightness());
-        
+
+        final double normalPercent = Math.min(100, Math.max(0, percent));
+
+        final int level = (int) (normalPercent / 100.0 * getMaxBrightness());
+
         setBrightness(level);
-        
+
     }
 
     @Override
