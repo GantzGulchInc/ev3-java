@@ -11,7 +11,7 @@
   <files>
   	<file>
   		<source>${project.build.directory}/${artifactId}-${version}.${packaging}</source>
-  		<outputDirectory>/</outputDirectory>
+  		<outputDirectory></outputDirectory>
   		<destName>${artifactId}.${packaging}</destName>
   	</file>
   </files>
@@ -27,7 +27,7 @@
      -->
     <fileSet>
       <directory>${project.basedir}</directory>
-      <outputDirectory>/</outputDirectory>
+      <outputDirectory></outputDirectory>
       <includes>
         <include>README*</include>
         <include>LICENSE*</include>
@@ -41,7 +41,7 @@
   </fileSets>
   <dependencySets>
   	<dependencySet>
-  		<outputDirectory>/lib</outputDirectory>
+  		<outputDirectory>lib</outputDirectory>
   		<useProjectArtifact>false</useProjectArtifact>
   	</dependencySet>
   </dependencySets>
