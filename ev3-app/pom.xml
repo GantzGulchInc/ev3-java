@@ -30,6 +30,19 @@
 	<name>EV3 App</name>
 	<description>Demonstration application.</description>
 
+	<properties>
+
+		<robot.username>zzz</robot.username>
+		<robot.hostname>zzz</robot.hostname>
+
+		<maven.build.timestamp.format>yyyy/MM/dd HH:MM:ss</maven.build.timestamp.format>
+
+		<timestamp>${maven.build.timestamp}</timestamp>
+
+		<SLF4J_VERSION>1.7.25</SLF4J_VERSION>
+		<LOG4J_VERSION>2.12.1</LOG4J_VERSION>
+	</properties>
+	
 	<dependencies>
 
 		<dependency>
@@ -107,6 +120,35 @@
 				</configuration>
 			</plugin>
 
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+				<version>2.0.0</version>
+				<executions>
+					<execution>
+						<id>upload-to-robot</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>upload-single</goal>
+						</goals>
+						<configuration>
+							<fromFile>${project.build.directory}/${project.artifactId}.tar</fromFile>
+							<url>scp://${robot.username}@${robot.hostname}/tmp</url>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<fromFile>${project.build.directory}/${protect.artifactId}.tar</fromFile>
+					<url>scp://robot@10.42.0.53/tmp</url>
+				</configuration>
+			</plugin>
 		</plugins>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh</artifactId>
+				<version>2.8</version>
+			</extension>
+		</extensions>
 	</build>
 </project>
