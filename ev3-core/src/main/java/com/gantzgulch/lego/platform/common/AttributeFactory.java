@@ -8,11 +8,11 @@ public final class AttributeFactory {
 
     }
 
-    public static AttributeFileChannel createAttribute(final AttributeType type, boolean preWarm, final Path sysPath) {
+    public static Attribute createAttribute(final AttributeType type, boolean preWarm, final Path sysPath) {
         return new AttributeFileChannel(type, preWarm, sysPath);
     }
 
-    public static AttributeFileChannel createAttribute(final AttributeType type, boolean preWarm, final Path sysPath, final String... attributeName) {
+    public static Attribute createAttribute(final AttributeType type, boolean preWarm, final Path sysPath, final String... attributeName) {
         return new AttributeFileChannel(type, preWarm, sysPath, attributeName);
     }
 

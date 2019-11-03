@@ -25,8 +25,6 @@ public class CustomFormatter extends SimpleFormatter {
 	
 	private String trim(final String value) {
 		
-		// System.err.println("CustomFormatter: trim: value: '" + value + "'");
-		
 		if( value == null ) {
 			return value;
 		}
