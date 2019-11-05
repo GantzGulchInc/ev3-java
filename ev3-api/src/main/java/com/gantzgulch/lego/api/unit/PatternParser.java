@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.gantzgulch.lego.api.unit;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -54,4 +55,17 @@ public class PatternParser<T1,R> {
         return Optional.empty();
     }
     
+    public static <P1,P2> Optional<P2> parse(final String value, final List<PatternParser<P1,P2>> parsers) {
+
+        for( final PatternParser<P1,P2> p : parsers) {
+            
+            Optional<P2> s = p.accept(value);
+            
+            if( s.isPresent() ) {
+                return s;
+            }
+        }
+        
+        return Optional.empty();
+    }
 }

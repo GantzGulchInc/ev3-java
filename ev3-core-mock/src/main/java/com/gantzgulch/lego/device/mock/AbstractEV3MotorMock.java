@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.gantzgulch.lego.api.device.ev3.EV3MotorCommand;
@@ -30,7 +29,6 @@ import com.gantzgulch.lego.api.device.ev3.EV3MotorState;
 import com.gantzgulch.lego.api.device.ev3.EV3MotorStopAction;
 import com.gantzgulch.lego.api.device.ev3.EV3TachoMotor;
 import com.gantzgulch.lego.api.unit.Speed;
-import com.gantzgulch.lego.common.lang.Sleep;
 import com.gantzgulch.lego.common.logger.EV3Logger;
 
 public class AbstractEV3MotorMock implements EV3TachoMotor<EV3MotorCommand>, MockTicker.Process {

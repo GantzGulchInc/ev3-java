@@ -18,16 +18,15 @@ package com.gantzgulch.lego.tank.impl;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-import com.gantzgulch.lego.api.device.ev3.EV3TachoMotor;
 import com.gantzgulch.lego.api.device.ev3.EV3MotorCommand;
 import com.gantzgulch.lego.api.device.ev3.EV3MotorStopAction;
+import com.gantzgulch.lego.api.device.ev3.EV3TachoMotor;
 import com.gantzgulch.lego.api.unit.Speed;
 import com.gantzgulch.lego.api.unit.SpeedNative;
 import com.gantzgulch.lego.common.lang.Pair;
 import com.gantzgulch.lego.common.lang.Sleep;
 import com.gantzgulch.lego.common.logger.EV3Logger;
 import com.gantzgulch.lego.tank.Tank;
-import com.gantzgulch.lego.units.LengthUnit;
 import com.gantzgulch.lego.wheel.Wheel;
 
 public class EV3TachoTank implements Tank {
@@ -185,16 +184,4 @@ public class EV3TachoTank implements Tank {
         
     }
 
-    private Pair<Integer,Integer> computePosition(final double lengthUnit, final LengthUnit unit) {
-
-        final double length = unit.toMilliMeters(lengthUnit);
-
-        final double rotations = length / wheel.getCircumferenceMMs();
-
-        final double positionLeft = rotations * leftMotor.getCountPerRotation();
-        
-        final double positionRight = rotations * rightMotor.getCountPerRotation();
-
-        return new Pair<>( (int) positionLeft, (int) positionRight );
-    }
 }

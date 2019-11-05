@@ -15,37 +15,36 @@
  *******************************************************************************/
 package com.gantzgulch.lego.wheel.impl;
 
-import com.gantzgulch.lego.units.LengthUnit;
+import com.gantzgulch.lego.api.unit.Length;
 import com.gantzgulch.lego.wheel.Wheel;
 
-public class WheelImpl implements Wheel{
+public class WheelImpl implements Wheel {
 
-    private final double diameter;
-    
-    private final double circumference;
-    
-    private final double width;
-    
-    public WheelImpl(final double diameter, final LengthUnit diameterUnit, final double width, final LengthUnit widthUnit) {
-        this.diameter = diameterUnit.toMilliMeters(diameter);
-        this.circumference = this.diameter * Math.PI;
-        this.width = widthUnit.toMilliMeters(width);
+    private final Length diameter;
+
+    private final Length circumference;
+
+    private final Length width;
+
+    public WheelImpl(final Length diameter, final Length width) {
+        this.diameter = diameter;
+        this.circumference = Length.ofMillimeters(this.diameter.toMillimeters() * Math.PI);
+        this.width = width;
     }
 
     @Override
     public double getWidthMMs() {
-        return width;
+        return width.toMillimeters();
     }
-    
+
     @Override
     public double getDiameterMMs() {
-        return diameter;
+        return diameter.toMillimeters();
     }
 
     @Override
     public double getCircumferenceMMs() {
-        return circumference;
+        return circumference.toMillimeters();
     }
 
-    
 }

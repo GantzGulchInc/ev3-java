@@ -17,7 +17,6 @@ package com.gantzgulch.lego.api.unit;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class SpeedParser {
@@ -35,21 +34,12 @@ public class SpeedParser {
 
     public static Speed parse(final String value) {
 
-        if (value == null) {
-            throw new NullPointerException();
-        }
-
-        for (final PatternParser<Double, Speed> p : SPEED_PARSERS) {
-
-            Optional<Speed> s = p.accept(value);
-
-            if (s.isPresent()) {
-                return s.get();
-            }
-        }
-
-        throw new IllegalArgumentException("Unable to parse speed: " + value);
-
+        return PatternParser//
+                .parse(value, SPEED_PARSERS)//
+                .orElseThrow(() -> {
+                    return new IllegalArgumentException("Unable to parse speed: " + value);
+                });
+        
     }
 
     private static List<PatternParser<Double, Speed>> createSpeedParser() {
