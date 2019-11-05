@@ -21,7 +21,6 @@ public class Length {
     
     public Length(final double millimeters) {
         this.millimeters = millimeters;
-        
     }
     
     public double toMillimeters() {

@@ -47,9 +47,9 @@ import com.gantzgulch.lego.shell.EV3Shell;
 import com.gantzgulch.lego.tank.Tank;
 import com.gantzgulch.lego.wheel.Wheels;
 
-public class Main {
+public class Tests {
 
-    private static final EV3Logger LOG = EV3Logger.getLogger(Main.class);
+    private static final EV3Logger LOG = EV3Logger.getLogger(Tests.class);
 
     /**
      * Identify platform.
@@ -328,41 +328,7 @@ public class Main {
 
         final EV3Shell shell = new EV3Shell(tank);
 
-        warmUp(leftMotor);
-        
         shell.run();
-    }
-
-    private static void warmUp(final EV3LargeMotor motor) {
-    
-        for (int i = 0; i < 5; i++) {
-
-            long now = System.currentTimeMillis();
-
-            for (int j = 0; j < 1000; j++) {
-
-                motor.getAddress();
-
-                motor.setDutyCycleSetPoint(0);
-            }
-
-            LOG.info("getModel: loop: %d, time: %d", i, System.currentTimeMillis() - now);
-        }
-
-    }
-
-    public static void main(final String[] args) {
-
-        LOG.info("Running...");
-
-        try {
-
-            test_09();
-
-        } finally {
-            // Closeables.close(Platform.getInstance());
-        }
-
     }
 
 }

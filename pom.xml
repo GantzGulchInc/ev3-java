@@ -59,13 +59,13 @@
 	<modules>
 		<module>ev3-common</module>
 		<module>ev3-api</module>
+		<module>ev3-api-mock</module>
 		<module>ev3dev</module>
 		<module>ev3dev-ev3</module>
 		<module>ev3dev-brickpi</module>
-		<module>ev3-core-mock</module>
 		<module>ev3-tank</module>
 		<module>ev3-tank-shell</module>
-		<module>ev3-app</module>
+		<module>ev3-demo</module>
 	</modules>
 
 	<scm>

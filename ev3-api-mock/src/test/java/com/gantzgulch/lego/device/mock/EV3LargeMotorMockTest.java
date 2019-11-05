@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.gantzgulch.lego.api.device.ev3.EV3MotorCommand;
@@ -47,6 +48,7 @@ public class EV3LargeMotorMockTest {
     }
 
     @Test
+    @Ignore
     public void testRunToRelPos() {
         
         motor.setSpeedSetPoint( new SpeedPercent(30) );

@@ -1,4 +1,4 @@
 
-cd ev3-app
+cd ev3-demo
 
 mvn -P $1 wagon:upload-single@upload-to-robot

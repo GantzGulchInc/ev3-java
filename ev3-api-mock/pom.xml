@@ -27,10 +27,10 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>ev3-core-mock</artifactId>
+	<artifactId>ev3-api-mock</artifactId>
 
-	<name>EV3 Core Mock</name>
-	<description>Core mock objects library.</description>
+	<name>EV3 API Mock</name>
+	<description>API mock objects library.</description>
 
 	<dependencies>
 	
@@ -43,12 +43,6 @@
 		<dependency>
 			<groupId>com.gantzgulch.ev3</groupId>
 			<artifactId>ev3-common</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.gantzgulch.ev3</groupId>
-			<artifactId>ev3dev</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

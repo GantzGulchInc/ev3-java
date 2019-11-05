@@ -25,29 +25,23 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>ev3-app</artifactId>
+	<artifactId>ev3-demo</artifactId>
 
-	<name>EV3 App</name>
+	<name>EV3 Demonstration</name>
 	<description>Demonstration application.</description>
 
 	<properties>
 
-		<robot.username>zzz</robot.username>
-		<robot.hostname>zzz</robot.hostname>
+          <robot.username>zzz</robot.username>
+          <robot.hostname>zzz</robot.hostname>
 
-		<maven.build.timestamp.format>yyyy/MM/dd HH:MM:ss</maven.build.timestamp.format>
-
-		<timestamp>${maven.build.timestamp}</timestamp>
-
-		<SLF4J_VERSION>1.7.25</SLF4J_VERSION>
-		<LOG4J_VERSION>2.12.1</LOG4J_VERSION>
 	</properties>
-	
+	       
 	<dependencies>
 
 		<dependency>
 			<groupId>com.gantzgulch.ev3</groupId>
-			<artifactId>ev3-core-mock</artifactId>
+			<artifactId>ev3-api-mock</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
