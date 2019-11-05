@@ -29,14 +29,20 @@
 
 	<artifactId>ev3-tank</artifactId>
 
-	<name>EV3 Tank Library</name>
-	<description>EV3 tank library.</description>
+	<name>EV3 Tank</name>
+	<description>EV3 tank movement library.</description>
 
 	<dependencies>
 
 		<dependency>
 			<groupId>com.gantzgulch.ev3</groupId>
-			<artifactId>ev3-core</artifactId>
+			<artifactId>ev3-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.gantzgulch.ev3</groupId>
+			<artifactId>ev3-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

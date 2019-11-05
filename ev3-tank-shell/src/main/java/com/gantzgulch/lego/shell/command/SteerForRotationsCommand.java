@@ -15,9 +15,10 @@
  *******************************************************************************/
 package com.gantzgulch.lego.shell.command;
 
+import com.gantzgulch.lego.api.unit.Speed;
+import com.gantzgulch.lego.api.unit.SpeedParser;
 import com.gantzgulch.lego.shell.EV3Shell;
 import com.gantzgulch.lego.tank.Tank;
-import com.gantzgulch.lego.unit.Speed;
 
 public class SteerForRotationsCommand extends AbstractCommand {
 
@@ -54,7 +55,7 @@ public class SteerForRotationsCommand extends AbstractCommand {
                 break;
                 
             case 2: 
-                speed = Speed.parse(arg);
+                speed = SpeedParser.parse(arg);
                 break;
             
             case 3:

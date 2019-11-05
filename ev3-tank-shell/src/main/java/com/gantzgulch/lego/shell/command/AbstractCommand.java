@@ -15,8 +15,8 @@
  *******************************************************************************/
 package com.gantzgulch.lego.shell.command;
 
+import com.gantzgulch.lego.common.logger.EV3Logger;
 import com.gantzgulch.lego.shell.Command;
-import com.gantzgulch.lego.util.logger.EV3Logger;
 
 public abstract class AbstractCommand implements Command {
 

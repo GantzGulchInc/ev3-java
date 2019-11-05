@@ -21,25 +21,25 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import com.gantzgulch.lego.device.ev3.EV3LargeMotor;
-import com.gantzgulch.lego.unit.Speed;
-import com.gantzgulch.lego.util.lang.Sleep;
-import com.gantzgulch.lego.util.logger.EV3Logger;
+import com.gantzgulch.lego.api.device.ev3.EV3MotorCommand;
+import com.gantzgulch.lego.api.device.ev3.EV3MotorPolarity;
+import com.gantzgulch.lego.api.device.ev3.EV3MotorState;
+import com.gantzgulch.lego.api.device.ev3.EV3MotorStopAction;
+import com.gantzgulch.lego.api.device.ev3.EV3TachoMotor;
+import com.gantzgulch.lego.api.unit.Speed;
+import com.gantzgulch.lego.common.lang.Sleep;
+import com.gantzgulch.lego.common.logger.EV3Logger;
 
-public class AbstractEV3MotorMock implements EV3LargeMotor {
+public class AbstractEV3MotorMock implements EV3TachoMotor<EV3MotorCommand>, MockTicker.Process {
 
     protected final EV3Logger LOG = EV3Logger.getLogger(getClass());
 
     private final String address;
 
     private final String driverName;
-
-    private BlockingDeque<EV3MotorCommand> pendingCommands = new LinkedBlockingDeque<>(50);
 
     private final int countPerRotation;
 
@@ -81,7 +81,8 @@ public class AbstractEV3MotorMock implements EV3LargeMotor {
 
     private Duration timeSetPoint = Duration.ofMillis(0);
 
-    private MotorThread thread;
+    
+    private EV3MotorCommand currentCommand = null;
 
     private boolean isClosed = false;
 
@@ -90,8 +91,6 @@ public class AbstractEV3MotorMock implements EV3LargeMotor {
         this.maxSpeed = maxSpeed;
         this.address = address;
         this.driverName = driverName;
-        this.thread = new MotorThread(this);
-        this.thread.start();
     }
 
     @Override
@@ -310,7 +309,7 @@ public class AbstractEV3MotorMock implements EV3LargeMotor {
     @Override
     public void sendCommand(final EV3MotorCommand command) {
 
-        pendingCommands.addLast(command);
+        currentCommand = command;
 
     }
 
@@ -319,132 +318,176 @@ public class AbstractEV3MotorMock implements EV3LargeMotor {
 
         isClosed = true;
 
-        thread.interrupt();
-
     }
 
-    private class MotorThread extends Thread {
+    
+    @Override
+    public boolean tick() {
 
-        private final AbstractEV3MotorMock motor;
-
-        public MotorThread(final AbstractEV3MotorMock motor) {
-            
-            setDaemon(true);
-            
-            this.motor = motor;
+        if( isClosed ) {
+            return true;
         }
         
-        @Override
-        public void run() {
-
-            while (!isClosed) {
-
-                try {
-
-                    final EV3MotorCommand command = pendingCommands.pollFirst(50, TimeUnit.MILLISECONDS);
-                    
-                    LOG.finest("run: command: %s", command);
-                    
-                    if( command != null ) {
-                        
-                        switch(command) {
-                        
-                        case RESET:
-                            reset();
-                            break;
-                        case RUN_DIRECT:
-                            runDirect();
-                            break;
-                        case RUN_FOREVER:
-                            runForever();
-                            break;
-                        case RUN_TIMED:
-                            runTimed();
-                            break;
-                        case RUN_TO_ABS_POS:
-                            runToAbsPos();
-                            break;
-                        case RUN_TO_REL_POS:
-                            runToRelPos();
-                            break;
-                        case STOP:
-                            stopAll();
-                            break;
-                        }
-                        
-                    }
-                } catch (final InterruptedException e) {
-                    LOG.finer(e, "run: Interrupted.");
-                }
-            }
+        if( currentCommand == null ) {
+            state.clear();
+            return false;
         }
-
-        private void reset() {
+        
+        switch( currentCommand ) {
+        
+        case RESET:
+            state.clear();
+            currentCommand = null;
+            break;
+            
+        case RUN_DIRECT:
+            break;
+            
+        case RUN_FOREVER:
+            break;
+            
+        case RUN_TIMED:
+            break;
+            
+        case RUN_TO_ABS_POS:
+            break;
+            
+        case RUN_TO_REL_POS:
+            break;
+            
+        case STOP:
+            state.clear();
+            currentCommand = null;
+            break;
             
         }
         
-        private void runDirect() {
-            
-        }
-        
-        private void runForever() {
-            
-        }
-        
-        private void runTimed() {
-            
-        }
-        
-        private void runToAbsPos() {
-            
-        }
-
-        private void runToRelPos() {
-            
-            LOG.finest("runToRelPos: entering");
-            
-            motor.state.clear();
-            
-            motor.state.add(EV3MotorState.RUNNING);
-            
-            int targetPosition = position + positionSetPoint;
-            
-            int sign = position > targetPosition ? -1 : 1;
-            
-            LOG.finest("runToRelPos: sign: %d", sign);
-            
-            LOG.finest("runToRelPos: speedSetPoint: %d", speedSetPoint);
-            
-            int incPerLoop = Math.abs(speedSetPoint) / 100;
-            
-            LOG.finest("runToRelPos: position: %d", position);
-            LOG.finest("runToRelPos: positionSetPoint: %d", positionSetPoint);
-            
-            LOG.finest("runToRelPos: incPerLoop: %s", incPerLoop);
-            
-            while(true) {
-                
-                int diff = Math.abs( position - targetPosition );
-                
-                if( diff < incPerLoop ) {
-                    
-                    position = targetPosition;
-                    
-                    break;
-                }
-
-                position += sign * incPerLoop;
-                
-                // LOG.finest("runToRelPos: position: %d", position);
-                
-                Sleep.sleep(10, TimeUnit.MILLISECONDS);
-            }
-            
-            motor.state.clear();
-        }
-        
-        private void stopAll() {
-            
-        }
+        return false;
     }
+    
+    
+//    private class MotorThread extends Thread {
+//
+//        private final AbstractEV3MotorMock motor;
+//
+//        public MotorThread(final AbstractEV3MotorMock motor) {
+//            
+//            setDaemon(true);
+//            
+//            this.motor = motor;
+//        }
+//        
+//        @Override
+//        public void run() {
+//
+//            while (!isClosed) {
+//
+//                try {
+//
+//                    final EV3MotorCommand command = pendingCommands.pollFirst(50, TimeUnit.MILLISECONDS);
+//                    
+//                    LOG.finest("run: command: %s", command);
+//                    
+//                    if( command != null ) {
+//                        
+//                        switch(command) {
+//                        
+//                        case RESET:
+//                            reset();
+//                            break;
+//                        case RUN_DIRECT:
+//                            runDirect();
+//                            break;
+//                        case RUN_FOREVER:
+//                            runForever();
+//                            break;
+//                        case RUN_TIMED:
+//                            runTimed();
+//                            break;
+//                        case RUN_TO_ABS_POS:
+//                            runToAbsPos();
+//                            break;
+//                        case RUN_TO_REL_POS:
+//                            runToRelPos();
+//                            break;
+//                        case STOP:
+//                            stopAll();
+//                            break;
+//                        }
+//                        
+//                    }
+//                } catch (final InterruptedException e) {
+//                    LOG.finer(e, "run: Interrupted.");
+//                }
+//            }
+//        }
+//
+//        private void reset() {
+//            
+//        }
+//        
+//        private void runDirect() {
+//            
+//        }
+//        
+//        private void runForever() {
+//            
+//        }
+//        
+//        private void runTimed() {
+//            
+//        }
+//        
+//        private void runToAbsPos() {
+//            
+//        }
+//
+//        private void runToRelPos() {
+//            
+//            LOG.finest("runToRelPos: entering");
+//            
+//            motor.state.clear();
+//            
+//            motor.state.add(EV3MotorState.RUNNING);
+//            
+//            int targetPosition = position + positionSetPoint;
+//            
+//            int sign = position > targetPosition ? -1 : 1;
+//            
+//            LOG.finest("runToRelPos: sign: %d", sign);
+//            
+//            LOG.finest("runToRelPos: speedSetPoint: %d", speedSetPoint);
+//            
+//            int incPerLoop = Math.abs(speedSetPoint) / 100;
+//            
+//            LOG.finest("runToRelPos: position: %d", position);
+//            LOG.finest("runToRelPos: positionSetPoint: %d", positionSetPoint);
+//            
+//            LOG.finest("runToRelPos: incPerLoop: %s", incPerLoop);
+//            
+//            while(true) {
+//                
+//                int diff = Math.abs( position - targetPosition );
+//                
+//                if( diff < incPerLoop ) {
+//                    
+//                    position = targetPosition;
+//                    
+//                    break;
+//                }
+//
+//                position += sign * incPerLoop;
+//                
+//                // LOG.finest("runToRelPos: position: %d", position);
+//                
+//                Sleep.sleep(10, TimeUnit.MILLISECONDS);
+//            }
+//            
+//            motor.state.clear();
+//        }
+//        
+//        private void stopAll() {
+//            
+//        }
+//    }
 }

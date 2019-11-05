@@ -17,10 +17,10 @@ package com.gantzgulch.lego.tank;
 
 import java.time.Duration;
 
-import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorCommand;
-import com.gantzgulch.lego.device.ev3.EV3TachoMotor;
+import com.gantzgulch.lego.api.device.ev3.EV3MotorCommand;
+import com.gantzgulch.lego.api.device.ev3.EV3TachoMotor;
+import com.gantzgulch.lego.api.unit.Speed;
 import com.gantzgulch.lego.tank.impl.EV3TachoTank;
-import com.gantzgulch.lego.unit.Speed;
 import com.gantzgulch.lego.wheel.Wheel;
 
 public interface Tank {

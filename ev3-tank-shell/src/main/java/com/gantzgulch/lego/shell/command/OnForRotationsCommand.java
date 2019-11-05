@@ -15,9 +15,10 @@
  *******************************************************************************/
 package com.gantzgulch.lego.shell.command;
 
+import com.gantzgulch.lego.api.unit.Speed;
+import com.gantzgulch.lego.api.unit.SpeedParser;
 import com.gantzgulch.lego.shell.EV3Shell;
 import com.gantzgulch.lego.tank.Tank;
-import com.gantzgulch.lego.unit.Speed;
 
 public class OnForRotationsCommand extends AbstractCommand {
 
@@ -50,11 +51,11 @@ public class OnForRotationsCommand extends AbstractCommand {
             
             switch(i) {
             case 1:
-                leftSpeed = Speed.parse(arg);
+                leftSpeed = SpeedParser.parse(arg);
                 break;
                 
             case 2: 
-                rightSpeed = Speed.parse(arg);
+                rightSpeed = SpeedParser.parse(arg);
                 break;
             
             case 3:

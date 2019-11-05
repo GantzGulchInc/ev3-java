@@ -57,7 +57,11 @@
 	</developers>
 
 	<modules>
-		<module>ev3-core</module>
+		<module>ev3-common</module>
+		<module>ev3-api</module>
+		<module>ev3dev</module>
+		<module>ev3dev-ev3</module>
+		<module>ev3dev-brickpi</module>
 		<module>ev3-core-mock</module>
 		<module>ev3-tank</module>
 		<module>ev3-tank-shell</module>
@@ -69,9 +73,9 @@
 		<connection>scm:git:ssh://git@github.com:GantzGulchInc/EV3.git</connection>
 	</scm>
 
-	<!-- Complete this section when we have a CI build tool. -->
+	<!-- Complete this section when we have a public CI build tool. -->
 	<ciManagement>
-		<system>Bamboo</system>
+		<system>Jenkins</system>
 		<url>http://www.google.com/</url>
 	</ciManagement>
 

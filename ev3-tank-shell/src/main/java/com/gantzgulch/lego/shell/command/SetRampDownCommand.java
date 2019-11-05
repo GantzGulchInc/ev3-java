@@ -17,9 +17,9 @@ package com.gantzgulch.lego.shell.command;
 
 import java.time.Duration;
 
+import com.gantzgulch.lego.api.unit.DurationParser;
 import com.gantzgulch.lego.shell.EV3Shell;
 import com.gantzgulch.lego.tank.Tank;
-import com.gantzgulch.lego.unit.DurationParser;
 
 public class SetRampDownCommand extends AbstractCommand {
 

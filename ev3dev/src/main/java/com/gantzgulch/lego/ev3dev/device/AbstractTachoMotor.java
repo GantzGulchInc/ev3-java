@@ -1,0 +1,386 @@
+/*******************************************************************************
+ *    Copyright 2019 GantzGulch, Inc.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *******************************************************************************/
+package com.gantzgulch.lego.ev3dev.device;
+
+import static com.gantzgulch.lego.ev3dev.attribute.AttributeFactory.createAttribute;
+
+import java.nio.file.Path;
+import java.time.Duration;
+import java.util.Set;
+
+import com.gantzgulch.lego.api.device.ev3.EV3MotorCommand;
+import com.gantzgulch.lego.api.device.ev3.EV3MotorPolarity;
+import com.gantzgulch.lego.api.device.ev3.EV3MotorState;
+import com.gantzgulch.lego.api.device.ev3.EV3MotorStopAction;
+import com.gantzgulch.lego.api.device.ev3.EV3TachoMotor;
+import com.gantzgulch.lego.api.unit.Speed;
+import com.gantzgulch.lego.common.lang.BidirectionalEnumMap;
+import com.gantzgulch.lego.common.lang.Closeables;
+import com.gantzgulch.lego.ev3dev.attribute.Attribute;
+import com.gantzgulch.lego.ev3dev.attribute.AttributeType;
+
+public abstract class AbstractTachoMotor extends AbstractOutputDevice<EV3MotorCommand> implements EV3TachoMotor<EV3MotorCommand> {
+
+    public static final String ATTR_COUNT_PER_ROT = "count_per_rot";
+    public static final String ATTR_DUTY_CYCLE = "duty_cycle";
+    public static final String ATTR_DUTY_CYCLE_SP = "duty_cycle_sp";
+    public static final String ATTR_POLARITY = "polarity";
+    public static final String ATTR_POSITION = "position";
+    public static final String ATTR_HOLD_PID = "hold_pid";
+    public static final String ATTR_HOLD_PID_KD = "Kd";
+    public static final String ATTR_HOLD_PID_KI = "Ki";
+    public static final String ATTR_HOLD_PID_KP = "Kp";
+    public static final String ATTR_MAX_SPEED = "max_speed";
+    public static final String ATTR_POSITION_SP = "position_sp";
+    public static final String ATTR_SPEED = "speed";
+    public static final String ATTR_SPEED_SP = "speed_sp";
+    public static final String ATTR_RAMP_UP_SP = "ramp_up_sp";
+    public static final String ATTR_RAMP_DOWN_SP = "ramp_down_sp";
+    public static final String ATTR_SPEED_PID = "speed_pid";
+    public static final String ATTR_SPEED_PID_KD = "Kd";
+    public static final String ATTR_SPEED_PID_KI = "Ki";
+    public static final String ATTR_SPEED_PID_KP = "Kp";
+    public static final String ATTR_STATE = "state";
+    public static final String ATTR_STOP_ACTION = "stop_action";
+    public static final String ATTR_STOP_ACTIONS = "stop_actions";
+    public static final String ATTR_TIME_SP = "time_sp";
+
+    private final BidirectionalEnumMap<EV3MotorStopAction> stopActionMap;
+    private final BidirectionalEnumMap<EV3MotorState> stateMap;
+    private final BidirectionalEnumMap<EV3MotorPolarity> polarityMap;
+
+    private final Attribute countPerRotation;
+    private final Attribute dutyCycle;
+    private final Attribute dutyCycleSetPoint;
+    private final Attribute maxSpeed;
+    private final Attribute polarity;
+    private final Attribute position;
+    private final Attribute holdPidKd;
+    private final Attribute holdPidKi;
+    private final Attribute holdPidKp;
+    private final Attribute positionSetPoint;
+    private final Attribute speed; // Tacho counts per second
+    private final Attribute speedSetPoint;
+    private final Attribute rampUpSetPoint;
+    private final Attribute rampDownSetPoint;
+    private final Attribute speedPidKd;
+    private final Attribute speedPidKi;
+    private final Attribute speedPidKp;
+    private final Attribute state;
+    private final Attribute stopAction;
+    private final Attribute stopActions;
+    private final Attribute timeSetPoint; // Milliseconds
+
+    public AbstractTachoMotor(//
+            final Path sysFsPath, //
+            final BidirectionalEnumMap<EV3MotorCommand> commandMap, //
+            final BidirectionalEnumMap<EV3MotorStopAction> stopActionMap, final BidirectionalEnumMap<EV3MotorState> stateMap,
+            final BidirectionalEnumMap<EV3MotorPolarity> polarityMap) {
+
+        super(sysFsPath, commandMap);
+
+        this.stopActionMap = stopActionMap;
+        this.stateMap = stateMap;
+        this.polarityMap = polarityMap;
+
+        this.countPerRotation = createAttribute(AttributeType.READ_ONLY_CACHED, false, this.sysFsPath, ATTR_COUNT_PER_ROT);
+        this.dutyCycle = createAttribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_DUTY_CYCLE);
+        this.dutyCycleSetPoint = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_DUTY_CYCLE_SP);
+        this.polarity = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_POLARITY);
+        this.position = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_POSITION);
+        this.holdPidKd = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_HOLD_PID, ATTR_HOLD_PID_KD);
+        this.holdPidKi = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_HOLD_PID, ATTR_HOLD_PID_KI);
+        this.holdPidKp = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_HOLD_PID, ATTR_HOLD_PID_KP);
+        this.maxSpeed = createAttribute(AttributeType.READ_ONLY_CACHED, false, this.sysFsPath, ATTR_MAX_SPEED);
+        this.positionSetPoint = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_POSITION_SP);
+        this.speed = createAttribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_SPEED);
+        this.speedSetPoint = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_SPEED_SP);
+        this.rampUpSetPoint = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_RAMP_UP_SP);
+        this.rampDownSetPoint = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_RAMP_DOWN_SP);
+        this.speedPidKd = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_SPEED_PID, ATTR_SPEED_PID_KD);
+        this.speedPidKi = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_SPEED_PID, ATTR_SPEED_PID_KI);
+        this.speedPidKp = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_SPEED_PID, ATTR_SPEED_PID_KP);
+        this.state = createAttribute(AttributeType.READ_ONLY, true, this.sysFsPath, ATTR_STATE);
+        this.stopAction = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_STOP_ACTION);
+        this.stopActions = createAttribute(AttributeType.READ_ONLY, false, this.sysFsPath, ATTR_STOP_ACTIONS);
+        this.timeSetPoint = createAttribute(AttributeType.READ_WRITE, false, this.sysFsPath, ATTR_TIME_SP);
+
+    }
+
+    @Override
+    public void close() {
+
+        try {
+
+            sendCommand(EV3MotorCommand.STOP);
+
+        } catch (final RuntimeException e) {
+            LOG.warning(e, "close: Error stopping motor: %s", e.getMessage());
+        }
+
+        Closeables.close(countPerRotation);
+        Closeables.close(dutyCycle);
+        Closeables.close(dutyCycleSetPoint);
+        Closeables.close(maxSpeed);
+        Closeables.close(polarity);
+        Closeables.close(position);
+        Closeables.close(holdPidKd);
+        Closeables.close(holdPidKi);
+        Closeables.close(holdPidKp);
+        Closeables.close(positionSetPoint);
+        Closeables.close(speed);
+        Closeables.close(speedSetPoint);
+        Closeables.close(rampUpSetPoint);
+        Closeables.close(rampDownSetPoint);
+        Closeables.close(speedPidKd);
+        Closeables.close(speedPidKi);
+        Closeables.close(speedPidKp);
+        Closeables.close(state);
+        Closeables.close(stopAction);
+        Closeables.close(stopActions);
+        Closeables.close(timeSetPoint);
+
+        super.close();
+
+    }
+
+    @Override
+    public int getCountPerRotation() {
+        return countPerRotation.readInteger().orElse(0);
+    }
+
+    @Override
+    public int getDutyCycle() {
+        return dutyCycle.readInteger().orElse(0);
+    }
+
+    @Override
+    public int getDutyCycleSetPoint() {
+        return dutyCycleSetPoint.readInteger().orElse(0);
+    }
+
+    @Override
+    public void setDutyCycleSetPoint(int newDutyCycleSetPoint) {
+        dutyCycleSetPoint.writeInteger(newDutyCycleSetPoint);
+    }
+
+    @Override
+    public EV3MotorPolarity getPolarity() {
+        return polarity.readEnum(polarityMap).orElse(EV3MotorPolarity.NORMAL);
+    }
+
+    @Override
+    public void setPolarity(final EV3MotorPolarity newPolarity) {
+        polarity.writeEnum(newPolarity, polarityMap);
+    }
+
+    @Override
+    public int getPosition() {
+        return position.readInteger().orElse(0);
+    }
+
+    @Override
+    public void setPosition(final int newPosition) {
+        position.writeInteger(newPosition);
+    }
+
+    @Override
+    public int getHoldPidKd() {
+        return holdPidKd.readInteger().orElse(0);
+    }
+
+    @Override
+    public void setHoldPidKd(final int newHoldPidKd) {
+        holdPidKd.writeInteger(newHoldPidKd);
+    }
+
+    @Override
+    public int getHoldPidKi() {
+        return holdPidKi.readInteger().orElse(0);
+    }
+
+    @Override
+    public void setHoldPidKi(final int newHoldPidKi) {
+        holdPidKi.writeInteger(newHoldPidKi);
+    }
+
+    @Override
+    public int getHoldPidKp() {
+        return holdPidKp.readInteger().orElse(0);
+    }
+
+    @Override
+    public void setHoldPidKp(final int newHoldPidKp) {
+        holdPidKp.writeInteger(newHoldPidKp);
+    }
+
+    @Override
+    public int getMaxSpeed() {
+        return maxSpeed.readInteger().orElse(0);
+    }
+
+    @Override
+    public int getPositionSetPoint() {
+        return positionSetPoint.readInteger().orElse(0);
+    }
+
+    @Override
+    public void setPositionSetPoint(final int newPositionSetPoint) {
+        positionSetPoint.writeInteger(newPositionSetPoint);
+    }
+
+    @Override
+    public int getSpeed() {
+        return speed.readInteger().orElse(0);
+    }
+
+    @Override
+    public int getSpeedSetPoint() {
+        return speedSetPoint.readInteger().orElse(0);
+    }
+
+    @Override
+    public void setSpeedSetPoint(int speed) {
+        speedSetPoint.writeInteger(speed);
+    }
+
+    @Override
+    public void setSpeedSetPoint(Speed speed) {
+
+        setSpeedSetPoint(speed.toNative(this));
+
+    }
+
+    @Override
+    public Duration getRampUpSetPoint() {
+        return Duration.ofMillis(rampUpSetPoint.readInteger().orElse(0));
+    }
+
+    @Override
+    public void setRampUpSetPoint(final Duration duration) {
+        rampUpSetPoint.writeInteger((int) duration.toMillis());
+    }
+
+    @Override
+    public Duration getRampDownSetPoint() {
+        return Duration.ofMillis(rampDownSetPoint.readInteger().orElse(0));
+    }
+
+    @Override
+    public void setRampDownSetPoint(final Duration duration) {
+        rampDownSetPoint.writeInteger((int) duration.toMillis());
+    }
+
+    @Override
+    public int getSpeedPidKd() {
+        return speedPidKd.readInteger().orElse(0);
+    }
+
+    @Override
+    public void setSpeedPidKd(final int newSpeedPidKd) {
+        speedPidKd.writeInteger(newSpeedPidKd);
+    }
+
+    @Override
+    public int getSpeedPidKi() {
+        return speedPidKi.readInteger().orElse(0);
+    }
+
+    @Override
+    public void setSpeedPidKi(final int newSpeedPidKi) {
+
+    }
+
+    @Override
+    public int getSpeedPidKp() {
+        return speedPidKp.readInteger().orElse(0);
+    }
+
+    @Override
+    public void setSpeedPidKp(int newSpeedPidKp) {
+        speedPidKp.writeInteger(newSpeedPidKp);
+    }
+
+    @Override
+    public Set<EV3MotorState> getState() {
+        return stateMap.get(this.state.readStringArray());
+    }
+
+    @Override
+    public EV3MotorStopAction getStopAction() {
+        return stopActionMap.get(stopAction.readString()).orElse(EV3MotorStopAction.BRAKE);
+    }
+
+    @Override
+    public void setStopAction(final EV3MotorStopAction newStopAction) {
+        stopAction.writeEnum(newStopAction, stopActionMap);
+    }
+
+    @Override
+    public Set<EV3MotorStopAction> getStopActions() {
+        return stopActionMap.get(stopActions.readStringArray());
+    }
+
+    @Override
+    public Duration getTimeSetPoint() {
+        return Duration.ofMillis(timeSetPoint.readInteger().orElse(0));
+    }
+
+    @Override
+    public void setTimeSetPoint(final Duration duration) {
+        timeSetPoint.writeInteger((int) duration.toMillis());
+    }
+
+    @Override
+    public boolean isRunning() {
+        return getState().contains(EV3MotorState.RUNNING);
+    }
+
+    @Override
+    public String toString() {
+
+        final StringBuffer b = new StringBuffer();
+
+        b.append("TachoMotor:\n");
+        b.append("  sysFsPath .............: ").append(sysFsPath).append("\n");
+        b.append("  address ...............: ").append(address.readString()).append("\n");
+        b.append("  driverName ............: ").append(driverName.readString()).append("\n");
+        b.append("  commands ..............: ").append(commands.readString()).append("\n");
+        b.append("  countPerRotation ......: ").append(countPerRotation.readString()).append("\n");
+        b.append("  dutyCycle .............: ").append(dutyCycle.readString()).append("\n");
+        b.append("  dutyCycleSetPoint .....: ").append(dutyCycleSetPoint.readString()).append("\n");
+        b.append("  polarity ..............: ").append(polarity.readString()).append("\n");
+        b.append("  holdPidKd .............: ").append(holdPidKd.readString()).append("\n");
+        b.append("  holdPidKi .............: ").append(holdPidKi.readString()).append("\n");
+        b.append("  holdPidKp .............: ").append(holdPidKp.readString()).append("\n");
+        b.append("  maxSpeed ..............: ").append(maxSpeed.readString()).append("\n");
+        b.append("  positionSetPoint ......: ").append(positionSetPoint.readString()).append("\n");
+        b.append("  speed .................: ").append(speed.readString()).append("\n");
+        b.append("  speedSetPoint .........: ").append(speedSetPoint.readString()).append("\n");
+        b.append("  rampUpSetPoint ........: ").append(rampUpSetPoint.readString()).append("\n");
+        b.append("  rampDownSetPoint ......: ").append(rampDownSetPoint.readString()).append("\n");
+        b.append("  speedPidKd ............: ").append(speedPidKd.readString()).append("\n");
+        b.append("  speedPidKi ............: ").append(speedPidKi.readString()).append("\n");
+        b.append("  speedPidKp ............: ").append(speedPidKp.readString()).append("\n");
+        b.append("  state .................: ").append(state.readString()).append("\n");
+        b.append("  stopAction ............: ").append(stopAction.readString()).append("\n");
+        b.append("  stopActions ...........: ").append(stopActions.readString()).append("\n");
+        b.append("  timeSetPoint ..........: ").append(timeSetPoint.readString()).append("\n");
+
+        return b.toString();
+    }
+
+}

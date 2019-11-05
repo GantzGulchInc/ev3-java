@@ -1,0 +1,4 @@
+
+cd ev3-app
+
+mvn -P robot1 wagon:upload-single@upload-to-robot

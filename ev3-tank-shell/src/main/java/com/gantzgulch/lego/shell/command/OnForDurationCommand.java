@@ -17,10 +17,11 @@ package com.gantzgulch.lego.shell.command;
 
 import java.time.Duration;
 
+import com.gantzgulch.lego.api.unit.DurationParser;
+import com.gantzgulch.lego.api.unit.Speed;
+import com.gantzgulch.lego.api.unit.SpeedParser;
 import com.gantzgulch.lego.shell.EV3Shell;
 import com.gantzgulch.lego.tank.Tank;
-import com.gantzgulch.lego.unit.DurationParser;
-import com.gantzgulch.lego.unit.Speed;
 
 public class OnForDurationCommand extends AbstractCommand {
 
@@ -53,11 +54,11 @@ public class OnForDurationCommand extends AbstractCommand {
             
             switch(i) {
             case 1:
-                leftSpeed = Speed.parse(arg);
+                leftSpeed = SpeedParser.parse(arg);
                 break;
                 
             case 2: 
-                rightSpeed = Speed.parse(arg);
+                rightSpeed = SpeedParser.parse(arg);
                 break;
             
             case 3:

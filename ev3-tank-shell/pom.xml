@@ -36,12 +36,6 @@
 
 		<dependency>
 			<groupId>com.gantzgulch.ev3</groupId>
-			<artifactId>ev3-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.gantzgulch.ev3</groupId>
 			<artifactId>ev3-tank</artifactId>
 			<version>${project.version}</version>
 		</dependency>

@@ -21,11 +21,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorCommand;
-import com.gantzgulch.lego.unit.SpeedPercent;
-import com.gantzgulch.lego.util.lang.Closeables;
-import com.gantzgulch.lego.util.lang.Sleep;
-import com.gantzgulch.lego.util.logger.EV3Logger;
+import com.gantzgulch.lego.api.device.ev3.EV3MotorCommand;
+import com.gantzgulch.lego.api.unit.SpeedPercent;
+import com.gantzgulch.lego.common.lang.Closeables;
+import com.gantzgulch.lego.common.lang.Sleep;
+import com.gantzgulch.lego.common.logger.EV3Logger;
 
 public class EV3LargeMotorMockTest {
 

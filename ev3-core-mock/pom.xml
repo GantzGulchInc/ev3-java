@@ -36,7 +36,19 @@
 	
 		<dependency>
 			<groupId>com.gantzgulch.ev3</groupId>
-			<artifactId>ev3-core</artifactId>
+			<artifactId>ev3-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.gantzgulch.ev3</groupId>
+			<artifactId>ev3-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.gantzgulch.ev3</groupId>
+			<artifactId>ev3dev</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

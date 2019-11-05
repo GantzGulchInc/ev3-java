@@ -22,28 +22,29 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import com.gantzgulch.lego.device.InputPort;
-import com.gantzgulch.lego.device.OutputPort;
-import com.gantzgulch.lego.device.ev3.EV3ColorSensor;
-import com.gantzgulch.lego.device.ev3.EV3ColorSensor.EV3ColorSensorMode;
-import com.gantzgulch.lego.device.ev3.EV3GyroSensor;
-import com.gantzgulch.lego.device.ev3.EV3GyroSensor.EV3GyroSensorMode;
-import com.gantzgulch.lego.device.ev3.EV3LargeMotor;
-import com.gantzgulch.lego.device.ev3.EV3Led;
-import com.gantzgulch.lego.device.ev3.EV3Led.LedColor;
-import com.gantzgulch.lego.device.ev3.EV3MediumMotor;
-import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorCommand;
-import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorState;
-import com.gantzgulch.lego.device.ev3.EV3Motor.EV3MotorStopAction;
-import com.gantzgulch.lego.platform.Platform;
-import com.gantzgulch.lego.platform.common.DeviceFinder;
-import com.gantzgulch.lego.platform.ev3.device.EV3ButtonImpl;
+import com.gantzgulch.lego.api.device.ev3.EV3ColorSensor;
+import com.gantzgulch.lego.api.device.ev3.EV3ColorSensorMode;
+import com.gantzgulch.lego.api.device.ev3.EV3GyroSensor;
+import com.gantzgulch.lego.api.device.ev3.EV3GyroSensorMode;
+import com.gantzgulch.lego.api.device.ev3.EV3LargeMotor;
+import com.gantzgulch.lego.api.device.ev3.EV3Led;
+import com.gantzgulch.lego.api.device.ev3.EV3LedColor;
+import com.gantzgulch.lego.api.device.ev3.EV3MediumMotor;
+import com.gantzgulch.lego.api.device.ev3.EV3MotorCommand;
+import com.gantzgulch.lego.api.device.ev3.EV3MotorState;
+import com.gantzgulch.lego.api.device.ev3.EV3MotorStopAction;
+import com.gantzgulch.lego.api.platform.Platform;
+import com.gantzgulch.lego.api.port.InputPort;
+import com.gantzgulch.lego.api.port.OutputPort;
+import com.gantzgulch.lego.api.unit.Speed;
+import com.gantzgulch.lego.api.unit.SpeedPercent;
+import com.gantzgulch.lego.common.lang.Sleep;
+import com.gantzgulch.lego.common.logger.EV3Logger;
+import com.gantzgulch.lego.ev3dev.DeviceFinder;
+import com.gantzgulch.lego.ev3dev.device.ev3.EV3ButtonImpl;
+import com.gantzgulch.lego.ev3dev.platform.PlatformFactory;
 import com.gantzgulch.lego.shell.EV3Shell;
 import com.gantzgulch.lego.tank.Tank;
-import com.gantzgulch.lego.unit.Speed;
-import com.gantzgulch.lego.unit.SpeedPercent;
-import com.gantzgulch.lego.util.lang.Sleep;
-import com.gantzgulch.lego.util.logger.EV3Logger;
 import com.gantzgulch.lego.wheel.Wheels;
 
 public class Main {
@@ -55,7 +56,7 @@ public class Main {
      */
     public static void test_00() {
 
-        final Platform platform = Platform.getInstance();
+        final Platform platform = PlatformFactory.INSTANCE.getPlatform();
 
         LOG.info("Platform: %s", platform);
 
@@ -65,15 +66,15 @@ public class Main {
 
     public static void test_01() {
 
-        final Platform platform = Platform.getInstance();
+        final Platform platform = PlatformFactory.INSTANCE.getPlatform();
 
         LOG.info("Platform: %s", platform);
 
-        final EV3Led led0Green = platform.findLed(0, LedColor.GREEN);
-        final EV3Led led0Red = platform.findLed(0, LedColor.RED);
+        final EV3Led led0Green = platform.findLed(0, EV3LedColor.GREEN);
+        final EV3Led led0Red = platform.findLed(0, EV3LedColor.RED);
 
-        final EV3Led led1Green = platform.findLed(1, LedColor.GREEN);
-        final EV3Led led1Red = platform.findLed(1, LedColor.RED);
+        final EV3Led led1Green = platform.findLed(1, EV3LedColor.GREEN);
+        final EV3Led led1Red = platform.findLed(1, EV3LedColor.RED);
 
         led0Green.setBrightnessPercent(0);
         led0Red.setBrightnessPercent(0);
@@ -111,7 +112,7 @@ public class Main {
 
     public static void test_03() {
 
-        final Platform platform = Platform.getInstance();
+        final Platform platform = PlatformFactory.INSTANCE.getPlatform();
 
         LOG.info("Platform: %s", platform);
 
@@ -134,7 +135,7 @@ public class Main {
 
     public static void test_04() {
 
-        final Platform platform = Platform.getInstance();
+        final Platform platform = PlatformFactory.INSTANCE.getPlatform();
 
         final EV3MediumMotor m3 = platform.findDevice(EV3MediumMotor.class, OutputPort.PORT_D);
 
@@ -174,7 +175,7 @@ public class Main {
 
     public static void test_05() {
 
-        final Platform platform = Platform.getInstance();
+        final Platform platform = PlatformFactory.INSTANCE.getPlatform();
 
         final EV3ColorSensor cs = platform.findDevice(EV3ColorSensor.class, InputPort.PORT_4);
 
@@ -192,7 +193,7 @@ public class Main {
 
     public static void test_06() {
 
-        final Platform platform = Platform.getInstance();
+        final Platform platform = PlatformFactory.INSTANCE.getPlatform();
 
         final EV3GyroSensor cs = platform.findDevice(EV3GyroSensor.class, InputPort.PORT_1);
 
@@ -210,7 +211,7 @@ public class Main {
 
     public static void test_07() {
 
-        final Platform platform = Platform.getInstance();
+        final Platform platform = PlatformFactory.INSTANCE.getPlatform();
 
         final EV3LargeMotor leftMotor = platform.findDevice(EV3LargeMotor.class, OutputPort.PORT_B);
         final EV3LargeMotor rightMotor = platform.findDevice(EV3LargeMotor.class, OutputPort.PORT_C);
@@ -317,7 +318,7 @@ public class Main {
 
     public static void test_09() {
         
-        final Platform platform = Platform.getInstance();
+        final Platform platform = PlatformFactory.INSTANCE.getPlatform();
 
         final EV3LargeMotor leftMotor = platform.findDevice(EV3LargeMotor.class, OutputPort.PORT_B);
         

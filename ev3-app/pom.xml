@@ -47,13 +47,13 @@
 
 		<dependency>
 			<groupId>com.gantzgulch.ev3</groupId>
-			<artifactId>ev3-core</artifactId>
+			<artifactId>ev3-core-mock</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.gantzgulch.ev3</groupId>
-			<artifactId>ev3-core-mock</artifactId>
+			<artifactId>ev3dev-ev3</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
