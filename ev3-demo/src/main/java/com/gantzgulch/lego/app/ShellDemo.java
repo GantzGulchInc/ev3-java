@@ -18,9 +18,9 @@ package com.gantzgulch.lego.app;
 import com.gantzgulch.lego.api.device.ev3.EV3LargeMotor;
 import com.gantzgulch.lego.api.platform.Platform;
 import com.gantzgulch.lego.api.port.OutputPort;
+import com.gantzgulch.lego.api.wheel.Wheels;
 import com.gantzgulch.lego.shell.EV3Shell;
 import com.gantzgulch.lego.tank.Tank;
-import com.gantzgulch.lego.wheel.Wheels;
 
 public class ShellDemo implements Runnable {
 

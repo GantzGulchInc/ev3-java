@@ -13,38 +13,26 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package com.gantzgulch.lego.wheel.impl;
+package com.gantzgulch.lego.linefollower;
 
+import com.gantzgulch.lego.api.device.ev3.EV3ColorSensor;
+import com.gantzgulch.lego.api.device.ev3.EV3MotorCommand;
+import com.gantzgulch.lego.api.device.ev3.EV3TachoMotor;
 import com.gantzgulch.lego.api.unit.Length;
-import com.gantzgulch.lego.wheel.Wheel;
+import com.gantzgulch.lego.api.wheel.Wheel;
+import com.gantzgulch.lego.linefollower.impl.LineFollowerImpl;
 
-public class WheelImpl implements Wheel {
+public interface LineFollower {
 
-    private final Length diameter;
-
-    private final Length circumference;
-
-    private final Length width;
-
-    public WheelImpl(final Length diameter, final Length width) {
-        this.diameter = diameter;
-        this.circumference = Length.ofMillimeters(this.diameter.toMillimeters() * Math.PI);
-        this.width = width;
+    void followLine(LineFollowerConfiguration config, Length length);
+    
+    public static LineFollower create(//
+            final EV3TachoMotor<EV3MotorCommand> leftMotor, //
+            final EV3TachoMotor<EV3MotorCommand> rightMotor, //
+            final Wheel wheel, //
+            final EV3ColorSensor colorSensor) {
+        
+        return new LineFollowerImpl(leftMotor, rightMotor, wheel, colorSensor);
     }
-
-    @Override
-    public double getWidthMMs() {
-        return width.toMillimeters();
-    }
-
-    @Override
-    public double getDiameterMMs() {
-        return diameter.toMillimeters();
-    }
-
-    @Override
-    public double getCircumferenceMMs() {
-        return circumference.toMillimeters();
-    }
-
+   
 }

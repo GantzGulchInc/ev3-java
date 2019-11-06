@@ -13,20 +13,38 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package com.gantzgulch.lego.wheel;
+package com.gantzgulch.lego.api.wheel;
 
 import com.gantzgulch.lego.api.unit.Length;
-import com.gantzgulch.lego.wheel.impl.WheelImpl;
+import com.gantzgulch.lego.api.wheel.Wheel;
 
-public interface Wheel {
+public class WheelImpl implements Wheel {
 
-    double getWidthMMs();
+    private final Length diameter;
 
-    double getDiameterMMs();
+    private final Length circumference;
 
-    double getCircumferenceMMs();
+    private final Length width;
 
-    static Wheel customWheel(final Length diameter, final Length width) {
-        return new WheelImpl(diameter, width);
+    public WheelImpl(final Length diameter, final Length width) {
+        this.diameter = diameter;
+        this.circumference = Length.ofMillimeters(this.diameter.toMillimeters() * Math.PI);
+        this.width = width;
     }
+
+    @Override
+    public double getWidthMMs() {
+        return width.toMillimeters();
+    }
+
+    @Override
+    public double getDiameterMMs() {
+        return diameter.toMillimeters();
+    }
+
+    @Override
+    public double getCircumferenceMMs() {
+        return circumference.toMillimeters();
+    }
+
 }

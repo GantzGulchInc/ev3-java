@@ -38,6 +38,7 @@ import com.gantzgulch.lego.api.port.InputPort;
 import com.gantzgulch.lego.api.port.OutputPort;
 import com.gantzgulch.lego.api.unit.Speed;
 import com.gantzgulch.lego.api.unit.SpeedPercent;
+import com.gantzgulch.lego.api.wheel.Wheels;
 import com.gantzgulch.lego.common.lang.Sleep;
 import com.gantzgulch.lego.common.logger.EV3Logger;
 import com.gantzgulch.lego.ev3dev.DeviceFinder;
@@ -45,7 +46,6 @@ import com.gantzgulch.lego.ev3dev.device.ev3.EV3ButtonImpl;
 import com.gantzgulch.lego.ev3dev.platform.PlatformFactory;
 import com.gantzgulch.lego.shell.EV3Shell;
 import com.gantzgulch.lego.tank.Tank;
-import com.gantzgulch.lego.wheel.Wheels;
 
 public class Tests {
 

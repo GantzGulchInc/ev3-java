@@ -13,22 +13,30 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package com.gantzgulch.lego.wheel;
+package com.gantzgulch.lego.linefollower;
 
-import com.gantzgulch.lego.api.unit.Length;
-import com.gantzgulch.lego.wheel.impl.WheelImpl;
+import com.gantzgulch.lego.api.unit.Speed;
+import com.gantzgulch.lego.linefollower.impl.ConfigurationBuilder;
 
-public final class Wheels {
+public interface LineFollowerConfiguration {
 
-    private Wheels() {
+    Speed getSpeed();
+    
+    int getBlack();
+    
+    int getTarget();
+    
+    int getWhite();
+    
+    int getPidWidth();
+    
+    double getKp();
+    
+    double getKi();
+    
+    double getKd();
+    
+    public static ConfigurationBuilder builder() {
+        return new ConfigurationBuilder();
     }
-
-    public static final Wheel EV3EducationRim = new WheelImpl(Length.ofMillimeters(43.0), Length.ofMillimeters(26.0));
-
-    public static final Wheel EV3EducationTire = new WheelImpl(Length.ofMillimeters(56.0), Length.ofMillimeters(28.0));
-
-    public static final Wheel EV3Rim = new WheelImpl(Length.ofMillimeters(30.0), Length.ofMillimeters(20));
-
-    public static final Wheel EV3Tire = new WheelImpl(Length.ofMillimeters(43.2), Length.ofMillimeters(21.0));
-
 }

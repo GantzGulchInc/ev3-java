@@ -65,6 +65,7 @@
 		<module>ev3dev-brickpi</module>
 		<module>ev3-tank</module>
 		<module>ev3-tank-shell</module>
+		<module>ev3-linefollower</module>
 		<module>ev3-demo</module>
 	</modules>
 
