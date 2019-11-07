@@ -54,6 +54,7 @@ public class RecorderCommand extends AbstractCommand {
             
         case LIST:
             shell.getRecorder().list();
+            break;
             
         case CLEAR:
             shell.getRecorder().clear();

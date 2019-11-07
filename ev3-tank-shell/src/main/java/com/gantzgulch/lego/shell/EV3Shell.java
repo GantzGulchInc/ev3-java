@@ -38,8 +38,6 @@ public class EV3Shell implements Runnable {
 
     public void run() {
 
-        Command command = null;
-        
         try (final Scanner scanner = new Scanner(System.in)) {
 
             while (isRunning) {
@@ -49,29 +47,37 @@ public class EV3Shell implements Runnable {
 
                 final String line = scanner.nextLine();
 
-                try {
-
-                    command = parser.parse(line);
-
-                    command.execute(this, tank);
-                    
-                    recorder.record(command);
-
-                } catch (final RuntimeException e) {
-                    
-                    e.printStackTrace(System.out);
-                    
-                    System.out.flush();
-                    
-                    if( command != null ) {
-                        System.out.println("\n" + command.help() );
-                    }
-                    
-                }
+                execute(line);
             }
             
         }
     };
+    
+    public void execute(final String line) {
+        
+        Command command = null;
+        
+        try {
+
+            command = parser.parse(line);
+
+            command.execute(this, tank);
+            
+            recorder.record(command);
+
+        } catch (final RuntimeException e) {
+            
+            e.printStackTrace(System.out);
+            
+            System.out.flush();
+            
+            if( command != null ) {
+                System.out.println("\n" + command.help() );
+            }
+            
+        }
+}
+    
     
     public void stop() {
         isRunning = false;

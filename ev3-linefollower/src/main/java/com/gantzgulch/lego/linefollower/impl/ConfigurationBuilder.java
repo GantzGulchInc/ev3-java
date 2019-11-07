@@ -23,11 +23,7 @@ public class ConfigurationBuilder {
 
     private Speed speed = new SpeedPercent(20.0);
 
-    private int black = 5;
-
     private int target = 40;
-
-    private int white = 75;
 
     private int pidWidth = 30;
 
@@ -46,18 +42,8 @@ public class ConfigurationBuilder {
         return this;
     }
 
-    public ConfigurationBuilder withBlack(final int black) {
-        this.black = black;
-        return this;
-    }
-
     public ConfigurationBuilder withTarget(final int target) {
         this.target = target;
-        return this;
-    }
-
-    public ConfigurationBuilder withWhite(final int white) {
-        this.white = white;
         return this;
     }
 
@@ -93,18 +79,8 @@ public class ConfigurationBuilder {
         }
 
         @Override
-        public int getBlack() {
-            return black;
-        }
-
-        @Override
-        public int getTarget() {
+        public int getTargetColor() {
             return target;
-        }
-
-        @Override
-        public int getWhite() {
-            return white;
         }
 
         @Override

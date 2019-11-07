@@ -44,9 +44,15 @@ public class Main {
         
         try(final Platform platform = PlatformFactory.INSTANCE.getPlatform() ) {
 
-            final ShellDemo demo = new ShellDemo(platform);
-
-            demo.run();
+            if( args.length == 0 || "shell".equals(args[0]) ) {
+                
+                new ShellDemo(platform).run();
+                
+            }else if( "lineFollower".equals(args[0]) ) {
+                
+                new LineFollowerDemo(platform).run();
+                
+            }
 
         } catch(final IOException e) {
             e.printStackTrace();

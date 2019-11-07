@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.gantzgulch.lego.shell.command.ExecCommand;
 import com.gantzgulch.lego.shell.command.HelpCommand;
 import com.gantzgulch.lego.shell.command.NullCommand;
 import com.gantzgulch.lego.shell.command.OnForDegreesCommand;
@@ -36,16 +37,17 @@ public class CommandParser {
 
     public CommandParser() {
 
-        commandParserMap.put("help", HelpCommand::parse);
         commandParserMap.put("?", HelpCommand::parse);
-        commandParserMap.put("onForRotations", OnForRotationsCommand::parse);
+        commandParserMap.put("help", HelpCommand::parse);
+        commandParserMap.put("exec", ExecCommand::parse);
         commandParserMap.put("onForDegrees", OnForDegreesCommand::parse);
         commandParserMap.put("onForDuration", OnForDurationCommand::parse);
-        commandParserMap.put("steerForRotations", SteerForRotationsCommand::parse);
-        commandParserMap.put("setRampUp", SetRampUpCommand::parse);
-        commandParserMap.put("setRampDown", SetRampDownCommand::parse);
-        commandParserMap.put("recorder", RecorderCommand::parse);
+        commandParserMap.put("onForRotations", OnForRotationsCommand::parse);
         commandParserMap.put("quit", QuitCommand::parse);
+        commandParserMap.put("recorder", RecorderCommand::parse);
+        commandParserMap.put("setRampDown", SetRampDownCommand::parse);
+        commandParserMap.put("setRampUp", SetRampUpCommand::parse);
+        commandParserMap.put("steerForRotations", SteerForRotationsCommand::parse);
     }
 
     public Command parse(final String commandString) {

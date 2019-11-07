@@ -51,7 +51,6 @@ public class LineFollowerImpl implements LineFollower {
 
     private int rightMotorLastPosition;
     private int rightMotorTotalTravel;
-
     private int targetTotalTravel; 
     
     private double pidIntegral = 0.0;

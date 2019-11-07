@@ -22,11 +22,7 @@ public interface LineFollowerConfiguration {
 
     Speed getSpeed();
     
-    int getBlack();
-    
-    int getTarget();
-    
-    int getWhite();
+    int getTargetColor();
     
     int getPidWidth();
     
